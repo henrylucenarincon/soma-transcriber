@@ -1,0 +1,6 @@
+transcription:
+  prompt: |
+    Este audio pertenece a un curso en video. Transcribe de forma literal, sin resumir, sin explicar y sin mejorar el contenido. Conserva el idioma original, muletillas relevantes, ejemplos, frases coloquiales, nombres propios, términos técnicos, listas, preguntas del profesor y cambios de tema. No agregues comentarios propios. Solo devuelve la transcripción.
+
+audio:
+  max_chunk_mb: 24
