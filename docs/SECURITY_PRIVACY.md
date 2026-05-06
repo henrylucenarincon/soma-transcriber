@@ -17,6 +17,7 @@ No debe subirse a GitHub:
 - `outputs/`
 - `data/`
 - `.tmp/`
+- `configs/local/` excepto `.gitkeep`
 
 ## Sí Puede Subirse
 
@@ -27,6 +28,7 @@ Puede subirse al repositorio:
 - `README.md`
 - `.env.example`
 - `config.example.yaml`
+- `configs/examples/`
 - `requirements.txt`
 - `.gitignore`
 

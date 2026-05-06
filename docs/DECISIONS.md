@@ -18,6 +18,7 @@ Este archivo registra decisiones relevantes para mantener trazabilidad del proye
 - No se suben transcripciones privadas al repositorio.
 - Codex se usa como ejecutor principal de cambios.
 - La documentación debe mantenerse actualizada con cada avance relevante.
+- Soma no tendrá prompts específicos hardcodeados para un curso. El contexto específico se maneja mediante perfiles YAML opcionales.
 
 ## Implicaciones
 

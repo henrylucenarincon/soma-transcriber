@@ -1,0 +1,40 @@
+profile:
+  name: "Curso genérico en español"
+  language: "es"
+  content_type: "curso en video"
+  transcription_style: "literal"
+
+transcription:
+  model: "gpt-4o-mini-transcribe"
+  response_format: "text"
+  base_prompt: >
+    Este audio pertenece a un curso en video. Transcribe de forma literal.
+    No resumas, no expliques, no mejores, no reescribas y no agregues comentarios propios.
+    Conserva el idioma original, muletillas relevantes, ejemplos, frases coloquiales,
+    nombres propios, términos técnicos, listas, preguntas del profesor y cambios de tema.
+  course_context: >
+    Curso educativo general. El objetivo es obtener una transcripción fiel para estudio privado
+    y análisis posterior con IA.
+  proper_names: []
+  glossary_terms: []
+  preserve:
+    - idioma original
+    - muletillas relevantes
+    - ejemplos
+    - frases coloquiales
+    - nombres propios
+    - términos técnicos
+    - listas
+    - preguntas del profesor
+    - cambios de tema
+
+audio:
+  format: "mp3"
+  sample_rate: 16000
+  channels: 1
+  bitrate: "64k"
+  max_file_mb: 24
+
+output:
+  include_metadata: true
+  markdown_heading: "Transcripción literal"

@@ -11,9 +11,8 @@ try:
     from .audio import MAX_CHUNK_BYTES, extract_audio, split_audio_if_needed
     from .manifest import Manifest, STATUS_COMPLETED
     from .scanner import VideoFile, scan_videos
-    from .transcriber import transcribe_audio_file
+    from .transcriber import build_transcription_prompt, transcribe_audio_file
     from .utils import (
-        DEFAULT_TRANSCRIPTION_PROMPT,
         config_get,
         load_config,
         megabytes_to_bytes,
@@ -31,9 +30,8 @@ except ImportError:
     from audio import MAX_CHUNK_BYTES, extract_audio, split_audio_if_needed
     from manifest import Manifest, STATUS_COMPLETED
     from scanner import VideoFile, scan_videos
-    from transcriber import transcribe_audio_file
+    from transcriber import build_transcription_prompt, transcribe_audio_file
     from utils import (
-        DEFAULT_TRANSCRIPTION_PROMPT,
         config_get,
         load_config,
         megabytes_to_bytes,
@@ -66,7 +64,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--course-name", required=True, help="Nombre del curso.")
     parser.add_argument(
         "--model",
-        default=DEFAULT_MODEL,
+        default=None,
         help=f"Modelo de transcripción de OpenAI. Default: {DEFAULT_MODEL}",
     )
     parser.add_argument("--force", action="store_true", help="Reprocesar aunque el archivo ya esté completed.")
@@ -120,11 +118,18 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
 
     config = load_config(args.config)
-    prompt = str(
-        config_get(config, "transcription", "prompt", default=DEFAULT_TRANSCRIPTION_PROMPT)
-        or DEFAULT_TRANSCRIPTION_PROMPT
+    prompt = build_transcription_prompt(config)
+    selected_model = str(
+        args.model
+        or config_get(config, "transcription", "model", default=DEFAULT_MODEL)
+        or DEFAULT_MODEL
     )
-    max_chunk_mb = config_get(config, "audio", "max_chunk_mb", default=None)
+    max_chunk_mb = config_get(
+        config,
+        "audio",
+        "max_chunk_mb",
+        default=config_get(config, "audio", "max_file_mb", default=None),
+    )
     max_chunk_bytes = megabytes_to_bytes(max_chunk_mb) if max_chunk_mb else MAX_CHUNK_BYTES
 
     validate_runtime_dependencies()
@@ -162,18 +167,18 @@ def main(argv: Sequence[str] | None = None) -> int:
 
             if chunks:
                 chunk_texts = [
-                    transcribe_audio_file(chunk, model=args.model, prompt=prompt)
+                    transcribe_audio_file(chunk, model=selected_model, prompt=prompt)
                     for chunk in progress(chunks, desc=f"Chunks: {video.video_name}", unit="chunk", leave=False)
                 ]
                 transcript_text = combine_chunk_transcripts(chunk_texts)
             else:
-                transcript_text = transcribe_audio_file(audio_path, model=args.model, prompt=prompt)
+                transcript_text = transcribe_audio_file(audio_path, model=selected_model, prompt=prompt)
 
             metadata = build_metadata(
                 course_name=args.course_name,
                 video=video,
                 audio_path=audio_path,
-                model=args.model,
+                model=selected_model,
                 chunked=bool(chunks),
                 chunks_count=len(chunks),
             )

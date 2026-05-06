@@ -50,15 +50,35 @@ OPENAI_API_KEY=sk-tu-api-key
 
 La API key no se guarda en el código ni debe subirse a Git.
 
-## Configurar prompt
+## Perfiles de configuración
 
-Opcionalmente crear `config.yaml`:
+Soma usa perfiles YAML para adaptar el prompt de transcripción sin atar el proyecto a un curso, marca, idioma o nicho específico. Los perfiles ayudan a mejorar precisión en nombres propios, términos técnicos y contexto, pero la transcripción sigue siendo literal.
+
+Archivos y carpetas relevantes:
+
+- `config.example.yaml`: plantilla universal versionada.
+- `config.yaml`: configuración local por defecto; está ignorada por Git.
+- `configs/examples/`: perfiles genéricos versionados para distintos tipos de curso.
+- `configs/local/`: perfiles reales privados por curso; está ignorada por Git salvo `.gitkeep`.
+
+Opcionalmente crear `config.yaml` desde la plantilla:
 
 ```bash
 cp config.example.yaml config.yaml
 ```
 
-Editar `transcription.prompt` para ajustar las instrucciones enviadas al modelo de transcripción.
+Para un curso concreto, puedes crear un perfil privado en `configs/local/` y pasarlo con `--config`:
+
+```bash
+python3 src/main.py \
+  --input "/ruta/curso" \
+  --output "./output" \
+  --course-name "Curso" \
+  --config "configs/local/mi-curso.yaml" \
+  --max-videos 1
+```
+
+Los perfiles pueden definir modelo, prompt base, contexto opcional del curso, idioma esperado, nombres propios, glosario y reglas de preservación. Si pasas `--model`, el valor de la CLI tiene prioridad sobre el YAML. `configs/local/` no debe subirse a GitHub.
 
 ## Dry run
 
@@ -124,6 +144,8 @@ python src/main.py \
   --course-name "Mi curso" \
   --max-videos 1
 ```
+
+Las transcripciones de V1 son literales: Soma no resume, no reescribe y no mejora el contenido. El Markdown generado sí se formatea en párrafos para facilitar lectura, revisión, estudio y análisis posterior por IA.
 
 Modelo por defecto:
 
@@ -246,3 +268,5 @@ Soma Transcriber no sube videos ni transcripciones a ningún servicio externo. S
 La carpeta `.tmp/` es local para patches o archivos temporales de revisión y está ignorada por Git. No se debe subir al repositorio.
 
 También están ignorados `data/`, `output/`, `outputs/`, videos, audios y transcripciones generadas. Estos archivos pueden contener material privado del curso o resultados de transcripción y no deben subirse a GitHub.
+
+Los perfiles reales en `configs/local/` también son privados. Los ejemplos genéricos en `configs/examples/` sí pueden versionarse.

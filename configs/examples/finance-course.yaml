@@ -1,0 +1,45 @@
+profile:
+  name: "Generic Finance Course"
+  language: "auto"
+  content_type: "finance video course"
+  transcription_style: "literal"
+
+transcription:
+  model: "gpt-4o-mini-transcribe"
+  response_format: "text"
+  base_prompt: >
+    This audio belongs to a finance video course. Transcribe literally.
+    Do not summarize, explain, improve, rewrite or add commentary.
+    Preserve the original language, numerical examples, proper names,
+    technical terms, lists, teacher questions and topic shifts.
+  course_context: >
+    Generic finance course focused on educational explanations, examples and terminology.
+  proper_names: []
+  glossary_terms:
+    - personal finance
+    - investing
+    - compound interest
+    - cash flow
+    - assets
+    - liabilities
+    - diversification
+    - risk
+  preserve:
+    - original language
+    - numbers and quantities
+    - examples
+    - proper names
+    - financial terms
+    - lists
+    - teacher questions
+
+audio:
+  format: "mp3"
+  sample_rate: 16000
+  channels: 1
+  bitrate: "64k"
+  max_file_mb: 24
+
+output:
+  include_metadata: true
+  markdown_heading: "Transcripción literal"

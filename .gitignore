@@ -7,6 +7,8 @@ config.yaml
 data/
 output/
 outputs/
+configs/local/*
+!configs/local/.gitkeep
 
 __pycache__/
 *.py[cod]

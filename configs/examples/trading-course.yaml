@@ -1,0 +1,46 @@
+profile:
+  name: "Generic Trading Course"
+  language: "auto"
+  content_type: "trading video course"
+  transcription_style: "literal"
+
+transcription:
+  model: "gpt-4o-mini-transcribe"
+  response_format: "text"
+  base_prompt: >
+    This audio belongs to a trading video course. Transcribe literally.
+    Do not summarize, explain, improve, rewrite or add commentary.
+    Preserve the original language, examples, market terminology,
+    proper names, lists, teacher questions and topic shifts.
+  course_context: >
+    Generic trading course focused on technical concepts, risk management and market examples.
+  proper_names: []
+  glossary_terms:
+    - trading
+    - risk management
+    - technical analysis
+    - stop loss
+    - take profit
+    - break even
+    - drawdown
+    - liquidity
+    - market structure
+  preserve:
+    - original language
+    - chart examples
+    - numbers and prices
+    - market terms
+    - proper names
+    - strategy names
+    - teacher questions
+
+audio:
+  format: "mp3"
+  sample_rate: 16000
+  channels: 1
+  bitrate: "64k"
+  max_file_mb: 24
+
+output:
+  include_metadata: true
+  markdown_heading: "Transcripción literal"

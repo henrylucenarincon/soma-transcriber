@@ -1,7 +1,7 @@
 profile:
-  name: "Generic Course"
-  language: "auto"
-  content_type: "online course"
+  name: "Generic English Course"
+  language: "en"
+  content_type: "video course"
   transcription_style: "literal"
 
 transcription:
@@ -10,14 +10,16 @@ transcription:
   base_prompt: >
     This audio belongs to a video course. Transcribe literally.
     Do not summarize, explain, improve, rewrite or add commentary.
-    Preserve the original language, relevant filler words, examples,
+    Preserve the original wording, relevant filler words, examples,
     colloquial expressions, proper names, technical terms, lists,
     teacher questions and topic shifts.
-  course_context: ""
+  course_context: >
+    General educational course. The goal is to obtain a faithful transcript for private study
+    and later AI-assisted analysis.
   proper_names: []
   glossary_terms: []
   preserve:
-    - original language
+    - original wording
     - relevant filler words
     - examples
     - colloquial expressions

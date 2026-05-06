@@ -17,12 +17,19 @@
 - documentación viva.
 - soporte para videos `.ts`.
 - orden natural de módulos y videos.
+- Primer test real con 1 video.
+- Formato legible de transcripciones Markdown.
+- perfiles universales de configuración por curso.
 
 ## Pendientes
 
 - Instalar dependencias localmente si falta.
 - Configurar `.env` real.
-- Probar con 1 video real.
+- Crear perfil local real para Victor Heras.
+- Reprocesar primer video con perfil local.
+- Probar nuevamente con `--force --max-videos 1`.
+- Procesar módulo completo.
+- Procesar curso completo.
 - Revisar calidad de transcripción.
 - Mejorar manejo de errores según test real.
 - Agregar estimación de duración/costo.

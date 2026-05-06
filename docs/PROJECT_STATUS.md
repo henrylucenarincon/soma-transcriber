@@ -1,10 +1,10 @@
 # Estado del Proyecto
 
-Versión actual: V1.2
+Versión actual: V1.3.2
 
-Estado: CLI base funcional con seguridad operativa inicial y documentación viva creada.
+Estado: CLI base funcional con seguridad operativa inicial, documentación viva creada, primer test real exitoso y perfiles universales de configuración.
 
-Soma Transcriber ya tiene una primera base funcional para detectar videos, extraer audio, dividir archivos grandes, transcribir con OpenAI API y escribir resultados organizados. La versión V1.1 agregó controles para reducir riesgo operativo y costos accidentales antes de ejecutar transcripciones reales.
+Soma Transcriber ya tiene una primera base funcional para detectar videos, extraer audio, dividir archivos grandes, transcribir con OpenAI API y escribir resultados organizados. La versión V1.1 agregó controles para reducir riesgo operativo y costos accidentales antes de ejecutar transcripciones reales. En V1.3 se ejecutó el primer test real controlado con 1 video y fue exitoso.
 
 ## Funcionalidades Implementadas
 
@@ -16,7 +16,10 @@ Soma Transcriber ya tiene una primera base funcional para detectar videos, extra
 - División de audios mayores a 24 MB usando pydub.
 - Transcripción con OpenAI API.
 - Prompt configurable desde `config.yaml`.
+- Perfiles universales de configuración por curso con `--config`.
+- Construcción de prompt final desde prompt base, contexto, idioma, nombres propios, glosario y reglas de preservación.
 - Transcripciones Markdown con metadata.
+- Formato de párrafos en Markdown para mejorar legibilidad sin resumir ni reescribir.
 - Manifest en `data/manifest.json`.
 - Saltar archivos ya `completed` salvo que se use `--force`.
 - Índice CSV en `output/index.csv`.
@@ -36,17 +39,26 @@ python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-
 python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-output --course-name Curso\ Demo --dry-run --max-videos 1
 ```
 
+## Probado
+
+- Primer test real con 1 video usando OpenAI API.
+- Resultado del primer test: procesado 1, fallidos 0.
+- Se generó audio, `output/index.csv` y transcripción Markdown con metadata y `status: completed`.
+
 ## Todavía No Probado
 
-- No se ha ejecutado una transcripción real con OpenAI API.
-- No se ha validado la calidad de transcripción sobre un curso real.
 - No se ha medido comportamiento real de chunking con archivos grandes.
 - No se ha estimado costo real por duración de video.
-- No se ha revisado el Markdown generado a partir de audio real.
+- No se ha procesado el módulo completo.
+- No se ha procesado el curso completo.
+
+## Hallazgo V1.3
+
+El primer Markdown real quedó como un bloque único de texto. En V1.3.1 se corrige la presentación para escribir la transcripción literal en párrafos legibles, sin resumir, reescribir ni alterar el orden del contenido.
 
 ## Próximo Hito Recomendado
 
-V1.3: primer test real controlado con un solo video usando `--max-videos 1`.
+Crear un perfil local real para el curso actual y reprocesar 1 video con `--force --max-videos 1`.
 
 El objetivo de ese hito no es procesar un curso completo, sino validar el circuito end to end: audio, chunking si aplica, API, Markdown, manifest e index.
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 from typing import Any, Iterable
 
 try:
@@ -19,6 +20,11 @@ INDEX_COLUMNS = [
     "chunks_count",
     "updated_at",
 ]
+MIN_PARAGRAPH_CHARS = 500
+MAX_PARAGRAPH_CHARS = 900
+SENTENCE_BOUNDARY_PATTERN = re.compile(r"(?<=[.!?])\s+")
+WHITESPACE_PATTERN = re.compile(r"[ \t\f\v]+")
+PART_HEADING_PATTERN = re.compile(r"^#{1,6}\s+Parte\s+\d+\b", re.IGNORECASE)
 
 
 def build_transcript_path(output_dir: Path, course_dir_name: str, relative_video_path: Path) -> Path:
@@ -43,12 +49,97 @@ def write_transcript(transcript_path: Path, metadata: dict[str, Any], transcript
 
     ensure_directory(transcript_path.parent)
     front_matter = yaml.safe_dump(metadata, sort_keys=False, allow_unicode=True).strip()
-    content = f"---\n{front_matter}\n---\n\n## Transcripción literal\n\n{transcript_text.strip()}\n"
+    formatted_text = format_transcript_paragraphs(transcript_text)
+    content = f"---\n{front_matter}\n---\n\n## Transcripción literal\n\n{formatted_text}\n"
 
     with transcript_path.open("w", encoding="utf-8") as markdown_file:
         markdown_file.write(content)
 
     return transcript_path
+
+
+def format_transcript_paragraphs(text: str) -> str:
+    normalized_text = text.replace("\r\n", "\n").replace("\r", "\n").strip()
+    if not normalized_text:
+        return ""
+
+    output_blocks: list[str] = []
+    prose_lines: list[str] = []
+
+    for raw_line in normalized_text.split("\n"):
+        line = raw_line.strip()
+
+        if not line:
+            _flush_prose_lines(prose_lines, output_blocks)
+            continue
+
+        if PART_HEADING_PATTERN.match(line):
+            _flush_prose_lines(prose_lines, output_blocks)
+            output_blocks.append(line)
+            continue
+
+        prose_lines.append(line)
+
+    _flush_prose_lines(prose_lines, output_blocks)
+    return "\n\n".join(block for block in output_blocks if block).strip()
+
+
+def _flush_prose_lines(prose_lines: list[str], output_blocks: list[str]) -> None:
+    if not prose_lines:
+        return
+
+    prose = WHITESPACE_PATTERN.sub(" ", " ".join(prose_lines)).strip()
+    output_blocks.extend(_split_prose_into_paragraphs(prose))
+    prose_lines.clear()
+
+
+def _split_prose_into_paragraphs(prose: str) -> list[str]:
+    if len(prose) <= MAX_PARAGRAPH_CHARS:
+        return [prose]
+
+    paragraphs: list[str] = []
+    current = ""
+
+    for sentence in SENTENCE_BOUNDARY_PATTERN.split(prose):
+        sentence = sentence.strip()
+        if not sentence:
+            continue
+
+        candidate = f"{current} {sentence}".strip() if current else sentence
+        if current and len(candidate) > MAX_PARAGRAPH_CHARS and len(current) >= MIN_PARAGRAPH_CHARS:
+            paragraphs.append(current)
+            current = sentence
+            continue
+
+        current = candidate
+
+        if len(current) > MAX_PARAGRAPH_CHARS:
+            wrapped, current = _wrap_long_paragraph(current)
+            paragraphs.extend(wrapped)
+
+    if current:
+        paragraphs.append(current)
+
+    return paragraphs
+
+
+def _wrap_long_paragraph(text: str) -> tuple[list[str], str]:
+    words = text.split(" ")
+    paragraphs: list[str] = []
+    current = ""
+
+    for word in words:
+        candidate = f"{current} {word}".strip() if current else word
+        if current and len(candidate) > MAX_PARAGRAPH_CHARS:
+            paragraphs.append(current)
+            current = word
+        else:
+            current = candidate
+
+    if paragraphs and current and len(current) < MIN_PARAGRAPH_CHARS:
+        return paragraphs[:-1], f"{paragraphs[-1]} {current}".strip()
+
+    return paragraphs, current
 
 
 def write_index(

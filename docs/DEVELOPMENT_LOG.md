@@ -67,6 +67,35 @@ Se corrigió el ordenamiento de módulos y videos para usar orden natural.
 - El orden natural se aplica sobre cada parte de la ruta relativa para respetar módulos y lecciones numeradas.
 - No se ejecutó transcripción real.
 
+## 2026-05-06: Entrada V1.3
+
+Se ejecutó el primer test real controlado con 1 video.
+
+- Resultado: procesado 1, fallidos 0.
+- Se generó audio, `output/index.csv` y transcripción Markdown.
+- La metadata quedó correcta y el estado fue `completed`.
+- La transcripción fue literal, pero quedó como bloque único de texto.
+
+## 2026-05-06: Entrada V1.3.1
+
+Se agregó formato de párrafos para mejorar legibilidad sin alterar la transcripción literal.
+
+- No se resume el contenido.
+- No se reescribe el contenido.
+- No se cambia el orden.
+- Se conserva la metadata YAML del Markdown.
+- No se ejecutó transcripción real durante este ajuste.
+
+## 2026-05-06: Entrada V1.3.2
+
+Se agregaron perfiles universales de configuración por curso.
+
+- Se separó prompt base universal de contexto específico.
+- Se agregó construcción de prompt final desde contexto, idioma, nombres propios, glosario y reglas de preservación.
+- Se agregaron ejemplos genéricos para español, inglés, marketing, finanzas y trading.
+- `configs/local/` queda reservado para perfiles reales privados.
+- No se ejecutó transcripción real durante esta tarea.
+
 ## Validaciones Ejecutadas
 
 ```bash
@@ -83,4 +112,4 @@ python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-
 
 ## Nota
 
-No se ha ejecutado todavía una transcripción real.
+Ya se ejecutó un primer test real con 1 video. Todavía no se ha procesado el módulo completo ni el curso completo.
