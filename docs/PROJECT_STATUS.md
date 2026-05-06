@@ -10,7 +10,8 @@ Soma Transcriber ya tiene una primera base funcional para detectar videos, extra
 
 - CLI local en Python.
 - Flags disponibles: `--input`, `--output`, `--course-name`, `--model`, `--force`, `--dry-run`, `--max-videos`, `--list-videos`, `--config`.
-- Scan recursivo de videos con extensiones `.mp4`, `.mov`, `.mkv`, `.webm`, `.m4v`.
+- Scan recursivo de videos con extensiones `.mp4`, `.mov`, `.mkv`, `.webm`, `.m4v`, `.ts`.
+- Orden natural de módulos y videos numerados.
 - Extracción de audio con FFmpeg a MP3 mono, 16000 Hz, 64k.
 - División de audios mayores a 24 MB usando pydub.
 - Transcripción con OpenAI API.

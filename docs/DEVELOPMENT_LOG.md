@@ -51,6 +51,22 @@ Se creó la documentación viva del proyecto en `docs/`:
 
 La documentación viva queda como fuente principal de contexto para futuras tareas con Codex.
 
+## 2026-05-06: Entrada V1.2.2
+
+Se agregó soporte para archivos `.ts` porque el primer curso real detectado usa MPEG-TS.
+
+- Se actualizó `.gitignore` para ignorar `*.ts` como archivos de video pesados.
+- Se actualizó README y documentación viva para reflejar el nuevo formato soportado.
+- No se ejecutó transcripción real.
+
+## 2026-05-06: Entrada V1.2.3
+
+Se corrigió el ordenamiento de módulos y videos para usar orden natural.
+
+- Esto evita que `10`, `11` y `12` aparezcan antes de `2`.
+- El orden natural se aplica sobre cada parte de la ruta relativa para respetar módulos y lecciones numeradas.
+- No se ejecutó transcripción real.
+
 ## Validaciones Ejecutadas
 
 ```bash

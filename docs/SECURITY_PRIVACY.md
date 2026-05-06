@@ -9,6 +9,7 @@ No debe subirse a GitHub:
 - `.env`
 - `.env.*` excepto `.env.example`
 - videos originales
+- archivos de video `.mp4`, `.mov`, `.mkv`, `.webm`, `.m4v`, `.ts`
 - audios extraídos
 - chunks
 - transcripciones privadas

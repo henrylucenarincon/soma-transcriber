@@ -98,14 +98,6 @@ def main(argv: Sequence[str] | None = None) -> int:
     output_dir = args.output.expanduser().resolve()
     course_dir_name = safe_path_part(args.course_name)
 
-    config = load_config(args.config)
-    prompt = str(
-        config_get(config, "transcription", "prompt", default=DEFAULT_TRANSCRIPTION_PROMPT)
-        or DEFAULT_TRANSCRIPTION_PROMPT
-    )
-    max_chunk_mb = config_get(config, "audio", "max_chunk_mb", default=None)
-    max_chunk_bytes = megabytes_to_bytes(max_chunk_mb) if max_chunk_mb else MAX_CHUNK_BYTES
-
     scanned_videos = scan_videos(input_dir)
     videos = limit_videos(scanned_videos, args.max_videos)
     manifest = Manifest.load(DEFAULT_MANIFEST_PATH)
@@ -126,6 +118,14 @@ def main(argv: Sequence[str] | None = None) -> int:
             args.max_videos,
         )
         return 0
+
+    config = load_config(args.config)
+    prompt = str(
+        config_get(config, "transcription", "prompt", default=DEFAULT_TRANSCRIPTION_PROMPT)
+        or DEFAULT_TRANSCRIPTION_PROMPT
+    )
+    max_chunk_mb = config_get(config, "audio", "max_chunk_mb", default=None)
+    max_chunk_bytes = megabytes_to_bytes(max_chunk_mb) if max_chunk_mb else MAX_CHUNK_BYTES
 
     validate_runtime_dependencies()
 

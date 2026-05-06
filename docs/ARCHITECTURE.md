@@ -43,7 +43,7 @@ soma-transcriber/
 
 `main.py`: punto de entrada de la CLI. Parseo de argumentos, carga de configuración, coordinación del pipeline, `--dry-run`, `--list-videos`, `--max-videos`, validaciones previas y manejo por archivo.
 
-`scanner.py`: scan recursivo del curso y detección de archivos de video soportados. Devuelve rutas absolutas, rutas relativas, módulo y nombre de video.
+`scanner.py`: scan recursivo del curso y detección de archivos de video soportados: `.mp4`, `.mov`, `.mkv`, `.webm`, `.m4v` y `.ts` MPEG-TS. Devuelve rutas absolutas, rutas relativas, módulo y nombre de video. Usa orden natural por ruta relativa para respetar módulos y lecciones numeradas, evitando que `10` aparezca antes de `2`.
 
 `audio.py`: extracción de audio con FFmpeg y división en chunks menores al límite configurado. Produce MP3 mono, 16000 Hz, 64k.
 

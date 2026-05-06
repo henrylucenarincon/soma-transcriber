@@ -171,6 +171,9 @@ Extensiones detectadas:
 - `.mkv`
 - `.webm`
 - `.m4v`
+- `.ts`
+
+Algunos cursos descargados pueden venir como MPEG-TS (`.ts`). Soma puede detectarlos y procesarlos usando FFmpeg.
 
 ## Estructura de output
 

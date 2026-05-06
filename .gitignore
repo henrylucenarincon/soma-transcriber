@@ -26,6 +26,7 @@ env/
 *.mkv
 *.webm
 *.m4v
+*.ts
 *.mp3
 *.wav
 *.aac

@@ -15,6 +15,8 @@
 - dry-run mejorado.
 - validación FFmpeg/API key.
 - documentación viva.
+- soporte para videos `.ts`.
+- orden natural de módulos y videos.
 
 ## Pendientes
 

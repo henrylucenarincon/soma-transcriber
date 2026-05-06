@@ -2,9 +2,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+import re
 
 
-VIDEO_EXTENSIONS = {".mp4", ".mov", ".mkv", ".webm", ".m4v"}
+VIDEO_EXTENSIONS = {".mp4", ".mov", ".mkv", ".webm", ".m4v", ".ts"}
+NATURAL_SORT_PATTERN = re.compile(r"\d+(?:\.\d+)*|\D+")
 
 
 @dataclass(frozen=True)
@@ -39,4 +41,21 @@ def scan_videos(input_dir: Path) -> list[VideoFile]:
             )
         )
 
-    return sorted(videos, key=lambda video: video.relative_path.as_posix().lower())
+    return sorted(videos, key=lambda video: natural_sort_key(video.relative_path))
+
+
+def natural_sort_key(path: Path) -> tuple[tuple[tuple[int, tuple[int, ...] | str], ...], ...]:
+    return tuple(_natural_part_key(part) for part in path.parts)
+
+
+def _natural_part_key(part: str) -> tuple[tuple[int, tuple[int, ...] | str], ...]:
+    tokens: list[tuple[int, tuple[int, ...] | str]] = []
+
+    for match in NATURAL_SORT_PATTERN.findall(part.casefold()):
+        if match[0].isdigit():
+            number_parts = tuple(int(value) for value in match.split("."))
+            tokens.append((0, number_parts))
+        else:
+            tokens.append((1, match))
+
+    return tuple(tokens)
