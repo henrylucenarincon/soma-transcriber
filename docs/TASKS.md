@@ -20,6 +20,8 @@
 - Primer test real con 1 video.
 - Formato legible de transcripciones Markdown.
 - perfiles universales de configuración por curso.
+- chunking preventivo por duración.
+- reemplazar la dependencia anterior por FFmpeg/FFprobe para chunking.
 
 ## Pendientes
 
@@ -28,6 +30,8 @@
 - Crear perfil local real para Victor Heras.
 - Reprocesar primer video con perfil local.
 - Probar nuevamente con `--force --max-videos 1`.
+- Reprocesar video fallido del módulo 1.
+- Validar módulo 1 completo.
 - Procesar módulo completo.
 - Procesar curso completo.
 - Revisar calidad de transcripción.

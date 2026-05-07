@@ -131,6 +131,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         default=config_get(config, "audio", "max_file_mb", default=None),
     )
     max_chunk_bytes = megabytes_to_bytes(max_chunk_mb) if max_chunk_mb else MAX_CHUNK_BYTES
+    max_chunk_minutes = config_get(config, "audio", "max_chunk_minutes", default=10)
 
     validate_runtime_dependencies()
 
@@ -162,6 +163,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 audio_path=audio_path,
                 chunk_dir=chunk_dir,
                 max_bytes=max_chunk_bytes,
+                max_chunk_minutes=max_chunk_minutes,
                 force=args.force,
             )
 

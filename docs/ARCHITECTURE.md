@@ -5,10 +5,9 @@ Soma Transcriber es una CLI local en Python. Su arquitectura está dividida por 
 ## Stack Actual
 
 - Python 3.11+
-- FFmpeg instalado en el sistema
+- FFmpeg y FFprobe instalados en el sistema
 - OpenAI API
 - `python-dotenv`
-- `pydub`
 - `tqdm`
 - `pandas`
 - `pyyaml`
@@ -48,7 +47,7 @@ soma-transcriber/
 
 `scanner.py`: scan recursivo del curso y detección de archivos de video soportados: `.mp4`, `.mov`, `.mkv`, `.webm`, `.m4v` y `.ts` MPEG-TS. Devuelve rutas absolutas, rutas relativas, módulo y nombre de video. Usa orden natural por ruta relativa para respetar módulos y lecciones numeradas, evitando que `10` aparezca antes de `2`.
 
-`audio.py`: extracción de audio con FFmpeg y división en chunks menores al límite configurado. Produce MP3 mono, 16000 Hz, 64k.
+`audio.py`: extracción de audio con FFmpeg, medición de duración con FFprobe y división en chunks con FFmpeg. Produce MP3 mono, 16000 Hz, 64k. Puede dividir por tamaño (`audio.max_file_mb` o `audio.max_chunk_mb`) y por duración preventiva (`audio.max_chunk_minutes`) para reducir errores `input_too_large` en audios largos. No depende de librerías Python de audio para chunking.
 
 `transcriber.py`: llamada a OpenAI API para transcribir un audio o chunk. Usa `OPENAI_API_KEY` desde `.env` o variable de entorno. También construye el prompt final con `build_transcription_prompt(config)`.
 

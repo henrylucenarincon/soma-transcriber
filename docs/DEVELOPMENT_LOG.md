@@ -96,6 +96,24 @@ Se agregaron perfiles universales de configuración por curso.
 - `configs/local/` queda reservado para perfiles reales privados.
 - No se ejecutó transcripción real durante esta tarea.
 
+## 2026-05-06: Entrada V1.3.3
+
+Se detectó error `input_too_large` en un video largo del módulo 1 real.
+
+- El archivo fallido fue `12. Cómo tener tus primeros clientes sin resultados.ts`.
+- El audio no necesariamente superó el límite por MB, pero sí el límite práctico de audio + instrucciones del modelo.
+- Se agregó chunking preventivo por duración configurable con `audio.max_chunk_minutes`.
+- No se ejecutó transcripción real durante esta tarea.
+
+## 2026-05-06: Entrada V1.3.4
+
+Se detectó que la dependencia anterior para chunking fallaba en Python 3.13 por `audioop`/`pyaudioop`.
+
+- Se reemplazó el chunking con librerías Python de audio por FFmpeg/FFprobe.
+- FFprobe obtiene la duración del audio.
+- FFmpeg exporta chunks MP3 con los nombres `chunk_001.mp3`, `chunk_002.mp3`, etc.
+- No se ejecutó transcripción real durante esta tarea.
+
 ## Validaciones Ejecutadas
 
 ```bash

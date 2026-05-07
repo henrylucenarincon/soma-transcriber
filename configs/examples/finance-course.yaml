@@ -39,6 +39,7 @@ audio:
   channels: 1
   bitrate: "64k"
   max_file_mb: 24
+  max_chunk_minutes: 10
 
 output:
   include_metadata: true

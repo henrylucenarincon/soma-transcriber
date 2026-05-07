@@ -16,6 +16,12 @@ Ver ayuda de CLI:
 python3 src/main.py --help
 ```
 
+Validar import de helpers de audio:
+
+```bash
+python3 -c "from src.audio import get_audio_duration_seconds; print('audio helpers OK')"
+```
+
 Listar videos sin extraer audio ni llamar a OpenAI:
 
 ```bash
@@ -88,6 +94,20 @@ Resultado observado: procesado 1, fallidos 0. Se generó audio, `output/index.cs
 - que no haya reescritura
 - que se mantenga el contenido literal y en orden
 - que `output/` y `data/` sigan ignorados por Git
+
+## Reprocesar Fallidos Sin `--force`
+
+Después de V1.3.3, se puede reintentar el video fallido del módulo 1 sin `--force`. Los videos `completed` deberían saltarse y Soma debería intentar el archivo `failed`:
+
+```bash
+python3 src/main.py \
+  --input "/Users/henry/Library/CloudStorage/GoogleDrive-henrylucena7@gmail.com/Mi unidad/Cursos/VICOR HERAS - MARCA PERSONAL 5.0/1. Como funciona el algoritmo" \
+  --output "./output" \
+  --course-name "Victor Heras - Marca Personal 5.0 - Modulo 1" \
+  --config "configs/local/victor-heras-marca-personal-5.yaml"
+```
+
+Sin `--force`, el manifest debe evitar reprocesar archivos `completed` y concentrarse en los `failed` o pendientes.
 
 ## Criterios de Éxito Iniciales
 

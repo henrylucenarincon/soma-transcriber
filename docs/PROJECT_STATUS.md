@@ -1,8 +1,8 @@
 # Estado del Proyecto
 
-Versión actual: V1.3.2
+Versión actual: V1.3.4
 
-Estado: CLI base funcional con seguridad operativa inicial, documentación viva creada, primer test real exitoso y perfiles universales de configuración.
+Estado: CLI base funcional con seguridad operativa inicial, documentación viva creada, primer test real exitoso, perfiles universales de configuración y chunking con FFmpeg/FFprobe.
 
 Soma Transcriber ya tiene una primera base funcional para detectar videos, extraer audio, dividir archivos grandes, transcribir con OpenAI API y escribir resultados organizados. La versión V1.1 agregó controles para reducir riesgo operativo y costos accidentales antes de ejecutar transcripciones reales. En V1.3 se ejecutó el primer test real controlado con 1 video y fue exitoso.
 
@@ -13,7 +13,8 @@ Soma Transcriber ya tiene una primera base funcional para detectar videos, extra
 - Scan recursivo de videos con extensiones `.mp4`, `.mov`, `.mkv`, `.webm`, `.m4v`, `.ts`.
 - Orden natural de módulos y videos numerados.
 - Extracción de audio con FFmpeg a MP3 mono, 16000 Hz, 64k.
-- División de audios mayores a 24 MB usando pydub.
+- División de audios con FFmpeg/FFprobe por tamaño y por duración máxima configurable.
+- Eliminación de la dependencia funcional de audio en Python para evitar problemas de `audioop` en Python 3.13.
 - Transcripción con OpenAI API.
 - Prompt configurable desde `config.yaml`.
 - Perfiles universales de configuración por curso con `--config`.
@@ -56,9 +57,17 @@ python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-
 
 El primer Markdown real quedó como un bloque único de texto. En V1.3.1 se corrige la presentación para escribir la transcripción literal en párrafos legibles, sin resumir, reescribir ni alterar el orden del contenido.
 
+## Hallazgo V1.3.3
+
+Al procesar el módulo 1 real se detectó un caso `input_too_large` en un video largo que no había superado el límite por MB. Para reducir ese riesgo, Soma ahora divide preventivamente audios que superen `audio.max_chunk_minutes`, por defecto 10 minutos.
+
+## Hallazgo V1.3.4
+
+En Python 3.13, la dependencia de chunking anterior falló por la remoción de `audioop` y ausencia de `pyaudioop`. Soma reemplazó ese flujo por FFmpeg/FFprobe para obtener duración y crear chunks sin depender de esa compatibilidad.
+
 ## Próximo Hito Recomendado
 
-Crear un perfil local real para el curso actual y reprocesar 1 video con `--force --max-videos 1`.
+Reprocesar el video fallido del módulo 1 sin `--force`, para saltar los videos `completed` e intentar nuevamente el archivo `failed`.
 
 El objetivo de ese hito no es procesar un curso completo, sino validar el circuito end to end: audio, chunking si aplica, API, Markdown, manifest e index.
 
@@ -68,4 +77,4 @@ El objetivo de ese hito no es procesar un curso completo, sino validar el circui
 - Usar `--force` sin intención y duplicar costos.
 - Exponer `OPENAI_API_KEY` si se versiona `.env` por error.
 - Versionar transcripciones privadas, audios o videos si se cambia `.gitignore`.
-- Encontrar errores no visibles hasta probar con videos reales, especialmente FFmpeg, pydub y límites de tamaño.
+- Encontrar errores no visibles hasta probar con videos reales, especialmente FFmpeg/FFprobe y límites de tamaño o duración.

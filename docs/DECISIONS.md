@@ -19,6 +19,7 @@ Este archivo registra decisiones relevantes para mantener trazabilidad del proye
 - Codex se usa como ejecutor principal de cambios.
 - La documentación debe mantenerse actualizada con cada avance relevante.
 - Soma no tendrá prompts específicos hardcodeados para un curso. El contexto específico se maneja mediante perfiles YAML opcionales.
+- Soma usará FFmpeg/FFprobe para operaciones de audio y evitará depender de librerías Python de audio para chunking debido a compatibilidad con Python 3.13.
 
 ## Implicaciones
 

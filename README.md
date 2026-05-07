@@ -2,14 +2,14 @@
 
 Soma Transcriber es una CLI local para convertir cursos en video en transcripciones Markdown estudiables por IA. Funciona con cursos de cualquier tema: marketing, finanzas, trading, programación, filosofía, ventas y más.
 
-La herramienta recorre una carpeta de curso, detecta videos, extrae audio con FFmpeg, divide audios grandes en chunks menores a 24 MB, transcribe con OpenAI API y conserva la estructura original de módulos dentro del output.
+La herramienta recorre una carpeta de curso, detecta videos, extrae audio con FFmpeg, divide audios grandes o largos en chunks seguros, transcribe con OpenAI API y conserva la estructura original de módulos dentro del output.
 
 ## Instalación
 
 Requisitos:
 
 - Python 3.11+
-- FFmpeg instalado en el sistema
+- FFmpeg instalado en el sistema, incluyendo FFprobe
 - Una API key de OpenAI
 
 Crear entorno virtual e instalar dependencias:
@@ -32,7 +32,10 @@ Verificar instalación:
 
 ```bash
 ffmpeg -version
+ffprobe -version
 ```
+
+Soma usa FFmpeg para extraer audio y crear chunks, y FFprobe para medir duración. Esto evita depender de librerías Python de audio que pueden fallar en Python 3.13 por la remoción de `audioop`.
 
 ## Configurar `.env`
 
@@ -79,6 +82,8 @@ python3 src/main.py \
 ```
 
 Los perfiles pueden definir modelo, prompt base, contexto opcional del curso, idioma esperado, nombres propios, glosario y reglas de preservación. Si pasas `--model`, el valor de la CLI tiene prioridad sobre el YAML. `configs/local/` no debe subirse a GitHub.
+
+En `audio`, `max_file_mb` controla el límite por tamaño y `max_chunk_minutes` controla el límite preventivo por duración. El valor recomendado por defecto es `10`, útil para reducir errores `input_too_large` en videos largos aunque el archivo pese menos de 24 MB.
 
 ## Dry run
 
