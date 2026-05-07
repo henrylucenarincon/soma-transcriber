@@ -144,6 +144,15 @@ Se mejoró la experiencia de Soma Studio Local.
 - Se refuerza que `max_videos = 1` es recomendado para pruebas y `0` significa sin límite.
 - No se ejecutó transcripción real durante esta tarea.
 
+## 2026-05-06: Entrada V1.5.2
+
+Se corrigió el selector de carpetas en macOS.
+
+- Se reemplazó la dependencia principal de `tkinter` por `osascript`/AppleScript en macOS.
+- `tkinter` queda como fallback si el selector nativo no está disponible.
+- El input manual queda como fallback final.
+- No se ejecutó transcripción real durante esta tarea.
+
 ## Validaciones Ejecutadas
 
 ```bash

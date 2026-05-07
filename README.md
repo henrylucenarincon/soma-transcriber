@@ -196,7 +196,7 @@ Si no activaste el entorno virtual:
 
 Soma Studio sirve para preparar cursos como contexto de aprendizaje para IA: primero transcripciones literales, luego documentos de estudio y paquetes de contexto. No es una app pública, no tiene login, no usa base de datos externa y no sube datos a la nube.
 
-Puedes seleccionar la carpeta del curso desde la interfaz o pegar la ruta manualmente. También puedes elegir la carpeta de output desde la UI.
+Puedes seleccionar la carpeta del curso desde la interfaz o pegar la ruta manualmente. También puedes elegir la carpeta de output desde la UI. En macOS, el selector usa el diálogo nativo mediante `osascript`/AppleScript; si falla, puedes seguir pegando la ruta manualmente.
 
 En Soma Studio, `max_videos = 0` significa sin límite. Para pruebas controladas, usa `max_videos = 1`; usa `0` solo cuando quieras procesar todo lo pendiente y entiendas el costo potencial de API.
 

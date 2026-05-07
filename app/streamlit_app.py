@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 import json
+import platform
 import re
 import subprocess
 import sys
@@ -28,6 +29,11 @@ def run_cli_command(args: list[str]) -> tuple[int, str, str]:
 
 
 def select_directory_dialog(title: str = "Selecciona una carpeta") -> str | None:
+    if platform.system() == "Darwin":
+        selected = _select_directory_with_osascript(title)
+        if selected:
+            return selected
+
     try:
         from tkinter import Tk, filedialog
 
@@ -37,10 +43,32 @@ def select_directory_dialog(title: str = "Selecciona una carpeta") -> str | None
         selected = filedialog.askdirectory(title=title)
         root.destroy()
     except Exception as exc:
-        st.warning(f"No se pudo abrir el selector de carpetas. Usa el input manual. Detalle: {exc}")
+        st.warning(f"No se pudo abrir selector gráfico. Pega la ruta manualmente. Detalle: {exc}")
         return None
 
     return selected or None
+
+
+def _select_directory_with_osascript(title: str) -> str | None:
+    escaped_title = title.replace("\\", "\\\\").replace('"', '\\"')
+    script = f'POSIX path of (choose folder with prompt "{escaped_title}")'
+    completed = subprocess.run(
+        ["osascript", "-e", script],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    if completed.returncode == 0:
+        selected = completed.stdout.strip()
+        return selected or None
+
+    error_text = completed.stderr.strip()
+    if "User canceled" in error_text or "User cancelled" in error_text:
+        return None
+
+    st.warning("No se pudo abrir el selector nativo de macOS. Intentando selector alternativo.")
+    return None
 
 
 def discover_config_files() -> list[str]:

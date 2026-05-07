@@ -27,6 +27,7 @@ Soma Transcriber ya tiene una primera base funcional para detectar videos, extra
 - Soma Studio Local con Streamlit como interfaz personal encima de la CLI.
 - Tabs locales para curso, transcripción, estado y Study Pack próximamente.
 - Soma Studio permite seleccionar carpeta local de curso/output desde Finder o pegar rutas manualmente.
+- En macOS, el selector de carpetas usa `osascript`/AppleScript con fallback manual.
 - La UI aclara que `max_videos = 0` significa sin límite y recomienda `1` para pruebas.
 - `.gitignore` configurado para excluir `.env`, `.tmp/`, `data/`, `output/`, `outputs/`, videos, audios y archivos pesados.
 
