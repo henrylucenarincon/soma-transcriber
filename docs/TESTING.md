@@ -10,6 +10,12 @@ Compilar módulos Python:
 python3 -m compileall src
 ```
 
+Compilar CLI y app:
+
+```bash
+python3 -m compileall src app
+```
+
 Ver ayuda de CLI:
 
 ```bash
@@ -21,6 +27,26 @@ Validar import de helpers de audio:
 ```bash
 python3 -c "from src.audio import get_audio_duration_seconds; print('audio helpers OK')"
 ```
+
+Validar Streamlit:
+
+```bash
+python3 -c "import streamlit; print('streamlit OK')"
+```
+
+Si el Python del sistema está gestionado por Homebrew, ejecutar la validación desde el entorno virtual:
+
+```bash
+.venv/bin/python -c "import streamlit; print('streamlit OK')"
+```
+
+Abrir Soma Studio Local:
+
+```bash
+streamlit run app/streamlit_app.py
+```
+
+No ejecutar transcripción real como parte de estas validaciones salvo que se esté haciendo una prueba controlada.
 
 Listar videos sin extraer audio ni llamar a OpenAI:
 

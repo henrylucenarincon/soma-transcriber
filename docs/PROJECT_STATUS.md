@@ -1,8 +1,8 @@
 # Estado del Proyecto
 
-Versión actual: V1.3.5
+Versión actual: V1.5
 
-Estado: CLI base funcional con seguridad operativa inicial, documentación viva creada, módulo 1 real completado, perfiles universales de configuración y chunking con FFmpeg/FFprobe.
+Estado: CLI base funcional con seguridad operativa inicial, documentación viva creada, módulo 1 real completado, perfiles universales de configuración, chunking con FFmpeg/FFprobe e interfaz local inicial Soma Studio.
 
 Soma Transcriber ya tiene una primera base funcional para detectar videos, extraer audio, dividir archivos grandes, transcribir con OpenAI API y escribir resultados organizados. La versión V1.1 agregó controles para reducir riesgo operativo y costos accidentales antes de ejecutar transcripciones reales. En V1.3 se ejecutó el primer test real controlado con 1 video y fue exitoso.
 
@@ -24,6 +24,8 @@ Soma Transcriber ya tiene una primera base funcional para detectar videos, extra
 - Manifest en `data/manifest.json`.
 - Saltar archivos ya `completed` salvo que se use `--force`.
 - Índice CSV en `output/index.csv`.
+- Soma Studio Local con Streamlit como interfaz personal encima de la CLI.
+- Tabs locales para curso, transcripción, estado y Study Pack próximamente.
 - `.gitignore` configurado para excluir `.env`, `.tmp/`, `data/`, `output/`, `outputs/`, videos, audios y archivos pesados.
 
 ## Validaciones Ejecutadas

@@ -53,9 +53,24 @@ Mejorar el sistema según hallazgos reales:
 - estimación de costo/duración
 - selección por índice/rango si hace falta
 
+## V1.5: Soma Studio Local
+
+Crear una interfaz local con Streamlit para controlar el flujo personal encima de la CLI:
+
+- seleccionar curso
+- seleccionar perfil YAML
+- listar videos
+- ejecutar dry-run
+- transcribir con controles de seguridad
+- reintentar fallidos
+- ver rutas de outputs y estado
+- preparar la sección visual de Study Pack
+
+Estado: implementado como interfaz local inicial. No tiene login, backend propio, base de datos externa ni modo SaaS.
+
 ## V2: Estudio del Curso
 
-Generar documentos de análisis a partir de transcripciones:
+Generar Study Pack y documentos de análisis a partir de transcripciones:
 
 - resúmenes por módulo
 - conceptos clave
@@ -63,6 +78,8 @@ Generar documentos de análisis a partir de transcripciones:
 - glosario
 - mapas de temas
 - guías de estudio
+- prompt maestro para IA
+- `AI_STUDY_CONTEXT.md`
 
 ## V3: Base Consultable para IA
 
@@ -86,4 +103,4 @@ Usar el conocimiento del curso para producir entregables concretos:
 
 ## V5: Posible Interfaz Local
 
-Evaluar una interfaz local, probablemente Streamlit, solo si hace falta. La CLI sigue siendo suficiente mientras el flujo sea simple y controlado.
+Evaluar una app local más avanzada si Soma Studio necesita crecer más allá de Streamlit. V1.5 ya cubre el uso personal local inicial.

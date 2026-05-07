@@ -178,6 +178,26 @@ python src/main.py \
   --force
 ```
 
+## Soma Studio Local
+
+Soma Studio Local es una interfaz personal y local construida con Streamlit. No reemplaza la CLI: la usa por debajo para listar videos, hacer dry-run, transcribir y reintentar fallidos.
+
+Abrir la interfaz:
+
+```bash
+streamlit run app/streamlit_app.py
+```
+
+Si no activaste el entorno virtual:
+
+```bash
+.venv/bin/streamlit run app/streamlit_app.py
+```
+
+Soma Studio sirve para preparar cursos como contexto de aprendizaje para IA: primero transcripciones literales, luego documentos de estudio y paquetes de contexto. No es una app pública, no tiene login, no usa base de datos externa y no sube datos a la nube.
+
+La UI no cambia el flujo de privacidad: `output/`, `data/`, `.env`, `configs/local/` y `.tmp/` siguen siendo privados y no deben subirse a GitHub.
+
 ## Estructura esperada del curso
 
 Ejemplo:

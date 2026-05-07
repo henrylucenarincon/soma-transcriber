@@ -123,6 +123,17 @@ Se reprocesó el módulo 1 completo.
 - Se validó que FFmpeg/FFprobe resolvió el error `input_too_large`.
 - `output/`, `data/` y las transcripciones privadas no deben versionarse.
 
+## 2026-05-06: Entrada V1.5
+
+Se agregó Soma Studio Local con Streamlit.
+
+- La interfaz es personal/local.
+- Ejecuta la CLI con `subprocess` y `sys.executable`.
+- Permite listar videos, dry-run, transcribir y reintentar fallidos.
+- Muestra estado local desde `output/index.csv` y resumen de `data/manifest.json`.
+- Deja preparada una sección para Study Pack V2.
+- No se ejecutó transcripción real durante esta tarea.
+
 ## Validaciones Ejecutadas
 
 ```bash

@@ -11,6 +11,7 @@ Soma Transcriber es una CLI local en Python. Su arquitectura está dividida por 
 - `tqdm`
 - `pandas`
 - `pyyaml`
+- `streamlit`
 
 ## Estructura de Carpetas
 
@@ -24,6 +25,8 @@ soma-transcriber/
     manifest.py
     writer.py
     utils.py
+  app/
+    streamlit_app.py
   docs/
   configs/
     examples/
@@ -57,6 +60,12 @@ soma-transcriber/
 
 `utils.py`: helpers compartidos para fechas, rutas seguras, configuración, conversión de tamaños y mensajes por defecto.
 
+## Responsabilidad de `app/`
+
+`streamlit_app.py`: interfaz local Soma Studio. Es una capa visual encima de la CLI existente: invoca `src/main.py` con `subprocess.run`, usando `sys.executable` para respetar el mismo entorno Python. Permite configurar curso, perfil YAML, output, `max_videos`, `force`, listar videos, hacer dry-run, transcribir, reintentar fallidos y revisar estado local.
+
+V1.5 no agrega base de datos, backend propio, login, multiusuario ni servicios externos. La CLI sigue siendo la base operativa.
+
 ## Perfiles de Configuración
 
 Soma soporta perfiles YAML universales por curso sin cambiar código. La CLI ya acepta `--config`, por ejemplo:
@@ -83,6 +92,7 @@ El modelo puede declararse en `transcription.model`; si el usuario pasa `--model
 Debe versionarse:
 
 - `src/`
+- `app/`
 - `docs/`
 - `README.md`
 - `requirements.txt`
