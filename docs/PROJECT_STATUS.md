@@ -1,8 +1,8 @@
 # Estado del Proyecto
 
-Versión actual: V2.0.5
+Versión actual: V2.0.6
 
-Estado: pipeline V1 validado con un curso completo y Study Pack Builder V2.0 agregado como CLI local inicial. V2.0.5 mejora la profundidad de los `module summaries` para producir síntesis metodológicas accionables.
+Estado: pipeline V1 validado con un curso completo y Study Pack Builder V2.0 agregado como CLI local inicial. V2.0.6 convierte los `module summaries` en Module Operating Systems.
 
 Soma Transcriber ya tiene una primera base funcional para detectar videos, extraer audio, dividir archivos grandes, transcribir con OpenAI API y escribir resultados organizados. La versión V1.1 agregó controles para reducir riesgo operativo y costos accidentales antes de ejecutar transcripciones reales. En V1.3 se ejecutó el primer test real controlado con 1 video y fue exitoso.
 
@@ -36,6 +36,7 @@ Soma Transcriber ya tiene una primera base funcional para detectar videos, extra
 - Detección V2.0.3 de clases introductorias por título/ruta para activar instrucciones especiales de mapa del módulo.
 - Prompts V2.0.4 para evitar arquitectura del módulo en clases operativas y forzar framework operativo real o implícito.
 - Prompts V2.0.5 para `module summaries` más profundos, conectados y útiles como metodología aplicable por IA.
+- Prompts V2.0.6 para corregir superficialidad de `module summaries` y producir sistemas operativos de módulo con checklist, reglas, frameworks y conexiones entre lecciones.
 - Manifest V2 privado en `data/study_manifest.json`.
 - Configuración V2 mediante sección `study` en YAML.
 - Chunking de texto por caracteres para analizar transcripciones largas.

@@ -278,6 +278,21 @@ python3 src/study_pack.py \
 
 Después de V2.0.5, revisar que el `module summary` conecte las lecciones, extraiga la secuencia metodológica, consolide ejemplos desde las `video-notes`, convierta conceptos en reglas prácticas y dé instrucciones útiles para una IA.
 
+Después de V2.0.6, el mismo comando debe regenerar un Module Operating System del módulo:
+
+```bash
+python3 src/study_pack.py \
+  --transcripts "./output/transcripts/Victor Heras - Marca Personal 5.0/3. Cómo hacer contenido viral en 5 pasos" \
+  --index "./output/index.csv" \
+  --output "./output/study" \
+  --course-name "Victor Heras - Marca Personal 5.0 - Test Modulo 3" \
+  --config "configs/local/victor-heras-marca-personal-5.yaml" \
+  --phase module-summaries \
+  --force
+```
+
+Revisar que el documento resultante no sea un resumen ejecutivo: debe incluir tesis central, sistema operativo del módulo, secuencia de aplicación, función de cada lección, frameworks, mapa de relaciones, ejemplos detectados, reglas prácticas, checklist operativo para IA e instrucciones de uso.
+
 No ejecutar generación real durante tareas de documentación o refactor. `output/study/` y `data/study_manifest.json` son privados y no se suben al repositorio.
 
 ## Criterios de Éxito Iniciales

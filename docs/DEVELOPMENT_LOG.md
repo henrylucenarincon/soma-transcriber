@@ -234,6 +234,15 @@ Se mejoraron prompts de `module summaries`.
 - También deben convertir conceptos en reglas prácticas e instrucciones útiles para IA.
 - No se ejecutó generación real durante esta tarea.
 
+## 2026-05-06: Entrada V2.0.6
+
+Se reforzaron los prompts de `module summaries` para convertirlos en Module Operating Systems.
+
+- El objetivo es evitar resúmenes genéricos y producir síntesis metodológicas accionables para IA.
+- El prompt ahora prioriza profundidad, especificidad y aplicabilidad sobre brevedad.
+- Se agregó una autoevaluación interna para revisar lecciones, frameworks, conexiones, reglas aplicables y ejemplos antes de responder.
+- No se ejecutó generación real durante esta tarea.
+
 ## Validaciones Ejecutadas
 
 ```bash

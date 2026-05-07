@@ -138,98 +138,203 @@ módulo, no como regla operativa única.
 
 MODULE_SUMMARY_TEMPLATE = """# Módulo: {module_name}
 
-## 1. Síntesis metodológica del módulo
+## 1. Tesis central del módulo
 
-Explicar qué enseña el módulo como sistema completo.
+Explica en 1-3 párrafos cuál es la idea profunda del módulo.
+No debe ser una descripción genérica.
 Debe responder:
-- Qué problema resuelve el módulo
-- Qué transformación busca producir
-- Cuál es la lógica completa que conecta las lecciones
-- Qué debe entender una IA antes de aplicar este módulo
+- Qué problema real resuelve este módulo
+- Qué transformación produce en quien lo estudia
+- Qué cambio de pensamiento exige
+- Qué lógica general sostiene todo el módulo
 
-## 2. Secuencia operativa del módulo
+Evita frases débiles como: "Este módulo trata sobre crear contenido atractivo".
+Produce una tesis fuerte, específica y metodológica basada solo en las video-notes.
 
-Extraer el orden de aplicación de las ideas.
-Debe incluir:
-- Paso 1
-- Paso 2
-- Paso 3
-- Pasos adicionales si aplica
-- Por qué el orden importa
-- Qué ocurre si se salta un paso
+## 2. Sistema operativo del módulo
 
-## 3. Lecciones incluidas y función de cada una
+Extraer la metodología completa como sistema.
+No limitarse a una lista corta si las video-notes contienen más piezas.
+Debe incluir todos los componentes relevantes respaldados por las video-notes.
 
-Listar cada lección y explicar qué función cumple dentro del módulo.
-No limitarse a títulos; explicar para qué sirve cada lección en la metodología.
+Formato:
 
-## 4. Principios centrales del módulo
+### 2.1 Componente 1: ...
+- Qué es
+- Para qué sirve
+- Cuándo se aplica
+- Qué pasa si se ignora
+- Con qué otro componente se conecta
 
-Extraer principios profundos.
+### 2.2 Componente 2: ...
+
+Continuar con todos los componentes relevantes detectados.
+
+## 3. Secuencia de aplicación
+
+Convertir el módulo en una secuencia práctica.
+Debe responder:
+- Qué se hace primero
+- Qué se hace después
+- Qué no se debe hacer antes de tiempo
+- Qué depende de qué
+- Qué se rompe si se salta un paso
+
+Debe ser más detallado que una lista de 5 pasos si el módulo contiene más componentes.
+
+## 4. Función de cada lección dentro del sistema
+
+Listar cada lección detectada en las video-notes y explicar su función dentro de la metodología.
+
+Formato:
+- Lección: [nombre de la lección]
+  - Función dentro del módulo:
+  - Qué aporta al sistema:
+  - Qué error ayuda a evitar:
+  - Cómo se conecta con la siguiente lección:
+
+No limitarse a repetir títulos.
+
+## 5. Principios profundos del módulo
+
+Extraer principios que realmente gobiernan la metodología.
+
 Cada principio debe incluir:
-- Nombre
+- Nombre del principio
 - Explicación
 - Por qué importa
 - Cómo se aplica
 - Qué error evita
+- Señales de que se está aplicando mal
 
-## 5. Mecanismos recurrentes
+Evitar principios obvios o genéricos. Extraer principios con poder operativo.
 
-Explicar relaciones de causa-efecto que se repiten.
-Ejemplo:
-- Si X, entonces Y
-- X funciona porque activa Y
-- X falla cuando falta Y
+## 6. Mecanismos causa-efecto
 
-## 6. Frameworks del módulo
+Explicar relaciones de causa y efecto presentes en el módulo.
 
-Consolidar frameworks explícitos o implícitos.
+Formato:
+- Si X ocurre, entonces Y pasa porque...
+- X aumenta/disminuye Y porque...
+- X falla cuando falta Y...
+
+Esta sección debe ayudar a una IA a razonar, no solo a recordar.
+
+## 7. Frameworks y herramientas del módulo
+
+Consolidar todos los frameworks explícitos o implícitos detectados.
+
 Para cada framework:
 - Nombre
 - Para qué sirve
-- Pasos/componentes
 - Cuándo usarlo
-- Resultado esperado
+- Entradas necesarias
+- Pasos/componentes
+- Output esperado
+- Errores comunes al usarlo
+- Cómo lo usaría una IA en una tarea real
 
-## 7. Conceptos clave y relaciones entre ellos
+No omitir frameworks o herramientas relevantes que aparezcan en las video-notes.
 
-No solo definir conceptos.
-Explicar cómo se relacionan entre sí dentro de la metodología.
+## 8. Conceptos clave y mapa de relaciones
 
-## 8. Ejemplos importantes y qué enseñan
+No solo definir conceptos. Explicar cómo se relacionan.
 
-Consolidar ejemplos presentes en las video-notes.
-No decir que no hay ejemplos si alguna video-note contiene ejemplos.
+Formato:
+- Concepto A:
+  - Definición según el curso
+  - Se relaciona con B porque...
+  - Es previo a C porque...
+  - Se aplica cuando...
+
+## 9. Ejemplos, casos y referencias detectadas
+
+Consolidar ejemplos reales mencionados en las video-notes.
+
+Reglas:
+- No inventar ejemplos
+- No usar ejemplos genéricos si no aparecen
+- Si una video-note contiene ejemplos, incluirlos
+
 Para cada ejemplo:
-- Ejemplo/caso
+- Qué ejemplo es
 - Qué principio ilustra
-- Cómo usarlo como referencia
+- Cómo se puede usar como referencia
+- Qué NO se debe copiar literalmente
 
-## 9. Reglas prácticas de aplicación
+Si no hay ejemplos en una lección concreta, no pasa nada.
+Pero no afirmar que el módulo completo no tiene ejemplos si otras video-notes sí los contienen.
+
+## 10. Reglas prácticas de aplicación
 
 Convertir el módulo en reglas accionables.
-Ejemplo:
-- Antes de crear un guion, validar...
-- Si el contenido no pasa...
-- No elegir formato antes de...
-- Usar controversia solo si...
 
-## 10. Errores que el módulo ayuda a evitar
+Ejemplos de formato:
+- Antes de escribir un guion, valida...
+- No elijas formato antes de...
+- Si la idea no pasa..., entonces...
+- Usa controversia solo cuando...
+- No uses tendencias si...
+- Antes de publicar, revisa...
+- Después de publicar, mide...
 
-Listar errores estratégicos, creativos o de ejecución que el módulo corrige.
+Las reglas deben salir de las video-notes.
 
-## 11. Instrucciones para una IA
+## 11. Checklist operativo para IA
 
-Instrucciones concretas para una IA que deba usar este módulo.
+Crear un checklist que una IA debe seguir cuando use este módulo.
+
+Debe estar pensado para tareas reales como:
+- crear guiones
+- revisar ideas
+- crear estrategia de contenido
+- analizar una marca
+- mejorar retención
+- diseñar un calendario
+- adaptar una referencia viral
+
+Formato:
+[ ] Preguntar por...
+[ ] Validar...
+[ ] Revisar...
+[ ] Elegir...
+[ ] Construir...
+[ ] Medir...
+
+Este checklist debe ser específico y no genérico.
+
+## 12. Instrucciones para una IA
+
+Escribir reglas de comportamiento para una IA que use este módulo.
+
 Debe incluir:
-- Qué debe priorizar
-- Qué no debe hacer
+- Qué debe hacer antes de responder
+- Qué debe evitar
 - Qué preguntas debe hacer si falta contexto
-- Cómo debe usar este módulo al crear guiones, estrategias, calendarios o análisis
+- Cómo debe usar los frameworks
+- Cómo debe priorizar la metodología del curso por encima de consejos genéricos
+- Cómo debe razonar cuando el usuario pida guiones, estrategia o contenido
 
-## 12. Preguntas que este módulo ayuda a responder
+## 13. Errores que el módulo ayuda a evitar
 
-Preguntas prácticas y estratégicas.
+Listar errores concretos.
+No escribir errores genéricos.
+
+Formato:
+- Error:
+- Por qué ocurre:
+- Qué parte del módulo lo corrige:
+- Cómo detectarlo:
+- Cómo corregirlo:
+
+## 14. Preguntas que este módulo ayuda a responder
+
+Separar por tipo:
+- Preguntas estratégicas
+- Preguntas creativas
+- Preguntas de guion
+- Preguntas de métricas
+- Preguntas de diagnóstico
 """
 
 
@@ -362,6 +467,8 @@ def build_system_prompt(settings: StudySettings) -> str:
             "Extrae principios, mecanismos de causa-efecto, frameworks explícitos o implícitos, reglas de decisión, ejemplos y referencias internas.",
             "El resultado debe ayudar a una IA a ejecutar tareas siguiendo la metodología del curso y evitando respuestas genéricas.",
             "Cuando generes module summaries, tu tarea no es resumir superficialmente. Tu tarea es sintetizar la metodología del módulo para que otra IA pueda aplicarla.",
+            "Cuando generes module summaries, no eres un resumidor. Eres un arquitecto de conocimiento para IA. Tu trabajo es convertir las notas del módulo en un sistema operativo aplicable.",
+            "Prioriza profundidad, especificidad y aplicabilidad.",
             "No reproduzcas transcripciones completas ni fragmentos largos del curso.",
             "Parafrasea con fidelidad. No inventes contenido.",
             "No rellenes secciones inventando ejemplos, frameworks o principios. Si algo no aparece, dilo claramente.",
@@ -503,10 +610,13 @@ def build_module_summary_prompt(
     )
     return f"""{build_system_prompt(settings)}
 
-Tarea: crear un module summary usando notas de estudio por video.
+Tarea: crear un Module Operating System usando notas de estudio por video.
 
-No se quiere un resumen superficial. Se quiere una síntesis metodológica profunda del módulo.
-Debes extraer el sistema operativo del módulo: la secuencia, los principios, los mecanismos, los frameworks, los ejemplos y las reglas de aplicación que permitirían a otra IA usar este módulo en tareas reales.
+No generes un resumen superficial. Se quiere una síntesis metodológica profunda del módulo.
+Tu tarea es construir el sistema operativo del módulo para que otra IA pueda aplicarlo en tareas reales.
+Debes extraer la lógica completa del módulo: la secuencia, los principios, los mecanismos, los frameworks, los ejemplos y las reglas de aplicación.
+Si hay conflicto entre brevedad y profundidad, prioriza profundidad.
+El resultado debe ser más largo y más útil que un resumen ejecutivo.
 
 Curso: {course_name}
 Módulo: {module_name}
@@ -518,15 +628,32 @@ Reglas:
 - Usa solo las video-notes como fuente.
 - Sintetiza el módulo sin copiar largas partes del curso.
 - Mantén el significado de las notas y conecta las lecciones entre sí.
+- Integra todas las lecciones disponibles.
 - Explica la lógica completa que une las lecciones, no solo una lista de temas.
 - Extrae el sistema operativo del módulo: secuencia de aplicación, principios, mecanismos recurrentes y frameworks explícitos o implícitos.
+- No reduzcas el módulo a una lista corta si las video-notes contienen más componentes.
+- No omitas frameworks, herramientas o estructuras detectadas en las video-notes.
 - Consolida ejemplos desde las video-notes.
 - No digas "no hay ejemplos" si alguna video-note contiene ejemplos, casos, analogías o comparaciones.
+- No inventes ejemplos.
+- No uses frases genéricas como "crear contenido atractivo" sin explicar el mecanismo.
 - Convierte conceptos en reglas prácticas de aplicación.
 - Genera instrucciones útiles para una IA que deba crear guiones, estrategias, calendarios, análisis o contenidos usando este módulo.
 - No agregues teoría externa.
 - No dejes secciones vacías. Si algo no aparece, escribe: "No aparece explícitamente en este módulo."
 - Incluye lecciones y referencias internas cuando ayuden a ubicar ideas.
+
+Antes de entregar, revisa internamente:
+- ¿Incluí todas las lecciones detectadas?
+- ¿Incluí todos los frameworks relevantes?
+- ¿Expliqué cómo se conectan las ideas?
+- ¿Convertí conceptos en reglas aplicables?
+- ¿Le di a una IA instrucciones concretas para usar este módulo?
+- ¿Evité frases genéricas?
+- ¿Evité inventar ejemplos?
+- ¿Evité decir que no hay ejemplos si sí aparecen en las notas?
+
+No muestres esta autoevaluación como sección final; úsala para mejorar la respuesta.
 
 Notas por video:
 <<<VIDEO_NOTES

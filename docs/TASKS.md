@@ -41,6 +41,7 @@
 - Ajustar video-notes introductorias como mapa del módulo.
 - Separar video-notes introductorias y operativas.
 - Mejorar profundidad de module summaries.
+- Convertir module summaries en Module Operating Systems.
 
 Nota: el perfil local real fue creado en `configs/local/` y no se versiona por privacidad.
 
