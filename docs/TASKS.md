@@ -29,6 +29,8 @@
 - Probar nuevamente con `--force --max-videos 1`.
 - Procesar módulo completo.
 - Crear interfaz local inicial Soma Studio.
+- Selección visual de carpetas.
+- Aclarar `max_videos` en UI.
 
 Nota: el perfil local real fue creado en `configs/local/` y no se versiona por privacidad.
 
@@ -40,7 +42,6 @@ Nota: el perfil local real fue creado en `configs/local/` y no se versiona por p
 - Revisar calidad de transcripciones por muestreo.
 - Generar documentos de estudio V2.
 - Mejorar progreso estructurado.
-- Selección visual de carpetas.
 - Exportar ZIP de transcripciones.
 - Generar AI_STUDY_CONTEXT.md.
 - Vista de revisión por muestreo.

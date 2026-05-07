@@ -134,6 +134,16 @@ Se agregó Soma Studio Local con Streamlit.
 - Deja preparada una sección para Study Pack V2.
 - No se ejecutó transcripción real durante esta tarea.
 
+## 2026-05-06: Entrada V1.5.1
+
+Se mejoró la experiencia de Soma Studio Local.
+
+- Se agregó selector local de carpetas para curso/output.
+- Se mantiene input manual como respaldo.
+- Se aclaró el comportamiento de `max_videos`.
+- Se refuerza que `max_videos = 1` es recomendado para pruebas y `0` significa sin límite.
+- No se ejecutó transcripción real durante esta tarea.
+
 ## Validaciones Ejecutadas
 
 ```bash

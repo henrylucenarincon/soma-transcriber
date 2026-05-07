@@ -27,6 +27,22 @@ def run_cli_command(args: list[str]) -> tuple[int, str, str]:
     return completed.returncode, completed.stdout, completed.stderr
 
 
+def select_directory_dialog(title: str = "Selecciona una carpeta") -> str | None:
+    try:
+        from tkinter import Tk, filedialog
+
+        root = Tk()
+        root.withdraw()
+        root.attributes("-topmost", True)
+        selected = filedialog.askdirectory(title=title)
+        root.destroy()
+    except Exception as exc:
+        st.warning(f"No se pudo abrir el selector de carpetas. Usa el input manual. Detalle: {exc}")
+        return None
+
+    return selected or None
+
+
 def discover_config_files() -> list[str]:
     candidates: list[Path] = []
 
@@ -155,12 +171,25 @@ def main() -> None:
     )
 
     config_files = discover_config_files()
+    st.session_state.setdefault("course_path", "")
+    st.session_state.setdefault("output_path", "./output")
 
     with st.sidebar:
         st.header("Configuración")
-        course_path = st.text_input("Ruta del curso", value="")
+        course_path = st.text_input("Ruta del curso", key="course_path")
+        if st.button("Seleccionar carpeta", use_container_width=True):
+            selected_directory = select_directory_dialog("Selecciona la carpeta del curso")
+            if selected_directory:
+                st.session_state.course_path = selected_directory
+                st.rerun()
+
         course_name = st.text_input("Nombre del curso", value="")
-        output_path = st.text_input("Output", value="./output")
+        output_path = st.text_input("Output", key="output_path")
+        if st.button("Seleccionar output", use_container_width=True):
+            selected_output = select_directory_dialog("Selecciona la carpeta de output")
+            if selected_output:
+                st.session_state.output_path = selected_output
+                st.rerun()
 
         if config_files:
             selected_config = st.selectbox("Perfil YAML", config_files, index=0)
@@ -169,7 +198,16 @@ def main() -> None:
             st.warning("No se encontraron perfiles YAML.")
         st.caption(f"Perfil seleccionado: `{selected_config or 'ninguno'}`")
 
-        max_videos_input = st.number_input("max_videos opcional", min_value=0, value=0, step=1)
+        max_videos_input = st.number_input(
+            "Límite de videos a procesar",
+            min_value=0,
+            value=0,
+            step=1,
+            help="0 significa sin límite. Usa 1 para pruebas controladas.",
+        )
+        st.caption("Recomendado: usa 1 para probar. Usa 0 solo si quieres procesar todo lo pendiente.")
+        if max_videos_input == 0:
+            st.warning("Sin límite de videos: Soma intentará procesar todo lo pendiente.")
         max_videos = int(max_videos_input) if max_videos_input else None
         force = st.checkbox("force")
         confirm_no_limit = st.checkbox(
