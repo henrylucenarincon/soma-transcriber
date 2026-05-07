@@ -3,14 +3,18 @@ from __future__ import annotations
 import argparse
 import os
 from pathlib import Path
+import re
 from typing import Any, Iterable, Sequence, TypeVar
+import unicodedata
 
 try:
     from .study_manifest import STATUS_COMPLETED, STATUS_FAILED, StudyManifest
     from .study_prompts import (
+        COURSE_EVIDENCE_DOCUMENTS,
         GLOBAL_DOCUMENTS,
         StudySettings,
         build_course_document_prompt,
+        build_course_evidence_prompt,
         build_module_summary_prompt,
         build_video_note_merge_prompt,
         build_video_note_prompt,
@@ -34,9 +38,11 @@ try:
 except ImportError:
     from study_manifest import STATUS_COMPLETED, STATUS_FAILED, StudyManifest
     from study_prompts import (
+        COURSE_EVIDENCE_DOCUMENTS,
         GLOBAL_DOCUMENTS,
         StudySettings,
         build_course_document_prompt,
+        build_course_evidence_prompt,
         build_module_summary_prompt,
         build_video_note_merge_prompt,
         build_video_note_prompt,
@@ -348,6 +354,15 @@ def generate_course_pack(
         (path.relative_to(study_paths.course_dir).as_posix(), read_markdown(path))
         for path in module_note_paths
     ]
+    evidence_docs = generate_course_pack_evidence(
+        client=client,
+        course_name=course_name,
+        study_paths=study_paths,
+        module_notes=module_notes,
+        settings=settings,
+        manifest=manifest,
+        force=force,
+    )
     video_notes_index = [
         path.relative_to(study_paths.course_dir).as_posix()
         for path in list_video_notes(study_paths.video_notes_dir)
@@ -362,6 +377,7 @@ def generate_course_pack(
             course_name=course_name,
             document_filename=filename,
             module_notes=module_notes,
+            evidence_docs=evidence_docs,
             video_notes_index=video_notes_index,
             settings=settings,
         )
@@ -369,6 +385,148 @@ def generate_course_pack(
         write_markdown(output_path, content)
         manifest.set_global_output(filename, output_path, STATUS_COMPLETED)
         manifest.save()
+
+    quality_report_path = study_paths.course_dir / "99_QUALITY_REPORT.md"
+    quality_report = build_quality_report(
+        study_paths=study_paths,
+        module_note_paths=module_note_paths,
+        evidence_docs=evidence_docs,
+    )
+    write_markdown(quality_report_path, quality_report)
+    manifest.set_global_output("99_QUALITY_REPORT.md", quality_report_path, STATUS_COMPLETED)
+    manifest.save()
+
+
+def generate_course_pack_evidence(
+    *,
+    client: Any,
+    course_name: str,
+    study_paths: Any,
+    module_notes: list[tuple[str, str]],
+    settings: StudySettings,
+    manifest: StudyManifest,
+    force: bool,
+) -> list[tuple[str, str]]:
+    evidence_dir = study_paths.course_dir / "_course_pack_evidence"
+    evidence_docs: list[tuple[str, str]] = []
+
+    for filename in progress(list(COURSE_EVIDENCE_DOCUMENTS), desc="Generando evidencia", unit="doc"):
+        output_path = evidence_dir / filename
+        if output_path.exists() and not force:
+            content = read_markdown(output_path)
+        else:
+            prompt = build_course_evidence_prompt(
+                course_name=course_name,
+                evidence_filename=filename,
+                module_notes=module_notes,
+                settings=settings,
+            )
+            content = call_openai_text(client, model=settings.model, prompt=prompt)
+            write_markdown(output_path, content)
+            manifest.set_global_output(f"evidence::{filename}", output_path, STATUS_COMPLETED)
+            manifest.save()
+
+        evidence_docs.append((output_path.relative_to(study_paths.course_dir).as_posix(), content))
+
+    return evidence_docs
+
+
+def build_quality_report(
+    *,
+    study_paths: Any,
+    module_note_paths: list[Path],
+    evidence_docs: list[tuple[str, str]],
+) -> str:
+    module_names = [path.stem for path in module_note_paths]
+    coverage_targets = [
+        study_paths.course_dir / "01_COURSE_MAP.md",
+        study_paths.course_dir / "02_MODULE_SUMMARIES.md",
+        study_paths.course_dir / "08_AI_STUDY_CONTEXT.md",
+    ]
+    coverage_rows: list[str] = []
+    warnings: list[str] = []
+
+    for module_name in module_names:
+        statuses: list[str] = []
+        for target in coverage_targets:
+            present = target.exists() and normalized_contains(read_markdown(target), module_name)
+            statuses.append(f"{target.name}: {'OK' if present else 'MISSING'}")
+            if not present:
+                warning = f"WARNING: módulo no encontrado en {target.name}: {module_name}"
+                warnings.append(warning)
+                print(warning)
+        coverage_rows.append(f"- {module_name}: " + " | ".join(statuses))
+
+    evidence_by_name = {name: content for name, content in evidence_docs}
+    principles_count = approximate_inventory_count(evidence_by_name.get("_course_pack_evidence/01_PRINCIPLES_INVENTORY.md", ""), "P")
+    frameworks_count = approximate_inventory_count(evidence_by_name.get("_course_pack_evidence/02_FRAMEWORKS_INVENTORY.md", ""), "F")
+    examples_count = approximate_inventory_count(evidence_by_name.get("_course_pack_evidence/04_EXAMPLES_INVENTORY.md", ""), "E")
+    master_prompt_exists = (study_paths.course_dir / "09_MASTER_PROMPT_FOR_AI.md").exists()
+
+    risk_lines = warnings or ["- No se detectaron warnings programáticos de cobertura por módulo."]
+    if principles_count == 0:
+        risk_lines.append("- Conteo de principios en inventario parece bajo o no detectable.")
+    if frameworks_count == 0:
+        risk_lines.append("- Conteo de frameworks en inventario parece bajo o no detectable.")
+
+    return "\n".join(
+        [
+            "# Quality Report",
+            "",
+            "## Módulos Detectados",
+            "",
+            *[f"- {module_name}" for module_name in module_names],
+            "",
+            "## Cobertura en Documentos Maestros",
+            "",
+            *coverage_rows,
+            "",
+            "## Conteos Aproximados",
+            "",
+            f"- Principios: {principles_count}",
+            f"- Frameworks/herramientas: {frameworks_count}",
+            f"- Ejemplos/casos/referencias: {examples_count}",
+            f"- MASTER_PROMPT existe: {'sí' if master_prompt_exists else 'no'}",
+            "",
+            "## Riesgos Detectados",
+            "",
+            *risk_lines,
+            "",
+            "## Secciones Débiles Potenciales",
+            "",
+            "- Revisar manualmente si `03_CORE_PRINCIPLES.md` cubre todo el curso.",
+            "- Revisar manualmente si `04_FRAMEWORKS.md` incluye herramientas de módulos finales.",
+            "- Revisar manualmente si `08_AI_STUDY_CONTEXT.md` lista todos los módulos.",
+            "- Revisar manualmente si `09_MASTER_PROMPT_FOR_AI.md` es suficientemente operativo.",
+            "",
+            "## Recomendaciones de Revisión Humana",
+            "",
+            "- Validar que no haya ejemplos inventados.",
+            "- Validar que todos los módulos aparezcan en 01, 02 y 08.",
+            "- Validar que los inventarios de evidencia sean más profundos que listas superficiales.",
+            "- Regenerar documentos maestros si aparecen warnings de cobertura.",
+        ]
+    )
+
+
+def normalized_contains(content: str, needle: str) -> bool:
+    return normalize_text(needle) in normalize_text(content)
+
+
+def normalize_text(value: str) -> str:
+    decomposed = unicodedata.normalize("NFKD", value)
+    without_accents = "".join(character for character in decomposed if not unicodedata.combining(character))
+    return without_accents.casefold()
+
+
+def approximate_inventory_count(content: str, prefix: str) -> int:
+    if not content.strip():
+        return 0
+    pattern = re.compile(rf"\b{re.escape(prefix)}\d{{2,}}\b", re.IGNORECASE)
+    matches = set(pattern.findall(content))
+    if matches:
+        return len(matches)
+    return len(re.findall(r"(?m)^#{2,4}\s+", content))
 
 
 def should_skip_video_note(record: dict[str, Any] | None, video_note_path: Path, force: bool) -> bool:
@@ -415,9 +573,13 @@ def print_dry_run(
         print(f"Module summaries planificados: {module_count}")
 
     if PHASE_COURSE_PACK in planned_phases:
+        print(f"Inventarios de evidencia planificados: {len(COURSE_EVIDENCE_DOCUMENTS)}")
+        for filename in COURSE_EVIDENCE_DOCUMENTS:
+            print(f"EVIDENCE: _course_pack_evidence/{filename}")
         print(f"Documentos globales planificados: {len(GLOBAL_DOCUMENTS)}")
         for filename in GLOBAL_DOCUMENTS:
             print(f"COURSE-PACK: {filename}")
+        print("QUALITY: 99_QUALITY_REPORT.md")
 
 
 def expand_phase(phase: str) -> set[str]:

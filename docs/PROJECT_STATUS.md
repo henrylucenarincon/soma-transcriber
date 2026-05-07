@@ -1,8 +1,8 @@
 # Estado del Proyecto
 
-Versión actual: V2.1
+Versión actual: V2.2.1
 
-Estado: pipeline V1 validado con un curso completo y Study Pack Builder V2.1 reforzado para generar archivos maestros del Course Pack más profundos, evidence-based y accionables para IA.
+Estado: pipeline V1 validado con un curso completo y Study Pack Builder V2.2.1 reforzado con Course Pack Evidence Layer, inventarios intermedios, Quality Report y prompts más livianos para documentos maestros.
 
 Soma Transcriber ya tiene una primera base funcional para detectar videos, extraer audio, dividir archivos grandes, transcribir con OpenAI API y escribir resultados organizados. La versión V1.1 agregó controles para reducir riesgo operativo y costos accidentales antes de ejecutar transcripciones reales. En V1.3 se ejecutó el primer test real controlado con 1 video y fue exitoso.
 
@@ -40,6 +40,10 @@ Soma Transcriber ya tiene una primera base funcional para detectar videos, extra
 - Prompts V2.0.7 para corregir el riesgo de relleno genérico en `module summaries`; ejemplos, frameworks, principios y reglas deben estar respaldados por `video-notes`.
 - Prompts V2.0.8 para corregir omisiones de lecciones/frameworks en `module summaries` mediante Coverage Matrix obligatorio y cobertura completa de `video-notes`.
 - Prompts V2.1 específicos por archivo maestro del Course Pack para mejorar `03_CORE_PRINCIPLES`, `04_FRAMEWORKS`, `07_APPLICATION_GUIDE`, `08_AI_STUDY_CONTEXT` y `09_MASTER_PROMPT_FOR_AI`.
+- Course Pack Evidence Layer V2.2 en `output/study/{course-name}/_course_pack_evidence/`.
+- Inventarios V2.2 de cobertura, principios, frameworks, conceptos, ejemplos, aplicaciones y tareas de IA.
+- Quality Report V2.2 en `99_QUALITY_REPORT.md` con validación simple de cobertura por módulos.
+- V2.2.1 reduce prompts gigantes en la fase `course-pack`: los archivos maestros usan `_course_pack_evidence/` como fuente principal y reciben `module_notes` solo como índice de cobertura.
 - Manifest V2 privado en `data/study_manifest.json`.
 - Configuración V2 mediante sección `study` en YAML.
 - Chunking de texto por caracteres para analizar transcripciones largas.
@@ -84,7 +88,7 @@ python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-
 ## Todavía No Probado
 
 - No se ha estimado costo real por duración de video.
-- No se ha regenerado el `course-pack` completo con prompts V2.1.
+- No se ha regenerado el `course-pack` completo con V2.2.
 
 ## Hallazgo V1.3
 
@@ -104,7 +108,7 @@ El módulo 1 real quedó como prueba de producción local: 13/13 videos `complet
 
 ## Próximo Hito Recomendado
 
-Regenerar solo `course-pack` con `--force` y validar especialmente `08_AI_STUDY_CONTEXT.md` y `09_MASTER_PROMPT_FOR_AI.md`.
+Regenerar `course-pack` con `--force` y validar `99_QUALITY_REPORT.md`.
 
 ## Riesgos Actuales
 

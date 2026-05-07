@@ -325,6 +325,15 @@ python3 src/study_pack.py \
 
 Después de V2.1, validar especialmente `03_CORE_PRINCIPLES.md`, `04_FRAMEWORKS.md`, `07_APPLICATION_GUIDE.md`, `08_AI_STUDY_CONTEXT.md` y `09_MASTER_PROMPT_FOR_AI.md`. Deben ser profundos, evidence-based, accionables y útiles para que una IA estudie y aplique la metodología del curso.
 
+Después de V2.2, validar que se generen los inventarios de evidencia y el quality report:
+
+```bash
+find "output/study/Victor Heras - Marca Personal 5.0/_course_pack_evidence" -type f | sort
+cat "output/study/Victor Heras - Marca Personal 5.0/99_QUALITY_REPORT.md"
+```
+
+El quality report debe ayudar a revisar si todos los módulos aparecen en `01_COURSE_MAP.md`, `02_MODULE_SUMMARIES.md` y `08_AI_STUDY_CONTEXT.md`, además de mostrar conteos aproximados de principios, frameworks y ejemplos.
+
 No ejecutar generación real durante tareas de documentación o refactor. `output/study/` y `data/study_manifest.json` son privados y no se suben al repositorio.
 
 ## Criterios de Éxito Iniciales

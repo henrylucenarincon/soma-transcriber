@@ -474,7 +474,7 @@ Debe explicar:
     "01_COURSE_MAP.md": """
 Genera un mapa completo del curso, no una lista plana.
 Debe incluir:
-- Todos los módulos presentes en module_notes, sin omitir módulos finales.
+- Todos los módulos presentes en los inventarios de evidencia y el índice de module_notes, sin omitir módulos finales.
 - Flujo lógico entre módulos.
 - Qué transformación produce cada módulo.
 - Qué módulo depende de qué.
@@ -520,8 +520,8 @@ Cada elemento debe incluir:
 - Output esperado.
 - Errores comunes.
 - Cómo lo usaría una IA en tareas reales.
-Incluye todos los frameworks clave detectados en module_notes. Cuando aparezcan, no omitas estructuras como algoritmo y retención, ratio de interés o ERI, filtro 5-50, referencias virales, controversia, tendencias, formatos, calculadora, ViralCopy, ganchos, historia/contexto, moraleja, CTA, método único de marca, cliente ideal, QCP, triángulo P.D.H., ventas, objeciones, stories, ManyChat, email marketing, web, VSL, página de registro, fiscalidad o contratos.
-No incluyas ninguno de esos elementos si no aparece respaldado por module_notes.
+Incluye todos los frameworks clave detectados en los inventarios de evidencia. Cuando aparezcan, no omitas estructuras como algoritmo y retención, ratio de interés o ERI, filtro 5-50, referencias virales, controversia, tendencias, formatos, calculadora, ViralCopy, ganchos, historia/contexto, moraleja, CTA, método único de marca, cliente ideal, QCP, triángulo P.D.H., ventas, objeciones, stories, ManyChat, email marketing, web, VSL, página de registro, fiscalidad o contratos.
+No incluyas ninguno de esos elementos si no aparece respaldado por los inventarios de evidencia.
 """,
     "05_KEY_CONCEPTS.md": """
 Crea un mapa conceptual, no solo un glosario.
@@ -536,7 +536,7 @@ Explica relaciones entre conceptos: qué es previo, qué activa qué, qué depen
 """,
     "06_EXAMPLES_AND_CASES.md": """
 Genera un documento evidence-based de ejemplos y casos.
-Solo incluye ejemplos presentes en module_notes.
+Solo incluye ejemplos presentes en los inventarios de evidencia.
 Cada ejemplo debe incluir:
 - Ejemplo/caso/referencia.
 - Módulo/lección donde aparece.
@@ -575,7 +575,7 @@ Debe incluir:
 - Cómo responder si falta contexto.
 - Cómo citar internamente módulo/lección.
 - Cómo aplicar el curso a tareas reales.
-- Lista completa de módulos presentes en module_notes, sin omitir módulos finales como módulo 10 cuando exista.
+- Lista completa de módulos presentes en los inventarios de evidencia y el índice de module_notes, sin omitir módulos finales como módulo 10 cuando exista.
 - Instrucciones específicas para guiones, estrategia, contenidos, marca personal, ventas, automatización y email marketing cuando esos temas estén respaldados.
 - Límites: no reproducir transcripciones largas, no inventar, no usar teoría externa salvo que se pida.
 """,
@@ -601,6 +601,137 @@ Debe incluir:
 - Instrucción de citar internamente módulos/lecciones cuando sea útil.
 Debe ser mucho más completo que un prompt corto. Su objetivo es que una IA trabaje desde la metodología del curso, no desde consejos genéricos.
 """,
+}
+
+
+COURSE_EVIDENCE_DOCUMENTS: dict[str, dict[str, str]] = {
+    "00_MODULE_COVERAGE_MATRIX.md": {
+        "title": "Module Coverage Matrix",
+        "instructions": """
+Lee todos los module_notes y genera una matriz con todos los módulos detectados.
+Cada módulo debe incluir:
+- Módulo
+- Cantidad de lecciones cubiertas según module_note
+- Tesis del módulo
+- Frameworks/herramientas detectadas
+- Principios detectados
+- Aplicaciones
+- Tareas de IA relacionadas
+- Estado de cobertura: completo / parcial / débil
+- Observaciones
+Incluye todos los módulos, incluyendo módulos finales como Email Marketing cuando aparezcan.
+""",
+    },
+    "01_PRINCIPLES_INVENTORY.md": {
+        "title": "Principles Inventory",
+        "instructions": """
+Extrae principios desde todos los module_notes.
+Cada principio debe incluir:
+- ID único, por ejemplo P01, P02, P03
+- Nombre del principio
+- Definición según el curso
+- Módulos que lo respaldan
+- Lecciones o secciones internas mencionadas si están disponibles
+- Mecanismo causa-efecto
+- Cómo se aplica
+- Qué errores evita
+- Señales de mala aplicación
+- Tareas de IA donde debe usarse
+- Nivel de evidencia: alto / medio / bajo
+Reglas:
+- No incluir principios vagos
+- No incluir principios sin respaldo interno
+- No limitarse a 10 principios si hay más
+- Cubrir todo el curso, no solo contenido viral
+""",
+    },
+    "02_FRAMEWORKS_INVENTORY.md": {
+        "title": "Frameworks Inventory",
+        "instructions": """
+Extrae frameworks, herramientas, estructuras, criterios, procesos, checklists y métricas desde todos los module_notes.
+Cada elemento debe incluir:
+- ID único, por ejemplo F01, F02
+- Nombre
+- Tipo: framework / herramienta / criterio / estructura / proceso / checklist / métrica
+- Módulos que lo respaldan
+- Para qué sirve
+- Cuándo usarlo
+- Entradas necesarias
+- Pasos/componentes
+- Output esperado
+- Errores comunes
+- Cómo lo usaría una IA
+- Nivel de evidencia
+Detecta frameworks de todo el curso cuando aparezcan, incluyendo algoritmo y retención, filtro 5-50, referencias virales, controversia, tendencias, formatos de video, calculadora de viralidad, ViralCopy, ganchos, historia/contexto, moraleja, CTA, lectura de métricas, marca única, cliente ideal, método único, QCP, triángulo P.D.H., stories, ventas, objeciones, Calendly, thank you page, web, VSL, registro, popup, ManyChat, email marketing, fiscalidad y contratos.
+No inventes elementos que no estén respaldados.
+""",
+    },
+    "03_CONCEPTS_INVENTORY.md": {
+        "title": "Concepts Inventory",
+        "instructions": """
+Extrae un inventario de conceptos del curso.
+Cada concepto debe incluir:
+- ID
+- Concepto
+- Definición según el curso
+- Módulos donde aparece
+- Conceptos relacionados
+- Relación con frameworks
+- Cómo se aplica
+- Confusión que evita
+- Cómo lo usaría una IA
+El resultado debe ser un mapa conceptual utilizable, no solo un glosario.
+""",
+    },
+    "04_EXAMPLES_INVENTORY.md": {
+        "title": "Examples Inventory",
+        "instructions": """
+Extrae ejemplos, casos y referencias presentes en los module_notes.
+Cada ejemplo debe incluir:
+- ID
+- Ejemplo/caso/referencia
+- Módulo donde aparece
+- Qué principio ilustra
+- Qué framework apoya
+- Cómo usarlo como referencia
+- Qué NO copiar literalmente
+- Nivel de evidencia
+Reglas:
+- No inventar ejemplos
+- No usar ejemplos genéricos
+- Si un ejemplo no está claro, marcarlo como evidencia baja o no incluirlo
+""",
+    },
+    "05_APPLICATIONS_INVENTORY.md": {
+        "title": "Applications Inventory",
+        "instructions": """
+Transforma el curso en usos reales.
+Incluye aplicaciones respaldadas para tareas como crear guiones, diseñar estrategia de contenido, construir marca personal, mejorar retención, crear calendario de contenido, diseñar stories, vender por llamada, manejar objeciones, crear páginas web/VSL, automatizar con ManyChat, usar email marketing y revisar fiscalidad/contratos cuando aplique.
+Cada aplicación debe incluir:
+- Tarea
+- Módulos relevantes
+- Frameworks aplicables
+- Inputs que necesita la IA
+- Proceso recomendado
+- Output esperado
+- Errores a evitar
+""",
+    },
+    "06_AI_TASKS_INVENTORY.md": {
+        "title": "AI Tasks Inventory",
+        "instructions": """
+Convierte el curso en instrucciones para IA.
+Cada tipo de tarea debe incluir:
+- Tipo de tarea
+- Qué debe estudiar antes
+- Qué preguntas debe hacer
+- Qué frameworks debe consultar
+- Qué no debe hacer
+- Qué output debe entregar
+- Cómo evitar respuesta genérica
+El objetivo es preparar a una IA para usar el curso en trabajo real sin responder desde conocimiento genérico.
+""",
+    },
 }
 
 
@@ -643,6 +774,14 @@ def _lesson_type_instruction(is_introductory: bool) -> str:
     )
 
 
+def _build_module_notes_index(module_notes: list[tuple[str, str]]) -> str:
+    lines: list[str] = []
+    for relative_path, _content in module_notes:
+        module_name = Path(relative_path).stem
+        lines.append(f"- Module note: {relative_path}\n  - Módulo inferido: {module_name}")
+    return "\n".join(lines) if lines else "- No hay module_notes disponibles."
+
+
 def build_system_prompt(settings: StudySettings) -> str:
     quote_rule = (
         f"Puedes incluir citas literales muy breves de máximo {settings.quote_max_words} palabras."
@@ -664,7 +803,7 @@ def build_system_prompt(settings: StudySettings) -> str:
             "Cuando generes module summaries, no eres un resumidor. Eres un arquitecto de conocimiento para IA. Tu trabajo es convertir las notas del módulo en un sistema operativo aplicable.",
             "Cuando generes module summaries, tu prioridad es cobertura completa + fidelidad interna + utilidad operativa para IA. No sacrifiques lecciones por brevedad.",
             "No eres un generador de contenido genérico. Eres un arquitecto de conocimiento basado en evidencia interna. Tu tarea es convertir las notas disponibles en un sistema operativo fiel al curso. No rellenes huecos con conocimiento externo.",
-            "Cuando generes archivos maestros del course-pack, usa principalmente module_notes como fuente, prioriza profundidad sobre brevedad y evita documentos genéricos.",
+            "Cuando generes archivos maestros del course-pack, usa principalmente los inventarios de _course_pack_evidence como fuente; los índices de module_notes y video_notes sirven solo para cobertura.",
             "Prioriza profundidad, especificidad y aplicabilidad.",
             "No reproduzcas transcripciones completas ni fragmentos largos del curso.",
             "Parafrasea con fidelidad. No inventes contenido.",
@@ -882,11 +1021,54 @@ VIDEO_NOTES>>>
 """
 
 
+def build_course_evidence_prompt(
+    *,
+    course_name: str,
+    evidence_filename: str,
+    module_notes: list[tuple[str, str]],
+    settings: StudySettings,
+) -> str:
+    if evidence_filename not in COURSE_EVIDENCE_DOCUMENTS:
+        raise ValueError(f"Documento de evidencia desconocido: {evidence_filename}")
+
+    definition = COURSE_EVIDENCE_DOCUMENTS[evidence_filename]
+    modules_text = "\n\n---\n\n".join(
+        f"Fuente: {relative_path}\n\n{content}" for relative_path, content in module_notes
+    )
+    return f"""{build_system_prompt(settings)}
+
+Tarea: construir un inventario intermedio del Course Pack.
+
+Curso: {course_name}
+Documento de evidencia a generar: {evidence_filename}
+Título sugerido: {definition["title"]}
+
+Instrucciones específicas:
+{definition["instructions"]}
+
+Reglas globales:
+- Usa solo module_notes como fuente.
+- No inventes principios, frameworks, conceptos, ejemplos ni aplicaciones.
+- No rellenes huecos con conocimiento externo.
+- Si falta evidencia, dilo o marca evidencia baja.
+- Mantén cobertura completa de todos los módulos disponibles.
+- Prioriza fidelidad, cobertura y utilidad operativa sobre brevedad.
+- Cada elemento importante debe poder rastrearse a un módulo.
+- No incluyas transcripciones completas ni fragmentos largos.
+
+Module notes:
+<<<MODULE_NOTES
+{modules_text}
+MODULE_NOTES>>>
+"""
+
+
 def build_course_document_prompt(
     *,
     course_name: str,
     document_filename: str,
     module_notes: list[tuple[str, str]],
+    evidence_docs: list[tuple[str, str]],
     video_notes_index: list[str],
     settings: StudySettings,
 ) -> str:
@@ -895,8 +1077,9 @@ def build_course_document_prompt(
 
     definition = GLOBAL_DOCUMENTS[document_filename]
     document_instructions = COURSE_DOCUMENT_INSTRUCTIONS.get(document_filename, "")
-    modules_text = "\n\n---\n\n".join(
-        f"Fuente: {relative_path}\n\n{content}" for relative_path, content in module_notes
+    module_notes_index_text = _build_module_notes_index(module_notes)
+    evidence_text = "\n\n---\n\n".join(
+        f"Fuente: {relative_path}\n\n{content}" for relative_path, content in evidence_docs
     )
     lessons_text = "\n".join(f"- {item}" for item in video_notes_index)
     return f"""{build_system_prompt(settings)}
@@ -911,9 +1094,10 @@ Instrucciones específicas para este archivo:
 {document_instructions}
 
 Reglas:
-- Usa las notas del curso como fuente principal.
-- Usa principalmente module_notes como fuente. Usa el índice de video_notes solo como respaldo de cobertura y referencia, salvo que el contenido de video_notes esté disponible explícitamente en el prompt.
-- Mantén enfoque evidence-based: no agregues ejemplos, frameworks, conceptos o casos que no estén presentes en module_notes o video_notes_index.
+- Usa los inventarios de _course_pack_evidence como fuente principal.
+- Usa el índice de module_notes solo como referencia de cobertura. La fuente principal para generar este documento son los inventarios de evidencia. Si falta evidencia, dilo en lugar de inventar.
+- Usa el índice de video_notes solo como respaldo de cobertura y referencia, salvo que el contenido de video_notes esté disponible explícitamente en el prompt.
+- Mantén enfoque evidence-based: no agregues ejemplos, frameworks, conceptos o casos que no estén presentes en los inventarios de evidencia; el índice de module_notes/video_notes sirve solo como respaldo de cobertura.
 - No generes documentos genéricos.
 - No inventes frameworks, ejemplos ni principios.
 - Todo principio, framework, regla o ejemplo debe estar respaldado por módulos o lecciones.
@@ -926,7 +1110,7 @@ Reglas:
 - No agregues teoría externa.
 - No rellenes huecos con conocimiento externo ni contenido genérico.
 - Cuando sea útil, referencia módulo/lección usando las fuentes internas disponibles.
-- Incluye todos los módulos presentes en module_notes; no omitas módulos finales por brevedad.
+- Incluye todos los módulos presentes en el índice de module_notes; no omitas módulos finales por brevedad.
 
 Antes de entregar, revisa internamente:
 - ¿El documento responde a las instrucciones específicas del archivo?
@@ -940,8 +1124,13 @@ No muestres esta autoevaluación como sección final; úsala para mejorar la res
 Índice de lecciones disponibles:
 {lessons_text}
 
-Notas de módulos:
-<<<MODULE_NOTES
-{modules_text}
-MODULE_NOTES>>>
+Índice de module_notes disponibles:
+<<<MODULE_NOTES_INDEX
+{module_notes_index_text}
+MODULE_NOTES_INDEX>>>
+
+Inventarios de evidencia:
+<<<COURSE_PACK_EVIDENCE
+{evidence_text}
+COURSE_PACK_EVIDENCE>>>
 """

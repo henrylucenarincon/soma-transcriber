@@ -271,6 +271,25 @@ Se reforzó la generación de archivos maestros del Course Pack.
 - Se agregó énfasis en documentos maestros evidence-based, profundos y accionables para IA.
 - No se ejecutó generación real durante esta tarea.
 
+## 2026-05-07: Entrada V2.2
+
+Se agregó Course Pack Evidence Layer.
+
+- Se generan inventarios intermedios antes de archivos maestros.
+- Se agregó `99_QUALITY_REPORT.md`.
+- Se agregó validación simple de cobertura por módulos en `01_COURSE_MAP.md`, `02_MODULE_SUMMARIES.md` y `08_AI_STUDY_CONTEXT.md`.
+- El flujo `course-pack` ahora usa `_course_pack_evidence/` como fuente principal y `module_notes` como respaldo.
+- No se ejecutó generación real durante esta tarea.
+
+## 2026-05-07: Entrada V2.2.1
+
+Se redujo el tamaño de los prompts de documentos maestros.
+
+- Los archivos maestros ahora usan `_course_pack_evidence/` como fuente principal.
+- `module_notes` se pasan como índice de cobertura, no como contenido completo.
+- Esto reduce riesgo de prompts gigantes, lentitud, costos altos o errores `input_too_large` en `course-pack`.
+- No se ejecutó generación real durante esta tarea.
+
 ## Validaciones Ejecutadas
 
 ```bash

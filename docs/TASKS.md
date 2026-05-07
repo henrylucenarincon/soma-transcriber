@@ -46,6 +46,11 @@
 - Agregar Coverage Matrix a module summaries.
 - Reforzar cobertura completa de lecciones.
 - Mejorar prompts del course-pack maestro.
+- Crear Course Pack Evidence Layer.
+- Agregar inventarios de principios/frameworks/conceptos/ejemplos/aplicaciones.
+- Agregar Quality Report.
+- Reducir prompts gigantes en course-pack.
+- Usar evidence layer como fuente principal de documentos maestros.
 
 Nota: el perfil local real fue creado en `configs/local/` y no se versiona por privacidad.
 
@@ -63,6 +68,8 @@ Nota: el perfil local real fue creado en `configs/local/` y no se versiona por p
 - Validar calidad evidence-based.
 - Validar cobertura completa.
 - Regenerar course-pack con `--force`.
+- Regenerar course-pack V2.2.
+- Validar `99_QUALITY_REPORT.md`.
 - Validar `03_CORE_PRINCIPLES`, `04_FRAMEWORKS`, `07_APPLICATION_GUIDE`, `08_AI_STUDY_CONTEXT` y `09_MASTER_PROMPT_FOR_AI`.
 - Integrar Study Pack en Soma Studio.
 - Exportar ZIP.
