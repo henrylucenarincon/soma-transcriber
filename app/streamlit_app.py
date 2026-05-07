@@ -199,24 +199,34 @@ def main() -> None:
     )
 
     config_files = discover_config_files()
-    st.session_state.setdefault("course_path", "")
-    st.session_state.setdefault("output_path", "./output")
+    st.session_state.setdefault("course_path_value", "")
+    st.session_state.setdefault("output_path_value", "./output")
 
     with st.sidebar:
         st.header("Configuración")
-        course_path = st.text_input("Ruta del curso", key="course_path")
+        course_path = st.text_input(
+            "Ruta del curso",
+            value=st.session_state["course_path_value"],
+            key="course_path_input",
+        )
+        st.session_state["course_path_value"] = course_path
         if st.button("Seleccionar carpeta", use_container_width=True):
             selected_directory = select_directory_dialog("Selecciona la carpeta del curso")
             if selected_directory:
-                st.session_state.course_path = selected_directory
+                st.session_state["course_path_value"] = selected_directory
                 st.rerun()
 
         course_name = st.text_input("Nombre del curso", value="")
-        output_path = st.text_input("Output", key="output_path")
+        output_path = st.text_input(
+            "Output",
+            value=st.session_state["output_path_value"],
+            key="output_path_input",
+        )
+        st.session_state["output_path_value"] = output_path
         if st.button("Seleccionar output", use_container_width=True):
             selected_output = select_directory_dialog("Selecciona la carpeta de output")
             if selected_output:
-                st.session_state.output_path = selected_output
+                st.session_state["output_path_value"] = selected_output
                 st.rerun()
 
         if config_files:

@@ -153,6 +153,14 @@ Se corrigió el selector de carpetas en macOS.
 - El input manual queda como fallback final.
 - No se ejecutó transcripción real durante esta tarea.
 
+## 2026-05-06: Entrada V1.5.3
+
+Se corrigió el manejo de `session_state` en Soma Studio para seleccionar carpetas sin error en Streamlit.
+
+- Las rutas seleccionadas usan keys internas separadas de las keys de los widgets.
+- El input manual sigue funcionando como respaldo.
+- No se ejecutó transcripción real durante esta tarea.
+
 ## Validaciones Ejecutadas
 
 ```bash
