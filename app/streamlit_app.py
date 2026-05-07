@@ -61,7 +61,9 @@ def _select_directory_with_osascript(title: str) -> str | None:
 
     if completed.returncode == 0:
         selected = completed.stdout.strip()
-        return selected or None
+        if selected:
+            return selected
+        return None
 
     error_text = completed.stderr.strip()
     if "User canceled" in error_text or "User cancelled" in error_text:
@@ -200,34 +202,46 @@ def main() -> None:
 
     config_files = discover_config_files()
     st.session_state.setdefault("course_path_value", "")
+    st.session_state.setdefault("course_path_input", st.session_state["course_path_value"])
     st.session_state.setdefault("output_path_value", "./output")
+    st.session_state.setdefault("output_path_input", st.session_state["output_path_value"])
 
     with st.sidebar:
         st.header("Configuración")
-        course_path = st.text_input(
-            "Ruta del curso",
-            value=st.session_state["course_path_value"],
-            key="course_path_input",
-        )
-        st.session_state["course_path_value"] = course_path
         if st.button("Seleccionar carpeta", use_container_width=True):
             selected_directory = select_directory_dialog("Selecciona la carpeta del curso")
             if selected_directory:
                 st.session_state["course_path_value"] = selected_directory
+                st.session_state["course_path_input"] = selected_directory
+                st.session_state["last_selected_course_path"] = selected_directory
+                st.toast("Carpeta del curso seleccionada.")
                 st.rerun()
 
-        course_name = st.text_input("Nombre del curso", value="")
-        output_path = st.text_input(
-            "Output",
-            value=st.session_state["output_path_value"],
-            key="output_path_input",
+        course_path = st.text_input(
+            "Ruta del curso",
+            key="course_path_input",
         )
-        st.session_state["output_path_value"] = output_path
+        st.session_state["course_path_value"] = course_path
+        if st.session_state.get("last_selected_course_path"):
+            st.caption(f"Última carpeta seleccionada: `{st.session_state['last_selected_course_path']}`")
+
+        course_name = st.text_input("Nombre del curso", value="")
         if st.button("Seleccionar output", use_container_width=True):
             selected_output = select_directory_dialog("Selecciona la carpeta de output")
             if selected_output:
                 st.session_state["output_path_value"] = selected_output
+                st.session_state["output_path_input"] = selected_output
+                st.session_state["last_selected_output_path"] = selected_output
+                st.toast("Carpeta de output seleccionada.")
                 st.rerun()
+
+        output_path = st.text_input(
+            "Output",
+            key="output_path_input",
+        )
+        st.session_state["output_path_value"] = output_path
+        if st.session_state.get("last_selected_output_path"):
+            st.caption(f"Último output seleccionado: `{st.session_state['last_selected_output_path']}`")
 
         if config_files:
             selected_config = st.selectbox("Perfil YAML", config_files, index=0)

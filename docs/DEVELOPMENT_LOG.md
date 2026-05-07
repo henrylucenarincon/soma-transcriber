@@ -161,6 +161,14 @@ Se corrigió el manejo de `session_state` en Soma Studio para seleccionar carpet
 - El input manual sigue funcionando como respaldo.
 - No se ejecutó transcripción real durante esta tarea.
 
+## 2026-05-06: Entrada V1.5.4
+
+Se corrigió la sincronización entre selector de carpetas y `text_input` en Soma Studio.
+
+- El selector ahora actualiza las keys visibles del widget.
+- Se guarda la última ruta seleccionada para confirmación visual.
+- No se ejecutó transcripción real durante esta tarea.
+
 ## Validaciones Ejecutadas
 
 ```bash
