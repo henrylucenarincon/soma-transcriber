@@ -266,6 +266,8 @@ git diff --cached > .tmp/soma_transcriber_prompt_3_docs.patch
 
 Antes de compartir un patch, revisar que no incluya `.env`, videos, audios, transcripciones privadas, `output/`, `data/` ni otros datos sensibles.
 
+Después de validar un módulo completo, se recomienda procesar la carpeta raíz del curso completo. `output/` y `data/` siguen siendo privados y no deben subirse a GitHub.
+
 ## Privacidad
 
 Soma Transcriber no sube videos ni transcripciones a ningún servicio externo. Solo envía los audios o chunks necesarios a OpenAI API para generar la transcripción.

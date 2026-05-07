@@ -114,6 +114,15 @@ Se detectó que la dependencia anterior para chunking fallaba en Python 3.13 por
 - FFmpeg exporta chunks MP3 con los nombres `chunk_001.mp3`, `chunk_002.mp3`, etc.
 - No se ejecutó transcripción real durante esta tarea.
 
+## 2026-05-06: Entrada V1.3.5
+
+Se reprocesó el módulo 1 completo.
+
+- Resultado: 13/13 videos `completed`.
+- El video 12 se dividió en 3 chunks.
+- Se validó que FFmpeg/FFprobe resolvió el error `input_too_large`.
+- `output/`, `data/` y las transcripciones privadas no deben versionarse.
+
 ## Validaciones Ejecutadas
 
 ```bash
@@ -130,4 +139,4 @@ python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-
 
 ## Nota
 
-Ya se ejecutó un primer test real con 1 video. Todavía no se ha procesado el módulo completo ni el curso completo.
+Ya se ejecutó un primer test real con 1 video y el módulo 1 completo. Todavía no se ha procesado el curso completo.

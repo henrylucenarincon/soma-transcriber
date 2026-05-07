@@ -35,6 +35,12 @@ python src/main.py --input "/ruta/curso" --output "./output" --course-name "Curs
 
 Objetivo: validar el circuito completo antes de escalar.
 
+V1.3.5 deja cerrado el primer módulo real como prueba de producción local: 13/13 videos completados y el caso `input_too_large` resuelto con chunking FFmpeg/FFprobe.
+
+Próximo paso: procesar el curso completo desde la carpeta raíz.
+
+Luego: avanzar a V2 para generar documentos de estudio del curso.
+
 ## V1.4: Robustez Después del Primer Test Real
 
 Mejorar el sistema según hallazgos reales:

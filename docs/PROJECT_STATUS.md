@@ -1,8 +1,8 @@
 # Estado del Proyecto
 
-Versión actual: V1.3.4
+Versión actual: V1.3.5
 
-Estado: CLI base funcional con seguridad operativa inicial, documentación viva creada, primer test real exitoso, perfiles universales de configuración y chunking con FFmpeg/FFprobe.
+Estado: CLI base funcional con seguridad operativa inicial, documentación viva creada, módulo 1 real completado, perfiles universales de configuración y chunking con FFmpeg/FFprobe.
 
 Soma Transcriber ya tiene una primera base funcional para detectar videos, extraer audio, dividir archivos grandes, transcribir con OpenAI API y escribir resultados organizados. La versión V1.1 agregó controles para reducir riesgo operativo y costos accidentales antes de ejecutar transcripciones reales. En V1.3 se ejecutó el primer test real controlado con 1 video y fue exitoso.
 
@@ -45,12 +45,13 @@ python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-
 - Primer test real con 1 video usando OpenAI API.
 - Resultado del primer test: procesado 1, fallidos 0.
 - Se generó audio, `output/index.csv` y transcripción Markdown con metadata y `status: completed`.
+- Módulo 1 real procesado completo.
+- Resultado del módulo 1: 13 videos detectados, 13 `completed`, 0 `failed` después del reproceso.
+- El video 12 requirió chunking preventivo y quedó con `chunks_count: 3`.
 
 ## Todavía No Probado
 
-- No se ha medido comportamiento real de chunking con archivos grandes.
 - No se ha estimado costo real por duración de video.
-- No se ha procesado el módulo completo.
 - No se ha procesado el curso completo.
 
 ## Hallazgo V1.3
@@ -65,11 +66,13 @@ Al procesar el módulo 1 real se detectó un caso `input_too_large` en un video 
 
 En Python 3.13, la dependencia de chunking anterior falló por la remoción de `audioop` y ausencia de `pyaudioop`. Soma reemplazó ese flujo por FFmpeg/FFprobe para obtener duración y crear chunks sin depender de esa compatibilidad.
 
+## Resultado V1.3.5
+
+El módulo 1 real quedó como prueba de producción local: 13/13 videos `completed`. El caso `input_too_large` del video 12 se resolvió con FFmpeg/FFprobe, generando 3 chunks y una transcripción organizada en partes.
+
 ## Próximo Hito Recomendado
 
-Reprocesar el video fallido del módulo 1 sin `--force`, para saltar los videos `completed` e intentar nuevamente el archivo `failed`.
-
-El objetivo de ese hito no es procesar un curso completo, sino validar el circuito end to end: audio, chunking si aplica, API, Markdown, manifest e index.
+Procesar el curso completo desde la carpeta raíz.
 
 ## Riesgos Actuales
 

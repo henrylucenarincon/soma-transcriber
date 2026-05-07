@@ -22,23 +22,25 @@
 - perfiles universales de configuración por curso.
 - chunking preventivo por duración.
 - reemplazar la dependencia anterior por FFmpeg/FFprobe para chunking.
+- Reprocesar video fallido del módulo 1.
+- Validar módulo 1 completo.
+- Crear perfil local real para Victor Heras.
+- Reprocesar primer video con perfil local.
+- Probar nuevamente con `--force --max-videos 1`.
+- Procesar módulo completo.
+
+Nota: el perfil local real fue creado en `configs/local/` y no se versiona por privacidad.
 
 ## Pendientes
 
 - Instalar dependencias localmente si falta.
 - Configurar `.env` real.
-- Crear perfil local real para Victor Heras.
-- Reprocesar primer video con perfil local.
-- Probar nuevamente con `--force --max-videos 1`.
-- Reprocesar video fallido del módulo 1.
-- Validar módulo 1 completo.
-- Procesar módulo completo.
 - Procesar curso completo.
-- Revisar calidad de transcripción.
-- Mejorar manejo de errores según test real.
+- Revisar calidad de transcripciones por muestreo.
+- Generar documentos de estudio V2.
+- Mejorar manejo de errores según nuevos hallazgos reales.
 - Agregar estimación de duración/costo.
 - Agregar selección por índice/rango de videos.
-- Agregar documentos de estudio V2.
 - Evaluar interfaz local en V5.
 
 ## Siguiente Acción Recomendada

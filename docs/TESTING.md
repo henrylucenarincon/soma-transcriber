@@ -109,6 +109,35 @@ python3 src/main.py \
 
 Sin `--force`, el manifest debe evitar reprocesar archivos `completed` y concentrarse en los `failed` o pendientes.
 
+## Validación del Módulo 1
+
+Comando usado para reprocesar el módulo 1 sin `--force`:
+
+```bash
+python3 src/main.py \
+  --input "/Users/henry/Library/CloudStorage/GoogleDrive-henrylucena7@gmail.com/Mi unidad/Cursos/VICOR HERAS - MARCA PERSONAL 5.0/1. Como funciona el algoritmo" \
+  --output "./output" \
+  --course-name "Victor Heras - Marca Personal 5.0 - Modulo 1" \
+  --config "configs/local/victor-heras-marca-personal-5.yaml"
+```
+
+Comandos locales para validar resultados privados:
+
+```bash
+find output/transcripts -type f -name "*.md" | sort | wc -l
+cat output/index.csv
+grep -A 20 -B 5 "primeros clientes" data/manifest.json
+```
+
+Resultado esperado:
+
+- 13 transcripciones del módulo 1.
+- 13 registros `completed`.
+- 0 registros `failed` después del reproceso.
+- video 12 con `chunks_count: 3`.
+
+No incluir transcripciones reales ni contenido del curso en docs o commits.
+
 ## Criterios de Éxito Iniciales
 
 - El proceso termina sin detenerse por errores globales.
