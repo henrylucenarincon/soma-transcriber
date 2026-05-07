@@ -174,6 +174,26 @@ Resultado esperado:
 
 No incluir transcripciones reales ni contenido del curso en docs o commits.
 
+## Validación Final del Curso Completo
+
+Comandos locales sobre outputs privados:
+
+```bash
+find output/transcripts -type f -name "*.md" | sort | wc -l
+grep -c "completed" output/index.csv
+grep -c "failed" output/index.csv
+```
+
+Resultado esperado:
+
+```text
+90
+90
+0
+```
+
+Estos archivos son locales/privados. `output/` y `data/` no se suben al repositorio.
+
 ## Criterios de Éxito Iniciales
 
 - El proceso termina sin detenerse por errores globales.

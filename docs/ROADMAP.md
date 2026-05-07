@@ -68,6 +68,14 @@ Crear una interfaz local con Streamlit para controlar el flujo personal encima d
 
 Estado: implementado como interfaz local inicial. No tiene login, backend propio, base de datos externa ni modo SaaS.
 
+## V1.6: Primer Curso Completo Procesado
+
+El primer curso real quedó procesado completo: 90 videos detectados, 90 `completed`, 0 `failed`.
+
+V1 queda validado como pipeline completo de transcripción local: detección, orden natural, extracción, chunking, transcripción, Markdown, manifest, index y operación desde CLI/Soma Studio.
+
+Próximo gran bloque: V2 Study Pack.
+
 ## V2: Estudio del Curso
 
 Generar Study Pack y documentos de análisis a partir de transcripciones:

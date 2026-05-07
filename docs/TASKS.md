@@ -31,6 +31,8 @@
 - Crear interfaz local inicial Soma Studio.
 - Selección visual de carpetas.
 - Aclarar `max_videos` en UI.
+- Procesar curso completo.
+- Corregir nombre final del output del curso.
 
 Nota: el perfil local real fue creado en `configs/local/` y no se versiona por privacidad.
 
@@ -38,7 +40,6 @@ Nota: el perfil local real fue creado en `configs/local/` y no se versiona por p
 
 - Instalar dependencias localmente si falta.
 - Configurar `.env` real.
-- Procesar curso completo.
 - Revisar calidad de transcripciones por muestreo.
 - Generar documentos de estudio V2.
 - Mejorar progreso estructurado.
@@ -47,7 +48,7 @@ Nota: el perfil local real fue creado en `configs/local/` y no se versiona por p
 - Vista de revisión por muestreo.
 - Mejorar manejo de errores según nuevos hallazgos reales.
 - Agregar estimación de duración/costo.
-- Agregar selección por índice/rango de videos.
+- Agregar selección por índice/rango de videos si sigue siendo necesaria.
 - Evaluar interfaz local en V5.
 
 ## Siguiente Acción Recomendada

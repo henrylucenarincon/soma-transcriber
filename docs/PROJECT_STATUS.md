@@ -1,8 +1,8 @@
 # Estado del Proyecto
 
-Versión actual: V1.5.1
+Versión actual: V1.6
 
-Estado: CLI base funcional con seguridad operativa inicial, documentación viva creada, módulo 1 real completado, perfiles universales de configuración, chunking con FFmpeg/FFprobe e interfaz local Soma Studio mejorada.
+Estado: primer curso real completo procesado exitosamente; pipeline V1 validado, Soma Studio Local disponible y próximo hito V2 Study Pack.
 
 Soma Transcriber ya tiene una primera base funcional para detectar videos, extraer audio, dividir archivos grandes, transcribir con OpenAI API y escribir resultados organizados. La versión V1.1 agregó controles para reducir riesgo operativo y costos accidentales antes de ejecutar transcripciones reales. En V1.3 se ejecutó el primer test real controlado con 1 video y fue exitoso.
 
@@ -53,11 +53,17 @@ python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-
 - Módulo 1 real procesado completo.
 - Resultado del módulo 1: 13 videos detectados, 13 `completed`, 0 `failed` después del reproceso.
 - El video 12 requirió chunking preventivo y quedó con `chunks_count: 3`.
+- Primer curso completo procesado exitosamente.
+- Curso: Victor Heras - Marca Personal 5.0.
+- Videos detectados: 90.
+- Completed: 90.
+- Failed: 0.
+- Output final: `output/transcripts/Victor Heras - Marca Personal 5.0/`.
+- `output/` y `data/` son privados y no se versionan.
 
 ## Todavía No Probado
 
 - No se ha estimado costo real por duración de video.
-- No se ha procesado el curso completo.
 
 ## Hallazgo V1.3
 
@@ -77,7 +83,7 @@ El módulo 1 real quedó como prueba de producción local: 13/13 videos `complet
 
 ## Próximo Hito Recomendado
 
-Procesar el curso completo desde la carpeta raíz.
+V2 Study Pack: convertir las transcripciones completas en conocimiento estudiable por IA.
 
 ## Riesgos Actuales
 

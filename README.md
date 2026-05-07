@@ -202,6 +202,8 @@ En Soma Studio, `max_videos = 0` significa sin límite. Para pruebas controladas
 
 La UI no cambia el flujo de privacidad: `output/`, `data/`, `.env`, `configs/local/` y `.tmp/` siguen siendo privados y no deben subirse a GitHub.
 
+Estado actual del pipeline: el primer curso real fue procesado completo como prueba de pipeline: 90 videos, 90 `completed`, 0 `failed`. El siguiente paso es generar Study Packs a partir de esas transcripciones privadas.
+
 ## Estructura esperada del curso
 
 Ejemplo:

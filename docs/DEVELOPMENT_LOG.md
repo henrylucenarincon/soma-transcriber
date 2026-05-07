@@ -169,6 +169,16 @@ Se corrigió la sincronización entre selector de carpetas y `text_input` en Som
 - Se guarda la última ruta seleccionada para confirmación visual.
 - No se ejecutó transcripción real durante esta tarea.
 
+## 2026-05-06: Entrada V1.6
+
+Se procesó completo el primer curso real.
+
+- Resultado: 90/90 videos `completed`, 0 `failed`.
+- Se corrigió el nombre de salida del curso a `Victor Heras - Marca Personal 5.0`.
+- El `original_path` se mantiene apuntando a la ruta real del curso fuente.
+- `output/` y `data/` siguen siendo privados y no se versionan.
+- Próximo paso: V2 Study Pack para convertir transcripciones en conocimiento estudiable por IA.
+
 ## Validaciones Ejecutadas
 
 ```bash
