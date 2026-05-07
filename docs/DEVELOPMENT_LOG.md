@@ -262,6 +262,15 @@ Se agregó enfoque coverage-based a los Module Operating Systems.
 - Si hay conflicto entre brevedad y cobertura, se prioriza cobertura.
 - No se ejecutó generación real durante esta tarea.
 
+## 2026-05-07: Entrada V2.1
+
+Se reforzó la generación de archivos maestros del Course Pack.
+
+- Se corrigió la superficialidad de `AI_STUDY_CONTEXT` y `MASTER_PROMPT_FOR_AI`.
+- Cada archivo maestro ahora tiene instrucciones específicas en lugar de depender de un prompt genérico.
+- Se agregó énfasis en documentos maestros evidence-based, profundos y accionables para IA.
+- No se ejecutó generación real durante esta tarea.
+
 ## Validaciones Ejecutadas
 
 ```bash

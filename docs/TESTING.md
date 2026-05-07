@@ -310,6 +310,21 @@ Después de V2.0.8, validar además cobertura completa:
 - Los frameworks deben incluir todas las herramientas importantes detectadas.
 - Ninguna lección detectada debe quedar fuera del Coverage Matrix.
 
+Regenerar solo el Course Pack maestro después de V2.1:
+
+```bash
+python3 src/study_pack.py \
+  --transcripts "./output/transcripts/Victor Heras - Marca Personal 5.0" \
+  --index "./output/index.csv" \
+  --output "./output/study" \
+  --course-name "Victor Heras - Marca Personal 5.0" \
+  --config "configs/local/victor-heras-marca-personal-5.yaml" \
+  --phase course-pack \
+  --force
+```
+
+Después de V2.1, validar especialmente `03_CORE_PRINCIPLES.md`, `04_FRAMEWORKS.md`, `07_APPLICATION_GUIDE.md`, `08_AI_STUDY_CONTEXT.md` y `09_MASTER_PROMPT_FOR_AI.md`. Deben ser profundos, evidence-based, accionables y útiles para que una IA estudie y aplique la metodología del curso.
+
 No ejecutar generación real durante tareas de documentación o refactor. `output/study/` y `data/study_manifest.json` son privados y no se suben al repositorio.
 
 ## Criterios de Éxito Iniciales

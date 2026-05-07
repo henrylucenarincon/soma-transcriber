@@ -45,6 +45,7 @@
 - Reforzar module summaries con enfoque evidence-based.
 - Agregar Coverage Matrix a module summaries.
 - Reforzar cobertura completa de lecciones.
+- Mejorar prompts del course-pack maestro.
 
 Nota: el perfil local real fue creado en `configs/local/` y no se versiona por privacidad.
 
@@ -61,7 +62,8 @@ Nota: el perfil local real fue creado en `configs/local/` y no se versiona por p
 - Validar calidad del nuevo module summary.
 - Validar calidad evidence-based.
 - Validar cobertura completa.
-- Generar course pack completo.
+- Regenerar course-pack con `--force`.
+- Validar `03_CORE_PRINCIPLES`, `04_FRAMEWORKS`, `07_APPLICATION_GUIDE`, `08_AI_STUDY_CONTEXT` y `09_MASTER_PROMPT_FOR_AI`.
 - Integrar Study Pack en Soma Studio.
 - Exportar ZIP.
 - Generar documentos de estudio V2.

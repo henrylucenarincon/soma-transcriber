@@ -1,8 +1,8 @@
 # Estado del Proyecto
 
-Versión actual: V2.0.8
+Versión actual: V2.1
 
-Estado: pipeline V1 validado con un curso completo y Study Pack Builder V2.0 agregado como CLI local inicial. V2.0.8 refuerza los Module Operating Systems con enfoque coverage-based.
+Estado: pipeline V1 validado con un curso completo y Study Pack Builder V2.1 reforzado para generar archivos maestros del Course Pack más profundos, evidence-based y accionables para IA.
 
 Soma Transcriber ya tiene una primera base funcional para detectar videos, extraer audio, dividir archivos grandes, transcribir con OpenAI API y escribir resultados organizados. La versión V1.1 agregó controles para reducir riesgo operativo y costos accidentales antes de ejecutar transcripciones reales. En V1.3 se ejecutó el primer test real controlado con 1 video y fue exitoso.
 
@@ -39,6 +39,7 @@ Soma Transcriber ya tiene una primera base funcional para detectar videos, extra
 - Prompts V2.0.6 para corregir superficialidad de `module summaries` y producir sistemas operativos de módulo con checklist, reglas, frameworks y conexiones entre lecciones.
 - Prompts V2.0.7 para corregir el riesgo de relleno genérico en `module summaries`; ejemplos, frameworks, principios y reglas deben estar respaldados por `video-notes`.
 - Prompts V2.0.8 para corregir omisiones de lecciones/frameworks en `module summaries` mediante Coverage Matrix obligatorio y cobertura completa de `video-notes`.
+- Prompts V2.1 específicos por archivo maestro del Course Pack para mejorar `03_CORE_PRINCIPLES`, `04_FRAMEWORKS`, `07_APPLICATION_GUIDE`, `08_AI_STUDY_CONTEXT` y `09_MASTER_PROMPT_FOR_AI`.
 - Manifest V2 privado en `data/study_manifest.json`.
 - Configuración V2 mediante sección `study` en YAML.
 - Chunking de texto por caracteres para analizar transcripciones largas.
@@ -75,6 +76,7 @@ python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-
 - Output final: `output/transcripts/Victor Heras - Marca Personal 5.0/`.
 - `output/` y `data/` son privados y no se versionan.
 - Prueba real controlada de V2 con 2 `video-notes` del módulo 3.
+- Course Pack completo generado técnicamente, pendiente de regenerar con prompts V2.1.
 - Hallazgo V2.0.1: las primeras `video-notes` fueron técnicamente correctas, pero demasiado resumidas y algo genéricas.
 - Prueba real de `module summary` del módulo 3.
 - Hallazgo V2.0.5: el primer `module summary` fue técnicamente correcto, pero demasiado genérico para servir como síntesis operativa.
@@ -82,7 +84,7 @@ python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-
 ## Todavía No Probado
 
 - No se ha estimado costo real por duración de video.
-- No se ha generado el `course-pack` completo real.
+- No se ha regenerado el `course-pack` completo con prompts V2.1.
 
 ## Hallazgo V1.3
 
@@ -102,7 +104,7 @@ El módulo 1 real quedó como prueba de producción local: 13/13 videos `complet
 
 ## Próximo Hito Recomendado
 
-Regenerar las 2 `video-notes` de prueba con `--force` y evaluar si las notas extraen principios, mecanismos, frameworks implícitos, aplicaciones e instrucciones para IA.
+Regenerar solo `course-pack` con `--force` y validar especialmente `08_AI_STUDY_CONTEXT.md` y `09_MASTER_PROMPT_FOR_AI.md`.
 
 ## Riesgos Actuales
 

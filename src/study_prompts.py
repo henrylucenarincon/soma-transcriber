@@ -458,6 +458,152 @@ GLOBAL_DOCUMENTS: dict[str, dict[str, str]] = {
 }
 
 
+COURSE_DOCUMENT_INSTRUCTIONS: dict[str, str] = {
+    "00_STUDY_PACK_INDEX.md": """
+Genera un índice operativo del Study Pack.
+Debe explicar:
+- Qué es el Study Pack y para qué sirve.
+- Cómo se usa para preparar a una IA.
+- Qué archivo leer primero y por qué.
+- Qué archivo usar para cada tipo de tarea.
+- Qué archivos son fuente original, cuáles son notas intermedias y cuáles son síntesis maestras.
+- Flujo recomendado de lectura para una IA.
+- Cuándo consultar module_notes y cuándo volver a video_notes.
+- Nota de privacidad: outputs, notas y transcripciones son privados.
+""",
+    "01_COURSE_MAP.md": """
+Genera un mapa completo del curso, no una lista plana.
+Debe incluir:
+- Todos los módulos presentes en module_notes, sin omitir módulos finales.
+- Flujo lógico entre módulos.
+- Qué transformación produce cada módulo.
+- Qué módulo depende de qué.
+- Cómo usar el mapa para estudiar y navegar el curso.
+- Cómo debe usar una IA este mapa antes de responder.
+Si aparece un módulo final numerado, como módulo 10 o similar, debe incluirse.
+""",
+    "02_MODULE_SUMMARIES.md": """
+Consolida todos los Module Operating Systems.
+Debe incluir:
+- Tesis de cada módulo.
+- Sistema operativo de cada módulo.
+- Principales frameworks por módulo.
+- Cómo se conecta cada módulo con los demás.
+- Qué módulo prepara a cuál.
+- Qué debe recordar una IA de cada módulo.
+No debe ser un resumen corto superficial.
+""",
+    "03_CORE_PRINCIPLES.md": """
+Extrae principios centrales del curso completo.
+Cada principio debe incluir:
+- Nombre.
+- Explicación.
+- Módulos/lecciones que lo respaldan.
+- Mecanismo causa-efecto.
+- Cómo aplicarlo.
+- Qué errores evita.
+- Señales de mala aplicación.
+- Cómo debe usarlo una IA.
+Incluye suficientes principios para representar todo el curso, no solo una lista breve de ideas genéricas.
+Evita principios vagos como "crear contenido atractivo" si no explicas el mecanismo.
+""",
+    "04_FRAMEWORKS.md": """
+Recopila frameworks, métodos, estructuras, herramientas, checklists, procesos y criterios operativos del curso.
+Cada elemento debe incluir:
+- Nombre.
+- Tipo: framework / herramienta / criterio / estructura / checklist / proceso.
+- Módulos/lecciones que lo respaldan.
+- Para qué sirve.
+- Cuándo usarlo.
+- Entradas necesarias.
+- Pasos/componentes.
+- Output esperado.
+- Errores comunes.
+- Cómo lo usaría una IA en tareas reales.
+Incluye todos los frameworks clave detectados en module_notes. Cuando aparezcan, no omitas estructuras como algoritmo y retención, ratio de interés o ERI, filtro 5-50, referencias virales, controversia, tendencias, formatos, calculadora, ViralCopy, ganchos, historia/contexto, moraleja, CTA, método único de marca, cliente ideal, QCP, triángulo P.D.H., ventas, objeciones, stories, ManyChat, email marketing, web, VSL, página de registro, fiscalidad o contratos.
+No incluyas ninguno de esos elementos si no aparece respaldado por module_notes.
+""",
+    "05_KEY_CONCEPTS.md": """
+Crea un mapa conceptual, no solo un glosario.
+Cada concepto debe incluir:
+- Definición según el curso.
+- Módulos donde aparece.
+- Conceptos relacionados.
+- Cómo se aplica.
+- Qué confusión evita.
+- Cómo lo usaría una IA.
+Explica relaciones entre conceptos: qué es previo, qué activa qué, qué depende de qué y qué errores aparecen cuando se confunden.
+""",
+    "06_EXAMPLES_AND_CASES.md": """
+Genera un documento evidence-based de ejemplos y casos.
+Solo incluye ejemplos presentes en module_notes.
+Cada ejemplo debe incluir:
+- Ejemplo/caso/referencia.
+- Módulo/lección donde aparece.
+- Qué principio ilustra.
+- Cómo se puede usar como referencia.
+- Qué NO copiar literalmente.
+Si no hay evidencia suficiente para una sección, dilo. No inventes ejemplos genéricos ni casos hipotéticos.
+""",
+    "07_APPLICATION_GUIDE.md": """
+Convierte el curso en una guía de aplicación real.
+Debe incluir:
+- Cómo usar el curso para crear guiones.
+- Cómo usarlo para estrategia de contenido.
+- Cómo usarlo para marca personal.
+- Cómo usarlo para ventas.
+- Cómo usarlo para stories.
+- Cómo usarlo para web, VSL o páginas.
+- Cómo usarlo para automatización, ManyChat o email si aparece.
+- Checklists por tipo de tarea.
+- Preguntas de diagnóstico.
+- Orden recomendado de aplicación.
+- Qué debe revisar una IA antes de ejecutar una tarea.
+La guía debe ser accionable: entradas necesarias, proceso, decisiones, outputs y errores a evitar.
+""",
+    "08_AI_STUDY_CONTEXT.md": """
+Este es uno de los documentos más importantes.
+Debe ser robusto y útil para preparar a una IA.
+Debe incluir:
+- Propósito del documento.
+- Cómo debe estudiar una IA el Study Pack.
+- Orden recomendado de lectura: 00, 01, 02, 03, 04, 05, 07, 08, 09.
+- Cuándo consultar video_notes.
+- Cuándo consultar module_notes.
+- Reglas para evitar respuestas genéricas.
+- Cómo priorizar la metodología del curso.
+- Cómo responder si falta contexto.
+- Cómo citar internamente módulo/lección.
+- Cómo aplicar el curso a tareas reales.
+- Lista completa de módulos presentes en module_notes, sin omitir módulos finales como módulo 10 cuando exista.
+- Instrucciones específicas para guiones, estrategia, contenidos, marca personal, ventas, automatización y email marketing cuando esos temas estén respaldados.
+- Límites: no reproducir transcripciones largas, no inventar, no usar teoría externa salvo que se pida.
+""",
+    "09_MASTER_PROMPT_FOR_AI.md": """
+Genera un prompt maestro completo, serio y listo para copiar y pegar.
+Debe incluir:
+- Rol de la IA.
+- Material que debe estudiar.
+- Orden de estudio.
+- Reglas de respuesta.
+- Proceso antes de responder.
+- Cómo usar frameworks.
+- Cómo evitar respuestas genéricas.
+- Cómo pedir contexto faltante.
+- Cómo producir entregables.
+- Cómo trabajar con guiones.
+- Cómo trabajar con estrategia.
+- Cómo trabajar con marca personal.
+- Cómo trabajar con ventas.
+- Cómo trabajar con automatización, email o web cuando esos temas estén respaldados.
+- Prohibición de reproducir largos fragmentos.
+- Instrucción de fidelidad al curso.
+- Instrucción de citar internamente módulos/lecciones cuando sea útil.
+Debe ser mucho más completo que un prompt corto. Su objetivo es que una IA trabaje desde la metodología del curso, no desde consejos genéricos.
+""",
+}
+
+
 @dataclass(frozen=True)
 class StudySettings:
     model: str
@@ -518,6 +664,7 @@ def build_system_prompt(settings: StudySettings) -> str:
             "Cuando generes module summaries, no eres un resumidor. Eres un arquitecto de conocimiento para IA. Tu trabajo es convertir las notas del módulo en un sistema operativo aplicable.",
             "Cuando generes module summaries, tu prioridad es cobertura completa + fidelidad interna + utilidad operativa para IA. No sacrifiques lecciones por brevedad.",
             "No eres un generador de contenido genérico. Eres un arquitecto de conocimiento basado en evidencia interna. Tu tarea es convertir las notas disponibles en un sistema operativo fiel al curso. No rellenes huecos con conocimiento externo.",
+            "Cuando generes archivos maestros del course-pack, usa principalmente module_notes como fuente, prioriza profundidad sobre brevedad y evita documentos genéricos.",
             "Prioriza profundidad, especificidad y aplicabilidad.",
             "No reproduzcas transcripciones completas ni fragmentos largos del curso.",
             "Parafrasea con fidelidad. No inventes contenido.",
@@ -747,6 +894,7 @@ def build_course_document_prompt(
         raise ValueError(f"Documento global desconocido: {document_filename}")
 
     definition = GLOBAL_DOCUMENTS[document_filename]
+    document_instructions = COURSE_DOCUMENT_INSTRUCTIONS.get(document_filename, "")
     modules_text = "\n\n---\n\n".join(
         f"Fuente: {relative_path}\n\n{content}" for relative_path, content in module_notes
     )
@@ -759,14 +907,35 @@ Curso: {course_name}
 Documento a generar: {document_filename}
 Título sugerido: {definition["title"]}
 
+Instrucciones específicas para este archivo:
+{document_instructions}
+
 Reglas:
 - Usa las notas del curso como fuente principal.
+- Usa principalmente module_notes como fuente. Usa el índice de video_notes solo como respaldo de cobertura y referencia, salvo que el contenido de video_notes esté disponible explícitamente en el prompt.
 - Mantén enfoque evidence-based: no agregues ejemplos, frameworks, conceptos o casos que no estén presentes en module_notes o video_notes_index.
+- No generes documentos genéricos.
+- No inventes frameworks, ejemplos ni principios.
+- Todo principio, framework, regla o ejemplo debe estar respaldado por módulos o lecciones.
+- Prioriza profundidad sobre brevedad.
+- Evita frases vagas como "crear contenido atractivo" sin explicar el mecanismo.
+- Si falta evidencia, dilo.
+- Mantén enfoque de arquitecto de conocimiento para IA.
 - No incluyas transcripciones completas.
 - No copies fragmentos largos.
 - No agregues teoría externa.
 - No rellenes huecos con conocimiento externo ni contenido genérico.
 - Cuando sea útil, referencia módulo/lección usando las fuentes internas disponibles.
+- Incluye todos los módulos presentes en module_notes; no omitas módulos finales por brevedad.
+
+Antes de entregar, revisa internamente:
+- ¿El documento responde a las instrucciones específicas del archivo?
+- ¿Incluí todos los módulos relevantes, incluidos módulos finales?
+- ¿Evité principios, frameworks o ejemplos sin respaldo interno?
+- ¿El resultado ayuda a una IA a aplicar la metodología del curso?
+- ¿Priorizé profundidad y utilidad sobre brevedad?
+
+No muestres esta autoevaluación como sección final; úsala para mejorar la respuesta.
 
 Índice de lecciones disponibles:
 {lessons_text}
