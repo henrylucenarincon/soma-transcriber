@@ -1,8 +1,8 @@
 # Estado del Proyecto
 
-Versión actual: V2.0.1
+Versión actual: V2.0.2
 
-Estado: pipeline V1 validado con un curso completo y Study Pack Builder V2.0 agregado como CLI local inicial. V2.0.1 ajusta la profundidad de las video-notes tras la primera prueba real.
+Estado: pipeline V1 validado con un curso completo y Study Pack Builder V2.0 agregado como CLI local inicial. V2.0.2 ajusta la calidad de video-notes para clases introductorias o mapas de módulo.
 
 Soma Transcriber ya tiene una primera base funcional para detectar videos, extraer audio, dividir archivos grandes, transcribir con OpenAI API y escribir resultados organizados. La versión V1.1 agregó controles para reducir riesgo operativo y costos accidentales antes de ejecutar transcripciones reales. En V1.3 se ejecutó el primer test real controlado con 1 video y fue exitoso.
 
@@ -32,6 +32,7 @@ Soma Transcriber ya tiene una primera base funcional para detectar videos, extra
 - Study Pack Builder V2.0 en `src/study_pack.py`.
 - Generación por fases: `video-notes`, `module-summaries`, `course-pack` y `all`.
 - Prompts V2.0.1 para video-notes más profundas, accionables y útiles para IA.
+- Prompts V2.0.2 para tratar clases introductorias, onboarding, cierre o mapa como arquitectura del módulo sin inventar principios ni ejemplos.
 - Manifest V2 privado en `data/study_manifest.json`.
 - Configuración V2 mediante sección `study` en YAML.
 - Chunking de texto por caracteres para analizar transcripciones largas.

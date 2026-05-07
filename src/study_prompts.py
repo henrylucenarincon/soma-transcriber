@@ -15,12 +15,17 @@ VIDEO_NOTE_TEMPLATE = """# {video_title}
 ## 1. Resumen fiel de la lección
 
 Explicar qué enseña la lección sin agregar teoría externa.
+Si esta clase es introductoria, bienvenida, onboarding, cierre o mapa del módulo,
+explica su función dentro del curso y la arquitectura que presenta.
 
 ## 2. Principio central extraído
 
-Identificar el principio más importante de la clase.
+Identificar el principio más importante de la clase, o la función de la lección dentro
+del curso si es introductoria.
+No elijas como principio central un tema secundario si la clase solo presenta el mapa
+completo del módulo.
 Debe incluir:
-- Nombre del principio
+- Nombre del principio o función de la lección
 - Explicación
 - Por qué importa dentro del curso
 - Qué problema resuelve
@@ -38,12 +43,20 @@ Debe responder:
 
 Extraer pasos, condiciones, estructura o método aplicable.
 Si el video no tiene un framework explícito, extraer el framework implícito.
+Si la lección presenta el recorrido del módulo, convertirlo en "Arquitectura del módulo" en
+lugar de inventar pasos.
 Debe incluir:
 - Paso 1
 - Paso 2
 - Paso 3
 - Condiciones de uso
 - Resultado esperado
+Para clases introductorias o mapas de módulo, usar:
+- Bloque 1
+- Bloque 2
+- Bloque 3
+- Por qué el orden importa
+- Resultado esperado del módulo
 
 ## 5. Conceptos clave de esta lección
 
@@ -53,6 +66,9 @@ Cada concepto debe tener definición breve basada solo en la transcripción.
 ## 6. Ejemplos usados por el profesor
 
 Listar ejemplos, casos, analogías o comparaciones.
+Solo listar ejemplos que aparezcan realmente en la transcripción.
+No inventar ejemplos genéricos para llenar la sección.
+Si no hay ejemplos, escribir: "No aparecen ejemplos concretos en esta lección."
 Para cada ejemplo:
 - Qué ejemplo es
 - Qué idea ilustra
@@ -219,6 +235,7 @@ def build_system_prompt(settings: StudySettings) -> str:
             "El resultado debe ayudar a una IA a ejecutar tareas siguiendo la metodología del curso y evitando respuestas genéricas.",
             "No reproduzcas transcripciones completas ni fragmentos largos del curso.",
             "Parafrasea con fidelidad. No inventes contenido.",
+            "No rellenes secciones inventando ejemplos, frameworks o principios. Si algo no aparece, dilo claramente.",
             external_rule,
             quote_rule,
             f"Idioma de salida preferido: {settings.output_language}.",
@@ -270,6 +287,9 @@ Reglas:
 - No te quedes en resumen superficial: extrae principios, mecanismos, reglas y aplicaciones.
 - Convierte ideas en reglas aplicables.
 - Si no hay framework explícito, extrae el framework implícito a partir de la lógica de la clase.
+- Si la lección es introductoria, bienvenida, cierre, onboarding o mapa del módulo, no fuerces un principio central estrecho.
+- Para clases introductorias o mapas de módulo, identifica la función de la lección dentro del curso y explica la arquitectura del módulo.
+- No inventes ejemplos genéricos para llenar la sección de ejemplos.
 - No agregues teoría externa.
 - No dejes secciones vacías. Si algo no aparece, escribe: "No aparece explícitamente en esta lección."
 - Si algo no está claro en la transcripción, dilo sin inventar.
@@ -314,6 +334,9 @@ Reglas:
 - Elimina duplicados.
 - Mantén profundidad operativa: principios, mecanismos, framework implícito o explícito, aplicaciones e instrucciones para IA.
 - Convierte ideas en reglas aplicables cuando la transcripción lo permita.
+- Si la lección es introductoria, bienvenida, cierre, onboarding o mapa del módulo, no fuerces un principio central estrecho.
+- Para clases introductorias o mapas de módulo, identifica la función de la lección dentro del curso y explica la arquitectura del módulo.
+- No inventes ejemplos genéricos para llenar la sección de ejemplos.
 - No agregues teoría externa.
 - No copies fragmentos largos.
 - No dejes secciones vacías. Si algo no aparece, escribe: "No aparece explícitamente en esta lección."

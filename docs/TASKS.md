@@ -36,6 +36,7 @@
 - Crear estructura inicial de Study Pack Builder.
 - Probar `video-notes` con `--max-videos 2`.
 - Mejorar prompts de video-notes.
+- Ajustar prompts para clases introductorias/mapa.
 
 Nota: el perfil local real fue creado en `configs/local/` y no se versiona por privacidad.
 

@@ -198,6 +198,15 @@ Se mejoraron los prompts de Study Pack para generar `video-notes` más profundas
 - Los resúmenes de módulo también quedan preparados para consumir notas más profundas.
 - No se ejecutó generación real durante esta tarea.
 
+## 2026-05-06: Entrada V2.0.2
+
+Se ajustaron prompts para clases introductorias o mapas de módulo.
+
+- Las clases introductorias, de bienvenida, onboarding, cierre o mapa ya no deben forzar principios centrales estrechos.
+- Si una clase presenta el recorrido del módulo, la nota debe extraer la función de la lección y la arquitectura del módulo.
+- Se reforzó que no deben inventarse principios, frameworks ni ejemplos cuando no aparecen explícitamente.
+- No se ejecutó generación real durante esta tarea.
+
 ## Validaciones Ejecutadas
 
 ```bash
