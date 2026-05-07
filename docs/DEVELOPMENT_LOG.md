@@ -243,6 +243,25 @@ Se reforzaron los prompts de `module summaries` para convertirlos en Module Oper
 - Se agregó una autoevaluación interna para revisar lecciones, frameworks, conexiones, reglas aplicables y ejemplos antes de responder.
 - No se ejecutó generación real durante esta tarea.
 
+## 2026-05-06: Entrada V2.0.7
+
+Se reforzó el enfoque evidence-based para `module summaries`.
+
+- Cada ejemplo, framework, principio o regla debe estar respaldado por `video-notes`.
+- Se busca evitar ejemplos genéricos, casos hipotéticos, frameworks inventados o conocimiento externo.
+- Los documentos globales del Study Pack también quedan preparados para mantener fidelidad a la evidencia interna.
+- No se ejecutó generación real durante esta tarea.
+
+## 2026-05-06: Entrada V2.0.8
+
+Se agregó enfoque coverage-based a los Module Operating Systems.
+
+- Los `module summaries` deben cubrir todas las `video-notes` detectadas.
+- Se agregó Coverage Matrix obligatorio.
+- Se reforzó el checklist operativo para IA para cubrir todo el recorrido del módulo.
+- Si hay conflicto entre brevedad y cobertura, se prioriza cobertura.
+- No se ejecutó generación real durante esta tarea.
+
 ## Validaciones Ejecutadas
 
 ```bash

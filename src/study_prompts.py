@@ -138,6 +138,19 @@ módulo, no como regla operativa única.
 
 MODULE_SUMMARY_TEMPLATE = """# Módulo: {module_name}
 
+## 0. Coverage Matrix del módulo
+
+Esta sección debe listar TODAS las video-notes detectadas.
+Para cada lección:
+- Lección:
+- Función dentro del módulo:
+- Componente/framework asociado:
+- Secciones donde se usa:
+- Estado de cobertura: cubierta / insuficiente
+
+Regla:
+Ninguna lección detectada puede quedar fuera del Coverage Matrix.
+
 ## 1. Tesis central del módulo
 
 Explica en 1-3 párrafos cuál es la idea profunda del módulo.
@@ -150,6 +163,10 @@ Debe responder:
 
 Evita frases débiles como: "Este módulo trata sobre crear contenido atractivo".
 Produce una tesis fuerte, específica y metodológica basada solo en las video-notes.
+Debe explicar la lógica completa del módulo en términos operativos y conectar:
+marca/congruencia -> idea -> validación -> referencia -> tensión/controversia -> formato
+-> estructura -> retención -> acción -> medición, solo cuando esos elementos estén respaldados
+por las video-notes.
 
 ## 2. Sistema operativo del módulo
 
@@ -161,6 +178,7 @@ Formato:
 
 ### 2.1 Componente 1: ...
 - Qué es
+- Lección o video-note que lo respalda
 - Para qué sirve
 - Cuándo se aplica
 - Qué pasa si se ignora
@@ -201,11 +219,12 @@ Extraer principios que realmente gobiernan la metodología.
 
 Cada principio debe incluir:
 - Nombre del principio
+- Lecciones que lo respaldan
 - Explicación
 - Por qué importa
 - Cómo se aplica
 - Qué error evita
-- Señales de que se está aplicando mal
+- Señales de mala aplicación
 
 Evitar principios obvios o genéricos. Extraer principios con poder operativo.
 
@@ -223,18 +242,36 @@ Esta sección debe ayudar a una IA a razonar, no solo a recordar.
 ## 7. Frameworks y herramientas del módulo
 
 Consolidar todos los frameworks explícitos o implícitos detectados.
+No limitar la lista a 3-5 frameworks.
+Incluir todas las herramientas, metodologías, subestructuras, criterios operativos,
+métricas o componentes narrativos detectados en las video-notes.
 
-Para cada framework:
+Si una herramienta no es un framework formal, clasificarla como:
+- framework
+- herramienta
+- subestructura
+- criterio operativo
+- métrica
+- componente narrativo
+
+Para cada elemento:
 - Nombre
+- Tipo
+- Lecciones que lo respaldan
+- Evidencia de la video-note
 - Para qué sirve
 - Cuándo usarlo
 - Entradas necesarias
 - Pasos/componentes
 - Output esperado
-- Errores comunes al usarlo
+- Errores comunes
 - Cómo lo usaría una IA en una tarea real
 
-No omitir frameworks o herramientas relevantes que aparezcan en las video-notes.
+Reglas:
+- Si un framework es implícito, debe ser una inferencia directa de una o más video-notes
+- No inventar frameworks externos
+- No incluir frameworks sin lecciones que los respalden
+- No omitir frameworks o herramientas relevantes que aparezcan en las video-notes
 
 ## 8. Conceptos clave y mapa de relaciones
 
@@ -247,23 +284,26 @@ Formato:
   - Es previo a C porque...
   - Se aplica cuando...
 
-## 9. Ejemplos, casos y referencias detectadas
+## 9. Evidencia interna: ejemplos, casos y referencias detectadas
 
-Consolidar ejemplos reales mencionados en las video-notes.
+Consolidar ejemplos, casos o referencias reales mencionados en las video-notes.
 
 Reglas:
-- No inventar ejemplos
-- No usar ejemplos genéricos si no aparecen
-- Si una video-note contiene ejemplos, incluirlos
+- Solo incluir ejemplos, casos o referencias que aparezcan explícitamente en las video-notes
+- No inventar ejemplos genéricos
+- No crear ejemplos hipotéticos
+- No usar conocimiento externo
+- No afirmar que no hay ejemplos si alguna video-note sí contiene ejemplos
 
 Para cada ejemplo:
-- Qué ejemplo es
-- Qué principio ilustra
-- Cómo se puede usar como referencia
-- Qué NO se debe copiar literalmente
+- Ejemplo/caso/referencia:
+- Lección o video-note donde aparece:
+- Qué principio ilustra:
+- Cómo puede usarse como referencia:
+- Qué NO debe copiarse literalmente:
 
-Si no hay ejemplos en una lección concreta, no pasa nada.
-Pero no afirmar que el módulo completo no tiene ejemplos si otras video-notes sí los contienen.
+Si no hay ejemplos detectados, escribir:
+"No se detectaron ejemplos concretos en las video-notes analizadas."
 
 ## 10. Reglas prácticas de aplicación
 
@@ -279,10 +319,20 @@ Ejemplos de formato:
 - Después de publicar, mide...
 
 Las reglas deben salir de las video-notes.
+Cada regla debe incluir:
+- Regla:
+- Basada en:
+- Cuándo aplicarla:
+- Qué evita:
+- Cómo la usaría una IA:
 
 ## 11. Checklist operativo para IA
 
 Crear un checklist que una IA debe seguir cuando use este módulo.
+Debe cubrir todo el recorrido del módulo, no solo los primeros componentes.
+Debe estar ordenado de forma secuencial.
+Debe incluir validaciones antes de crear un guion, durante la creación y después de publicar.
+Debe tener mínimo 12 ítems si el módulo contiene más de 10 lecciones.
 
 Debe estar pensado para tareas reales como:
 - crear guiones
@@ -294,14 +344,12 @@ Debe estar pensado para tareas reales como:
 - adaptar una referencia viral
 
 Formato:
-[ ] Preguntar por...
-[ ] Validar...
-[ ] Revisar...
-[ ] Elegir...
-[ ] Construir...
-[ ] Medir...
+- [ ] Acción
+  - Basado en:
+  - Por qué importa:
 
 Este checklist debe ser específico y no genérico.
+Cada ítem debe estar basado en una lección o framework detectado.
 
 ## 12. Instrucciones para una IA
 
@@ -468,6 +516,8 @@ def build_system_prompt(settings: StudySettings) -> str:
             "El resultado debe ayudar a una IA a ejecutar tareas siguiendo la metodología del curso y evitando respuestas genéricas.",
             "Cuando generes module summaries, tu tarea no es resumir superficialmente. Tu tarea es sintetizar la metodología del módulo para que otra IA pueda aplicarla.",
             "Cuando generes module summaries, no eres un resumidor. Eres un arquitecto de conocimiento para IA. Tu trabajo es convertir las notas del módulo en un sistema operativo aplicable.",
+            "Cuando generes module summaries, tu prioridad es cobertura completa + fidelidad interna + utilidad operativa para IA. No sacrifiques lecciones por brevedad.",
+            "No eres un generador de contenido genérico. Eres un arquitecto de conocimiento basado en evidencia interna. Tu tarea es convertir las notas disponibles en un sistema operativo fiel al curso. No rellenes huecos con conocimiento externo.",
             "Prioriza profundidad, especificidad y aplicabilidad.",
             "No reproduzcas transcripciones completas ni fragmentos largos del curso.",
             "Parafrasea con fidelidad. No inventes contenido.",
@@ -615,7 +665,10 @@ Tarea: crear un Module Operating System usando notas de estudio por video.
 No generes un resumen superficial. Se quiere una síntesis metodológica profunda del módulo.
 Tu tarea es construir el sistema operativo del módulo para que otra IA pueda aplicarlo en tareas reales.
 Debes extraer la lógica completa del módulo: la secuencia, los principios, los mecanismos, los frameworks, los ejemplos y las reglas de aplicación.
+Este documento debe ser evidence-based. Solo puedes incluir elementos presentes en las video-notes. No rellenes con conocimiento general, ejemplos inventados, casos hipotéticos o frameworks no mencionados o no inferibles directamente desde las notas.
+Este documento también debe ser coverage-based. Primero identifica todas las video-notes recibidas. Luego construye el Coverage Matrix. Después genera el sistema operativo del módulo. No termines el documento hasta que todas las video-notes estén cubiertas.
 Si hay conflicto entre brevedad y profundidad, prioriza profundidad.
+Si hay conflicto entre brevedad y cobertura, prioriza cobertura.
 El resultado debe ser más largo y más útil que un resumen ejecutivo.
 
 Curso: {course_name}
@@ -626,9 +679,15 @@ Usa exactamente esta estructura:
 
 Reglas:
 - Usa solo las video-notes como fuente.
+- Primero identifica todas las video-notes recibidas.
+- Construye el Coverage Matrix antes de desarrollar el sistema operativo.
 - Sintetiza el módulo sin copiar largas partes del curso.
 - Mantén el significado de las notas y conecta las lecciones entre sí.
 - Integra todas las lecciones disponibles.
+- Todas las lecciones detectadas deben aparecer al menos en Coverage Matrix, Función de cada lección, Sistema operativo del módulo y, cuando aplique, Frameworks / Checklist / Reglas prácticas.
+- No termines el documento hasta que todas las video-notes estén cubiertas.
+- Si una lección no encaja en un framework, crea un componente auxiliar o explica su función dentro del sistema.
+- No omitas lecciones finales por falta de espacio.
 - Explica la lógica completa que une las lecciones, no solo una lista de temas.
 - Extrae el sistema operativo del módulo: secuencia de aplicación, principios, mecanismos recurrentes y frameworks explícitos o implícitos.
 - No reduzcas el módulo a una lista corta si las video-notes contienen más componentes.
@@ -636,6 +695,14 @@ Reglas:
 - Consolida ejemplos desde las video-notes.
 - No digas "no hay ejemplos" si alguna video-note contiene ejemplos, casos, analogías o comparaciones.
 - No inventes ejemplos.
+- No uses frases como "por ejemplo" para introducir casos que no aparezcan en las notas.
+- No crees ejemplos hipotéticos.
+- No uses nichos, marcas o plataformas no mencionadas en las notas salvo que aparezcan en las video-notes.
+- Si una sección no tiene suficiente evidencia, dilo.
+- Prioriza fidelidad sobre completar secciones.
+- Si dudas entre ser completo o ser fiel, sé fiel.
+- No conviertas conocimiento general de marketing en contenido del curso.
+- Toda afirmación importante debe poder rastrearse a una video-note.
 - No uses frases genéricas como "crear contenido atractivo" sin explicar el mecanismo.
 - Convierte conceptos en reglas prácticas de aplicación.
 - Genera instrucciones útiles para una IA que deba crear guiones, estrategias, calendarios, análisis o contenidos usando este módulo.
@@ -645,13 +712,19 @@ Reglas:
 
 Antes de entregar, revisa internamente:
 - ¿Incluí todas las lecciones detectadas?
+- ¿Incluí la última lección?
 - ¿Incluí todos los frameworks relevantes?
+- ¿Los frameworks incluyen también formatos, calculadora, ViralCopy, ganchos, historia, moraleja, CTA y métricas si aparecen?
 - ¿Expliqué cómo se conectan las ideas?
 - ¿Convertí conceptos en reglas aplicables?
 - ¿Le di a una IA instrucciones concretas para usar este módulo?
+- ¿El checklist cubre todo el módulo?
+- ¿Evité tesis genéricas?
 - ¿Evité frases genéricas?
 - ¿Evité inventar ejemplos?
 - ¿Evité decir que no hay ejemplos si sí aparecen en las notas?
+- ¿Cada afirmación importante puede rastrearse a una video-note?
+- ¿Prioricé cobertura sobre brevedad?
 
 No muestres esta autoevaluación como sección final; úsala para mejorar la respuesta.
 
@@ -688,9 +761,11 @@ Título sugerido: {definition["title"]}
 
 Reglas:
 - Usa las notas del curso como fuente principal.
+- Mantén enfoque evidence-based: no agregues ejemplos, frameworks, conceptos o casos que no estén presentes en module_notes o video_notes_index.
 - No incluyas transcripciones completas.
 - No copies fragmentos largos.
 - No agregues teoría externa.
+- No rellenes huecos con conocimiento externo ni contenido genérico.
 - Cuando sea útil, referencia módulo/lección usando las fuentes internas disponibles.
 
 Índice de lecciones disponibles:

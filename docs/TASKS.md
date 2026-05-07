@@ -42,6 +42,9 @@
 - Separar video-notes introductorias y operativas.
 - Mejorar profundidad de module summaries.
 - Convertir module summaries en Module Operating Systems.
+- Reforzar module summaries con enfoque evidence-based.
+- Agregar Coverage Matrix a module summaries.
+- Reforzar cobertura completa de lecciones.
 
 Nota: el perfil local real fue creado en `configs/local/` y no se versiona por privacidad.
 
@@ -56,6 +59,8 @@ Nota: el perfil local real fue creado en `configs/local/` y no se versiona por p
 - Generar video-notes del módulo 3 completo.
 - Regenerar module summary del módulo 3.
 - Validar calidad del nuevo module summary.
+- Validar calidad evidence-based.
+- Validar cobertura completa.
 - Generar course pack completo.
 - Integrar Study Pack en Soma Studio.
 - Exportar ZIP.

@@ -293,6 +293,23 @@ python3 src/study_pack.py \
 
 Revisar que el documento resultante no sea un resumen ejecutivo: debe incluir tesis central, sistema operativo del módulo, secuencia de aplicación, función de cada lección, frameworks, mapa de relaciones, ejemplos detectados, reglas prácticas, checklist operativo para IA e instrucciones de uso.
 
+Después de V2.0.7, validar además el enfoque evidence-based:
+
+- No debe incluir ejemplos no presentes en `video-notes`.
+- Cada framework debe mencionar lecciones que lo respaldan.
+- Cada principio debe tener respaldo interno.
+- Si no hay evidencia suficiente, debe decirlo.
+- No debe usar ejemplos genéricos de marketing.
+- No debe convertir conocimiento general externo en contenido del curso.
+
+Después de V2.0.8, validar además cobertura completa:
+
+- El module summary debe incluir todas las `video-notes`.
+- Debe incluir la última lección del módulo.
+- El checklist debe cubrir todo el recorrido.
+- Los frameworks deben incluir todas las herramientas importantes detectadas.
+- Ninguna lección detectada debe quedar fuera del Coverage Matrix.
+
 No ejecutar generación real durante tareas de documentación o refactor. `output/study/` y `data/study_manifest.json` son privados y no se suben al repositorio.
 
 ## Criterios de Éxito Iniciales
