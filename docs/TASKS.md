@@ -37,6 +37,10 @@
 - Probar `video-notes` con `--max-videos 2`.
 - Mejorar prompts de video-notes.
 - Ajustar prompts para clases introductorias/mapa.
+- Detectar clases introductorias por título/ruta.
+- Ajustar video-notes introductorias como mapa del módulo.
+- Separar video-notes introductorias y operativas.
+- Mejorar profundidad de module summaries.
 
 Nota: el perfil local real fue creado en `configs/local/` y no se versiona por privacidad.
 
@@ -48,7 +52,9 @@ Nota: el perfil local real fue creado en `configs/local/` y no se versiona por p
 - Ejecutar dry-run de V2.
 - Regenerar 2 video-notes de prueba con `--force`.
 - Validar calidad de video-notes mejoradas.
-- Generar module summaries.
+- Generar video-notes del módulo 3 completo.
+- Regenerar module summary del módulo 3.
+- Validar calidad del nuevo module summary.
 - Generar course pack completo.
 - Integrar Study Pack en Soma Studio.
 - Exportar ZIP.

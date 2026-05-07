@@ -207,6 +207,33 @@ Se ajustaron prompts para clases introductorias o mapas de módulo.
 - Se reforzó que no deben inventarse principios, frameworks ni ejemplos cuando no aparecen explícitamente.
 - No se ejecutó generación real durante esta tarea.
 
+## 2026-05-06: Entrada V2.0.3
+
+Se agregó detección de clases introductorias por título/ruta.
+
+- Las introducciones ahora se tratan como mapas o arquitectura del módulo.
+- Se evita reducir una introducción a un framework operativo artificial.
+- La detección soporta términos como introducción, intro, bienvenida, overview, mapa, onboarding, cierre y conclusión.
+- No se ejecutó generación real durante esta tarea.
+
+## 2026-05-06: Entrada V2.0.4
+
+Se separó el tratamiento de clases introductorias y operativas.
+
+- Las introductorias usan arquitectura del módulo.
+- Las operativas usan framework operativo real o implícito.
+- Se corrigió el riesgo de usar arquitectura del módulo en clases operativas.
+- No se ejecutó generación real durante esta tarea.
+
+## 2026-05-06: Entrada V2.0.5
+
+Se mejoraron prompts de `module summaries`.
+
+- El objetivo es generar síntesis metodológicas profundas y no resúmenes genéricos.
+- Los resúmenes de módulo ahora deben conectar lecciones, extraer el sistema operativo del módulo y consolidar ejemplos desde las `video-notes`.
+- También deben convertir conceptos en reglas prácticas e instrucciones útiles para IA.
+- No se ejecutó generación real durante esta tarea.
+
 ## Validaciones Ejecutadas
 
 ```bash

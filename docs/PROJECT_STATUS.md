@@ -1,8 +1,8 @@
 # Estado del Proyecto
 
-Versión actual: V2.0.2
+Versión actual: V2.0.5
 
-Estado: pipeline V1 validado con un curso completo y Study Pack Builder V2.0 agregado como CLI local inicial. V2.0.2 ajusta la calidad de video-notes para clases introductorias o mapas de módulo.
+Estado: pipeline V1 validado con un curso completo y Study Pack Builder V2.0 agregado como CLI local inicial. V2.0.5 mejora la profundidad de los `module summaries` para producir síntesis metodológicas accionables.
 
 Soma Transcriber ya tiene una primera base funcional para detectar videos, extraer audio, dividir archivos grandes, transcribir con OpenAI API y escribir resultados organizados. La versión V1.1 agregó controles para reducir riesgo operativo y costos accidentales antes de ejecutar transcripciones reales. En V1.3 se ejecutó el primer test real controlado con 1 video y fue exitoso.
 
@@ -33,6 +33,9 @@ Soma Transcriber ya tiene una primera base funcional para detectar videos, extra
 - Generación por fases: `video-notes`, `module-summaries`, `course-pack` y `all`.
 - Prompts V2.0.1 para video-notes más profundas, accionables y útiles para IA.
 - Prompts V2.0.2 para tratar clases introductorias, onboarding, cierre o mapa como arquitectura del módulo sin inventar principios ni ejemplos.
+- Detección V2.0.3 de clases introductorias por título/ruta para activar instrucciones especiales de mapa del módulo.
+- Prompts V2.0.4 para evitar arquitectura del módulo en clases operativas y forzar framework operativo real o implícito.
+- Prompts V2.0.5 para `module summaries` más profundos, conectados y útiles como metodología aplicable por IA.
 - Manifest V2 privado en `data/study_manifest.json`.
 - Configuración V2 mediante sección `study` en YAML.
 - Chunking de texto por caracteres para analizar transcripciones largas.
@@ -70,11 +73,12 @@ python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-
 - `output/` y `data/` son privados y no se versionan.
 - Prueba real controlada de V2 con 2 `video-notes` del módulo 3.
 - Hallazgo V2.0.1: las primeras `video-notes` fueron técnicamente correctas, pero demasiado resumidas y algo genéricas.
+- Prueba real de `module summary` del módulo 3.
+- Hallazgo V2.0.5: el primer `module summary` fue técnicamente correcto, pero demasiado genérico para servir como síntesis operativa.
 
 ## Todavía No Probado
 
 - No se ha estimado costo real por duración de video.
-- No se han generado `module-summaries` reales.
 - No se ha generado el `course-pack` completo real.
 
 ## Hallazgo V1.3

@@ -244,6 +244,40 @@ python3 src/study_pack.py \
 
 Después de regenerar, revisar que cada nota incluya principios, mecanismos, frameworks implícitos, aplicaciones prácticas, errores que evita e instrucciones concretas para IA.
 
+Después de V2.0.3, usar el mismo comando para validar que una clase introductoria se trate como mapa o arquitectura del módulo, sin forzar un framework operativo artificial:
+
+```bash
+python3 src/study_pack.py \
+  --transcripts "./output/transcripts/Victor Heras - Marca Personal 5.0/3. Cómo hacer contenido viral en 5 pasos" \
+  --index "./output/index.csv" \
+  --output "./output/study" \
+  --course-name "Victor Heras - Marca Personal 5.0 - Test Modulo 3" \
+  --config "configs/local/victor-heras-marca-personal-5.yaml" \
+  --phase video-notes \
+  --max-videos 2 \
+  --force
+```
+
+Después de V2.0.4, la validación de calidad debe revisar dos casos:
+
+- `0. Introducción` debe usar arquitectura del módulo.
+- `1. Sé el referente de lo que tu cliente quiere ser` debe usar framework operativo, no arquitectura del módulo.
+
+Regenerar el `module summary` del módulo 3 después de ajustar prompts:
+
+```bash
+python3 src/study_pack.py \
+  --transcripts "./output/transcripts/Victor Heras - Marca Personal 5.0/3. Cómo hacer contenido viral en 5 pasos" \
+  --index "./output/index.csv" \
+  --output "./output/study" \
+  --course-name "Victor Heras - Marca Personal 5.0 - Test Modulo 3" \
+  --config "configs/local/victor-heras-marca-personal-5.yaml" \
+  --phase module-summaries \
+  --force
+```
+
+Después de V2.0.5, revisar que el `module summary` conecte las lecciones, extraiga la secuencia metodológica, consolide ejemplos desde las `video-notes`, convierta conceptos en reglas prácticas y dé instrucciones útiles para una IA.
+
 No ejecutar generación real durante tareas de documentación o refactor. `output/study/` y `data/study_manifest.json` son privados y no se suben al repositorio.
 
 ## Criterios de Éxito Iniciales

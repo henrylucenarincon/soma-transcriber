@@ -3,6 +3,19 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+import unicodedata
+
+
+INTRODUCTORY_LESSON_TERMS = (
+    "introduccion",
+    "intro",
+    "bienvenida",
+    "overview",
+    "mapa",
+    "onboarding",
+    "cierre",
+    "conclusion",
+)
 
 
 VIDEO_NOTE_TEMPLATE = """# {video_title}
@@ -18,10 +31,12 @@ Explicar qué enseña la lección sin agregar teoría externa.
 Si esta clase es introductoria, bienvenida, onboarding, cierre o mapa del módulo,
 explica su función dentro del curso y la arquitectura que presenta.
 
-## 2. Principio central extraído
+## 2. Principio central extraído o función de la lección
 
 Identificar el principio más importante de la clase, o la función de la lección dentro
 del curso si es introductoria.
+Si la clase es introductoria, no inventes un principio central. Explica la función de
+la clase dentro del curso.
 No elijas como principio central un tema secundario si la clase solo presenta el mapa
 completo del módulo.
 Debe incluir:
@@ -41,22 +56,31 @@ Debe responder:
 
 ## 4. Framework operativo
 
-Extraer pasos, condiciones, estructura o método aplicable.
-Si el video no tiene un framework explícito, extraer el framework implícito.
-Si la lección presenta el recorrido del módulo, convertirlo en "Arquitectura del módulo" en
-lugar de inventar pasos.
-Debe incluir:
+Si la lección es introductoria/mapa, usar "Arquitectura del módulo" con:
+- Bloques o lecciones anunciadas
+- Función de cada bloque
+- Por qué el orden importa
+- Resultado esperado del módulo
+
+Si la lección es operativa/no introductoria, usar "Framework operativo" con:
+- Nombre del framework o principio operativo
 - Paso 1
 - Paso 2
 - Paso 3
+- Pasos adicionales si aplica
 - Condiciones de uso
 - Resultado esperado
-Para clases introductorias o mapas de módulo, usar:
+
+Para una clase introductoria/mapa, la arquitectura del módulo puede incluir:
 - Bloque 1
 - Bloque 2
 - Bloque 3
+- Bloques adicionales si aparecen
+- Qué función cumple cada bloque
 - Por qué el orden importa
 - Resultado esperado del módulo
+No reduzcas una arquitectura de módulo a tres pasos si la transcripción enumera más
+bloques o lecciones. No uses "Arquitectura del módulo" en clases operativas.
 
 ## 5. Conceptos clave de esta lección
 
@@ -103,6 +127,8 @@ Ejemplo:
 - No respondas de forma genérica sobre Z.
 - Prioriza este principio antes que consejos externos.
 - Pregunta por A si falta contexto.
+Para clases introductorias, la IA debe usar esta nota como mapa de navegación del
+módulo, no como regla operativa única.
 
 ## 11. Referencias internas
 
@@ -112,25 +138,98 @@ Ejemplo:
 
 MODULE_SUMMARY_TEMPLATE = """# Módulo: {module_name}
 
-## Resumen del módulo
+## 1. Síntesis metodológica del módulo
 
-## Lecciones incluidas
+Explicar qué enseña el módulo como sistema completo.
+Debe responder:
+- Qué problema resuelve el módulo
+- Qué transformación busca producir
+- Cuál es la lógica completa que conecta las lecciones
+- Qué debe entender una IA antes de aplicar este módulo
 
-## Principios del módulo
+## 2. Secuencia operativa del módulo
 
-## Mecanismos recurrentes
+Extraer el orden de aplicación de las ideas.
+Debe incluir:
+- Paso 1
+- Paso 2
+- Paso 3
+- Pasos adicionales si aplica
+- Por qué el orden importa
+- Qué ocurre si se salta un paso
 
-## Frameworks del módulo
+## 3. Lecciones incluidas y función de cada una
 
-## Conceptos clave
+Listar cada lección y explicar qué función cumple dentro del módulo.
+No limitarse a títulos; explicar para qué sirve cada lección en la metodología.
 
-## Ejemplos importantes
+## 4. Principios centrales del módulo
 
-## Aplicaciones prácticas
+Extraer principios profundos.
+Cada principio debe incluir:
+- Nombre
+- Explicación
+- Por qué importa
+- Cómo se aplica
+- Qué error evita
 
-## Instrucciones para una IA
+## 5. Mecanismos recurrentes
 
-## Preguntas que este módulo ayuda a responder
+Explicar relaciones de causa-efecto que se repiten.
+Ejemplo:
+- Si X, entonces Y
+- X funciona porque activa Y
+- X falla cuando falta Y
+
+## 6. Frameworks del módulo
+
+Consolidar frameworks explícitos o implícitos.
+Para cada framework:
+- Nombre
+- Para qué sirve
+- Pasos/componentes
+- Cuándo usarlo
+- Resultado esperado
+
+## 7. Conceptos clave y relaciones entre ellos
+
+No solo definir conceptos.
+Explicar cómo se relacionan entre sí dentro de la metodología.
+
+## 8. Ejemplos importantes y qué enseñan
+
+Consolidar ejemplos presentes en las video-notes.
+No decir que no hay ejemplos si alguna video-note contiene ejemplos.
+Para cada ejemplo:
+- Ejemplo/caso
+- Qué principio ilustra
+- Cómo usarlo como referencia
+
+## 9. Reglas prácticas de aplicación
+
+Convertir el módulo en reglas accionables.
+Ejemplo:
+- Antes de crear un guion, validar...
+- Si el contenido no pasa...
+- No elegir formato antes de...
+- Usar controversia solo si...
+
+## 10. Errores que el módulo ayuda a evitar
+
+Listar errores estratégicos, creativos o de ejecución que el módulo corrige.
+
+## 11. Instrucciones para una IA
+
+Instrucciones concretas para una IA que deba usar este módulo.
+Debe incluir:
+- Qué debe priorizar
+- Qué no debe hacer
+- Qué preguntas debe hacer si falta contexto
+- Cómo debe usar este módulo al crear guiones, estrategias, calendarios o análisis
+
+## 12. Preguntas que este módulo ayuda a responder
+
+Preguntas prácticas y estratégicas.
 """
 
 
@@ -216,6 +315,35 @@ class StudySettings:
     avoid_external_knowledge: bool = True
 
 
+def is_introductory_lesson(video_title: str, relative_path: str = "") -> bool:
+    text = _normalize_lesson_text(f"{video_title} {relative_path}")
+    return any(term in text for term in INTRODUCTORY_LESSON_TERMS)
+
+
+def _normalize_lesson_text(value: str) -> str:
+    decomposed = unicodedata.normalize("NFKD", value)
+    without_accents = "".join(character for character in decomposed if not unicodedata.combining(character))
+    return without_accents.casefold()
+
+
+def _lesson_type_instruction(is_introductory: bool) -> str:
+    if is_introductory:
+        return (
+            "Instrucción especial para esta lección:\n"
+            "Esta lección es introductoria/mapa. En la sección 4 usa Arquitectura del módulo. "
+            "No generes un framework operativo artificial. Trata la lección como una arquitectura del módulo "
+            "o del curso. Prioriza explicar la función de la lección, el recorrido que presenta, los bloques "
+            "que anuncia y cómo preparar a la IA para usar ese módulo."
+        )
+
+    return (
+        "Instrucción especial para esta lección:\n"
+        "Esta lección no parece introductoria. En la sección 4 NO uses Arquitectura del módulo. "
+        "Extrae un Framework operativo real o implícito. Si no hay framework explícito, convierte la enseñanza "
+        "en pasos accionables fieles a la transcripción, sin inventar elementos externos."
+    )
+
+
 def build_system_prompt(settings: StudySettings) -> str:
     quote_rule = (
         f"Puedes incluir citas literales muy breves de máximo {settings.quote_max_words} palabras."
@@ -233,9 +361,11 @@ def build_system_prompt(settings: StudySettings) -> str:
             "Tu objetivo no es hacer un resumen escolar: debes convertir el contenido en conocimiento aplicable.",
             "Extrae principios, mecanismos de causa-efecto, frameworks explícitos o implícitos, reglas de decisión, ejemplos y referencias internas.",
             "El resultado debe ayudar a una IA a ejecutar tareas siguiendo la metodología del curso y evitando respuestas genéricas.",
+            "Cuando generes module summaries, tu tarea no es resumir superficialmente. Tu tarea es sintetizar la metodología del módulo para que otra IA pueda aplicarla.",
             "No reproduzcas transcripciones completas ni fragmentos largos del curso.",
             "Parafrasea con fidelidad. No inventes contenido.",
             "No rellenes secciones inventando ejemplos, frameworks o principios. Si algo no aparece, dilo claramente.",
+            "No uses arquitectura del módulo en clases operativas. Solo úsala cuando la lección sea introductoria, bienvenida, overview, mapa, onboarding, cierre o conclusión.",
             external_rule,
             quote_rule,
             f"Idioma de salida preferido: {settings.output_language}.",
@@ -254,6 +384,8 @@ def build_video_note_prompt(
     chunks_count: int,
     settings: StudySettings,
 ) -> str:
+    is_introductory = is_introductory_lesson(video_title, relative_path.as_posix())
+    lesson_type_instruction = _lesson_type_instruction(is_introductory)
     chunk_notice = (
         f"Esta es la parte {chunk_index} de {chunks_count} de una transcripción larga. "
         "Extrae solo lo que aparezca en esta parte."
@@ -267,6 +399,8 @@ Tarea: crear una nota de estudio por video a partir de una transcripción litera
 La nota debe ser profunda, específica y accionable. Debe servir para que una IA estudie esta lección y luego aplique la metodología del curso en tareas reales.
 
 {chunk_notice}
+
+{lesson_type_instruction}
 
 Curso: {course_name}
 Módulo: {module_path or "Sin módulo"}
@@ -289,6 +423,8 @@ Reglas:
 - Si no hay framework explícito, extrae el framework implícito a partir de la lógica de la clase.
 - Si la lección es introductoria, bienvenida, cierre, onboarding o mapa del módulo, no fuerces un principio central estrecho.
 - Para clases introductorias o mapas de módulo, identifica la función de la lección dentro del curso y explica la arquitectura del módulo.
+- Si la lección no es introductoria, NO uses "Arquitectura del módulo"; extrae un "Framework operativo" real o implícito.
+- Un framework implícito debe convertir la enseñanza en pasos accionables fieles a la transcripción.
 - No inventes ejemplos genéricos para llenar la sección de ejemplos.
 - No agregues teoría externa.
 - No dejes secciones vacías. Si algo no aparece, escribe: "No aparece explícitamente en esta lección."
@@ -311,10 +447,14 @@ def build_video_note_merge_prompt(
     partial_notes: list[str],
     settings: StudySettings,
 ) -> str:
+    is_introductory = is_introductory_lesson(video_title, relative_path.as_posix())
+    lesson_type_instruction = _lesson_type_instruction(is_introductory)
     joined_notes = "\n\n---\n\n".join(partial_notes)
     return f"""{build_system_prompt(settings)}
 
 Tarea: unir notas parciales de una misma lección en una sola nota de estudio profunda, específica y accionable.
+
+{lesson_type_instruction}
 
 Curso: {course_name}
 Módulo: {module_path or "Sin módulo"}
@@ -336,6 +476,8 @@ Reglas:
 - Convierte ideas en reglas aplicables cuando la transcripción lo permita.
 - Si la lección es introductoria, bienvenida, cierre, onboarding o mapa del módulo, no fuerces un principio central estrecho.
 - Para clases introductorias o mapas de módulo, identifica la función de la lección dentro del curso y explica la arquitectura del módulo.
+- Si la lección no es introductoria, NO uses "Arquitectura del módulo"; extrae un "Framework operativo" real o implícito.
+- Un framework implícito debe convertir la enseñanza en pasos accionables fieles a la transcripción.
 - No inventes ejemplos genéricos para llenar la sección de ejemplos.
 - No agregues teoría externa.
 - No copies fragmentos largos.
@@ -361,9 +503,10 @@ def build_module_summary_prompt(
     )
     return f"""{build_system_prompt(settings)}
 
-Tarea: crear un resumen de módulo usando notas de estudio por video.
+Tarea: crear un module summary usando notas de estudio por video.
 
-El resumen debe convertir el módulo en conocimiento operativo para una IA, no en una síntesis genérica.
+No se quiere un resumen superficial. Se quiere una síntesis metodológica profunda del módulo.
+Debes extraer el sistema operativo del módulo: la secuencia, los principios, los mecanismos, los frameworks, los ejemplos y las reglas de aplicación que permitirían a otra IA usar este módulo en tareas reales.
 
 Curso: {course_name}
 Módulo: {module_name}
@@ -372,11 +515,15 @@ Usa exactamente esta estructura:
 {MODULE_SUMMARY_TEMPLATE.format(module_name=module_name)}
 
 Reglas:
+- Usa solo las video-notes como fuente.
 - Sintetiza el módulo sin copiar largas partes del curso.
-- Mantén el significado de las notas.
-- Extrae principios del módulo, mecanismos recurrentes, frameworks explícitos o implícitos, ejemplos, aplicaciones e instrucciones para IA.
-- Identifica patrones entre lecciones y cómo se conectan.
-- Convierte ideas del módulo en reglas de aplicación.
+- Mantén el significado de las notas y conecta las lecciones entre sí.
+- Explica la lógica completa que une las lecciones, no solo una lista de temas.
+- Extrae el sistema operativo del módulo: secuencia de aplicación, principios, mecanismos recurrentes y frameworks explícitos o implícitos.
+- Consolida ejemplos desde las video-notes.
+- No digas "no hay ejemplos" si alguna video-note contiene ejemplos, casos, analogías o comparaciones.
+- Convierte conceptos en reglas prácticas de aplicación.
+- Genera instrucciones útiles para una IA que deba crear guiones, estrategias, calendarios, análisis o contenidos usando este módulo.
 - No agregues teoría externa.
 - No dejes secciones vacías. Si algo no aparece, escribe: "No aparece explícitamente en este módulo."
 - Incluye lecciones y referencias internas cuando ayuden a ubicar ideas.
