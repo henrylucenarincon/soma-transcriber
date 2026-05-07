@@ -228,6 +228,22 @@ python3 src/study_pack.py \
   --max-videos 2
 ```
 
+Regenerar las 2 `video-notes` de prueba después de ajustar prompts:
+
+```bash
+python3 src/study_pack.py \
+  --transcripts "./output/transcripts/Victor Heras - Marca Personal 5.0/3. Cómo hacer contenido viral en 5 pasos" \
+  --index "./output/index.csv" \
+  --output "./output/study" \
+  --course-name "Victor Heras - Marca Personal 5.0 - Test Modulo 3" \
+  --config "configs/local/victor-heras-marca-personal-5.yaml" \
+  --phase video-notes \
+  --max-videos 2 \
+  --force
+```
+
+Después de regenerar, revisar que cada nota incluya principios, mecanismos, frameworks implícitos, aplicaciones prácticas, errores que evita e instrucciones concretas para IA.
+
 No ejecutar generación real durante tareas de documentación o refactor. `output/study/` y `data/study_manifest.json` son privados y no se suben al repositorio.
 
 ## Criterios de Éxito Iniciales

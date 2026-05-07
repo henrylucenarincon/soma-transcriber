@@ -189,6 +189,15 @@ Se agregó Study Pack Builder.
 - No debe incluir transcripciones completas ni largos fragmentos verbatim dentro del Study Pack.
 - No se ejecutó generación real durante esta tarea.
 
+## 2026-05-06: Entrada V2.0.1
+
+Se mejoraron los prompts de Study Pack para generar `video-notes` más profundas y accionables.
+
+- Las primeras pruebas reales de `video-notes` funcionaron técnicamente, pero quedaron demasiado resumidas.
+- Las `video-notes` ahora deben extraer principios, mecanismos, frameworks implícitos, aplicaciones e instrucciones para IA.
+- Los resúmenes de módulo también quedan preparados para consumir notas más profundas.
+- No se ejecutó generación real durante esta tarea.
+
 ## Validaciones Ejecutadas
 
 ```bash

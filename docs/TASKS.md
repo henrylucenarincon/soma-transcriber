@@ -34,6 +34,8 @@
 - Procesar curso completo.
 - Corregir nombre final del output del curso.
 - Crear estructura inicial de Study Pack Builder.
+- Probar `video-notes` con `--max-videos 2`.
+- Mejorar prompts de video-notes.
 
 Nota: el perfil local real fue creado en `configs/local/` y no se versiona por privacidad.
 
@@ -43,7 +45,8 @@ Nota: el perfil local real fue creado en `configs/local/` y no se versiona por p
 - Configurar `.env` real.
 - Revisar calidad de transcripciones por muestreo.
 - Ejecutar dry-run de V2.
-- Probar `video-notes` con `--max-videos 2`.
+- Regenerar 2 video-notes de prueba con `--force`.
+- Validar calidad de video-notes mejoradas.
 - Generar module summaries.
 - Generar course pack completo.
 - Integrar Study Pack en Soma Studio.

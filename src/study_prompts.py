@@ -12,23 +12,84 @@ VIDEO_NOTE_TEMPLATE = """# {video_title}
 **Fuente:** {relative_path}
 **Tipo:** Nota de estudio por video
 
-## Propósito de la lección
+## 1. Resumen fiel de la lección
 
-## Ideas principales
+Explicar qué enseña la lección sin agregar teoría externa.
 
-## Conceptos explicados
+## 2. Principio central extraído
 
-## Frameworks o estructuras mencionadas
+Identificar el principio más importante de la clase.
+Debe incluir:
+- Nombre del principio
+- Explicación
+- Por qué importa dentro del curso
+- Qué problema resuelve
 
-## Ejemplos y casos usados
+## 3. Mecanismo explicado
 
-## Reglas prácticas / instrucciones accionables
+Explicar cómo funciona la idea según la clase.
+Debe responder:
+- Qué causa qué
+- Qué condición activa el resultado
+- Qué relación hay entre conceptos
+- Qué lógica usa el profesor
 
-## Errores, advertencias o matices
+## 4. Framework operativo
 
-## Aplicaciones posibles
+Extraer pasos, condiciones, estructura o método aplicable.
+Si el video no tiene un framework explícito, extraer el framework implícito.
+Debe incluir:
+- Paso 1
+- Paso 2
+- Paso 3
+- Condiciones de uso
+- Resultado esperado
 
-## Referencias internas
+## 5. Conceptos clave de esta lección
+
+Lista de conceptos explicados según la clase.
+Cada concepto debe tener definición breve basada solo en la transcripción.
+
+## 6. Ejemplos usados por el profesor
+
+Listar ejemplos, casos, analogías o comparaciones.
+Para cada ejemplo:
+- Qué ejemplo es
+- Qué idea ilustra
+- Cómo se podría aplicar
+
+## 7. Aplicación práctica
+
+Explicar cómo aplicar la lección en un proyecto real.
+Debe incluir:
+- Cómo usarlo
+- Cuándo usarlo
+- Qué revisar antes de aplicarlo
+- Qué resultado buscar
+
+## 8. Implicaciones para creación de contenido, estrategia o ejecución
+
+Aunque el curso no sea de marketing, adaptar esta sección al tema del curso.
+Debe responder:
+- Qué cambiaría en la forma de crear, decidir o ejecutar
+- Qué debe priorizarse
+- Qué debe evitarse
+
+## 9. Errores que esta lección ayuda a evitar
+
+Listar errores, falsas creencias, malas prácticas o confusiones que la lección corrige.
+
+## 10. Instrucciones para una IA
+
+Escribir instrucciones concretas para una IA que deba usar esta lección.
+Ejemplo:
+- Cuando el usuario pida X, recuerda Y.
+- No respondas de forma genérica sobre Z.
+- Prioriza este principio antes que consejos externos.
+- Pregunta por A si falta contexto.
+
+## 11. Referencias internas
+
 - Transcript: {relative_path}
 """
 
@@ -41,13 +102,17 @@ MODULE_SUMMARY_TEMPLATE = """# Módulo: {module_name}
 
 ## Principios del módulo
 
+## Mecanismos recurrentes
+
 ## Frameworks del módulo
 
 ## Conceptos clave
 
 ## Ejemplos importantes
 
-## Cómo se aplica este módulo
+## Aplicaciones prácticas
+
+## Instrucciones para una IA
 
 ## Preguntas que este módulo ayuda a responder
 """
@@ -148,8 +213,10 @@ def build_system_prompt(settings: StudySettings) -> str:
     )
     return "\n".join(
         [
-            "Eres un analista de cursos para crear materiales de estudio privados para IA.",
-            "Trabaja con síntesis, principios, frameworks, conceptos, ejemplos y referencias internas.",
+            "Eres un analista de cursos que crea material de estudio operativo para IA.",
+            "Tu objetivo no es hacer un resumen escolar: debes convertir el contenido en conocimiento aplicable.",
+            "Extrae principios, mecanismos de causa-efecto, frameworks explícitos o implícitos, reglas de decisión, ejemplos y referencias internas.",
+            "El resultado debe ayudar a una IA a ejecutar tareas siguiendo la metodología del curso y evitando respuestas genéricas.",
             "No reproduzcas transcripciones completas ni fragmentos largos del curso.",
             "Parafrasea con fidelidad. No inventes contenido.",
             external_rule,
@@ -180,6 +247,8 @@ def build_video_note_prompt(
 
 Tarea: crear una nota de estudio por video a partir de una transcripción literal.
 
+La nota debe ser profunda, específica y accionable. Debe servir para que una IA estudie esta lección y luego aplique la metodología del curso en tareas reales.
+
 {chunk_notice}
 
 Curso: {course_name}
@@ -197,9 +266,13 @@ Estructura obligatoria:
 
 Reglas:
 - No copies largos fragmentos textuales.
-- No resumas de forma genérica: conserva los matices del contenido.
+- No hagas una respuesta genérica: usa detalles concretos de la transcripción.
+- No te quedes en resumen superficial: extrae principios, mecanismos, reglas y aplicaciones.
+- Convierte ideas en reglas aplicables.
+- Si no hay framework explícito, extrae el framework implícito a partir de la lógica de la clase.
 - No agregues teoría externa.
-- Si algo no está claro en la transcripción, dilo.
+- No dejes secciones vacías. Si algo no aparece, escribe: "No aparece explícitamente en esta lección."
+- Si algo no está claro en la transcripción, dilo sin inventar.
 - Usa referencias internas al transcript cuando sea útil.
 
 Transcripción a analizar:
@@ -221,7 +294,7 @@ def build_video_note_merge_prompt(
     joined_notes = "\n\n---\n\n".join(partial_notes)
     return f"""{build_system_prompt(settings)}
 
-Tarea: unir notas parciales de una misma lección en una sola nota de estudio clara.
+Tarea: unir notas parciales de una misma lección en una sola nota de estudio profunda, específica y accionable.
 
 Curso: {course_name}
 Módulo: {module_path or "Sin módulo"}
@@ -238,8 +311,12 @@ Usa exactamente esta estructura:
 
 Reglas:
 - Integra ideas repetidas sin perder matices importantes.
+- Elimina duplicados.
+- Mantén profundidad operativa: principios, mecanismos, framework implícito o explícito, aplicaciones e instrucciones para IA.
+- Convierte ideas en reglas aplicables cuando la transcripción lo permita.
 - No agregues teoría externa.
 - No copies fragmentos largos.
+- No dejes secciones vacías. Si algo no aparece, escribe: "No aparece explícitamente en esta lección."
 - Mantén referencias internas al transcript.
 
 Notas parciales:
@@ -263,6 +340,8 @@ def build_module_summary_prompt(
 
 Tarea: crear un resumen de módulo usando notas de estudio por video.
 
+El resumen debe convertir el módulo en conocimiento operativo para una IA, no en una síntesis genérica.
+
 Curso: {course_name}
 Módulo: {module_name}
 
@@ -272,7 +351,11 @@ Usa exactamente esta estructura:
 Reglas:
 - Sintetiza el módulo sin copiar largas partes del curso.
 - Mantén el significado de las notas.
+- Extrae principios del módulo, mecanismos recurrentes, frameworks explícitos o implícitos, ejemplos, aplicaciones e instrucciones para IA.
+- Identifica patrones entre lecciones y cómo se conectan.
+- Convierte ideas del módulo en reglas de aplicación.
 - No agregues teoría externa.
+- No dejes secciones vacías. Si algo no aparece, escribe: "No aparece explícitamente en este módulo."
 - Incluye lecciones y referencias internas cuando ayuden a ubicar ideas.
 
 Notas por video:

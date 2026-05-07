@@ -1,8 +1,8 @@
 # Estado del Proyecto
 
-Versión actual: V2.0
+Versión actual: V2.0.1
 
-Estado: pipeline V1 validado con un curso completo y Study Pack Builder V2.0 agregado como CLI local inicial.
+Estado: pipeline V1 validado con un curso completo y Study Pack Builder V2.0 agregado como CLI local inicial. V2.0.1 ajusta la profundidad de las video-notes tras la primera prueba real.
 
 Soma Transcriber ya tiene una primera base funcional para detectar videos, extraer audio, dividir archivos grandes, transcribir con OpenAI API y escribir resultados organizados. La versión V1.1 agregó controles para reducir riesgo operativo y costos accidentales antes de ejecutar transcripciones reales. En V1.3 se ejecutó el primer test real controlado con 1 video y fue exitoso.
 
@@ -31,6 +31,7 @@ Soma Transcriber ya tiene una primera base funcional para detectar videos, extra
 - La UI aclara que `max_videos = 0` significa sin límite y recomienda `1` para pruebas.
 - Study Pack Builder V2.0 en `src/study_pack.py`.
 - Generación por fases: `video-notes`, `module-summaries`, `course-pack` y `all`.
+- Prompts V2.0.1 para video-notes más profundas, accionables y útiles para IA.
 - Manifest V2 privado en `data/study_manifest.json`.
 - Configuración V2 mediante sección `study` en YAML.
 - Chunking de texto por caracteres para analizar transcripciones largas.
@@ -66,12 +67,14 @@ python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-
 - Failed: 0.
 - Output final: `output/transcripts/Victor Heras - Marca Personal 5.0/`.
 - `output/` y `data/` son privados y no se versionan.
+- Prueba real controlada de V2 con 2 `video-notes` del módulo 3.
+- Hallazgo V2.0.1: las primeras `video-notes` fueron técnicamente correctas, pero demasiado resumidas y algo genéricas.
 
 ## Todavía No Probado
 
 - No se ha estimado costo real por duración de video.
-- No se ha ejecutado generación real de Study Pack con OpenAI.
-- Falta probar `video-notes` con `--max-videos 2`.
+- No se han generado `module-summaries` reales.
+- No se ha generado el `course-pack` completo real.
 
 ## Hallazgo V1.3
 
@@ -91,7 +94,7 @@ El módulo 1 real quedó como prueba de producción local: 13/13 videos `complet
 
 ## Próximo Hito Recomendado
 
-Ejecutar un dry-run de V2 y luego una prueba real controlada de `video-notes` con `--max-videos 2`.
+Regenerar las 2 `video-notes` de prueba con `--force` y evaluar si las notas extraen principios, mecanismos, frameworks implícitos, aplicaciones e instrucciones para IA.
 
 ## Riesgos Actuales
 
