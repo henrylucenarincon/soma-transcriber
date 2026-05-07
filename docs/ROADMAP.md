@@ -76,18 +76,23 @@ V1 queda validado como pipeline completo de transcripción local: detección, or
 
 Próximo gran bloque: V2 Study Pack.
 
-## V2: Estudio del Curso
+## V2: Study Pack
 
-Generar Study Pack y documentos de análisis a partir de transcripciones:
+Estado: etapa activa.
 
-- resúmenes por módulo
+Generar Study Pack y documentos de análisis a partir de transcripciones privadas:
+
+- mapa del curso
+- resumen por módulo
+- principios centrales
+- frameworks
 - conceptos clave
-- preguntas de repaso
-- glosario
-- mapas de temas
-- guías de estudio
+- ejemplos del curso
+- guía de aplicación
 - prompt maestro para IA
 - `AI_STUDY_CONTEXT.md`
+
+V2.0 agrega el builder inicial por CLI. El siguiente paso es validar con dry-run y luego generar `video-notes` de prueba con `--max-videos 2`.
 
 ## V3: Base Consultable para IA
 

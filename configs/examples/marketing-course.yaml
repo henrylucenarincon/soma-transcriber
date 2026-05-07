@@ -43,3 +43,11 @@ audio:
 output:
   include_metadata: true
   markdown_heading: "Transcripción literal"
+
+study:
+  model: "gpt-4o-mini"
+  output_language: "same-as-course"
+  max_chars_per_analysis_chunk: 25000
+  include_short_quotes: false
+  quote_max_words: 20
+  avoid_external_knowledge: true

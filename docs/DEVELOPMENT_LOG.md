@@ -179,6 +179,16 @@ Se procesó completo el primer curso real.
 - `output/` y `data/` siguen siendo privados y no se versionan.
 - Próximo paso: V2 Study Pack para convertir transcripciones en conocimiento estudiable por IA.
 
+## 2026-05-06: Entrada V2.0
+
+Se agregó Study Pack Builder.
+
+- Permite generar notas por video, resúmenes por módulo y documentos globales para IA.
+- La implementación inicial vive en `src/study_pack.py`, `src/study_prompts.py`, `src/study_writer.py` y `src/study_manifest.py`.
+- El flujo V2 trabaja desde transcripciones privadas hacia `output/study/`.
+- No debe incluir transcripciones completas ni largos fragmentos verbatim dentro del Study Pack.
+- No se ejecutó generación real durante esta tarea.
+
 ## Validaciones Ejecutadas
 
 ```bash
@@ -195,4 +205,4 @@ python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-
 
 ## Nota
 
-Ya se ejecutó un primer test real con 1 video y el módulo 1 completo. Todavía no se ha procesado el curso completo.
+Ya se ejecutó un primer test real con 1 video, el módulo 1 completo y el curso completo. Todavía no se ha ejecutado generación real del Study Pack.

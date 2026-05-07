@@ -33,6 +33,7 @@
 - Aclarar `max_videos` en UI.
 - Procesar curso completo.
 - Corregir nombre final del output del curso.
+- Crear estructura inicial de Study Pack Builder.
 
 Nota: el perfil local real fue creado en `configs/local/` y no se versiona por privacidad.
 
@@ -41,9 +42,14 @@ Nota: el perfil local real fue creado en `configs/local/` y no se versiona por p
 - Instalar dependencias localmente si falta.
 - Configurar `.env` real.
 - Revisar calidad de transcripciones por muestreo.
+- Ejecutar dry-run de V2.
+- Probar `video-notes` con `--max-videos 2`.
+- Generar module summaries.
+- Generar course pack completo.
+- Integrar Study Pack en Soma Studio.
+- Exportar ZIP.
 - Generar documentos de estudio V2.
 - Mejorar progreso estructurado.
-- Exportar ZIP de transcripciones.
 - Generar AI_STUDY_CONTEXT.md.
 - Vista de revisión por muestreo.
 - Mejorar manejo de errores según nuevos hallazgos reales.

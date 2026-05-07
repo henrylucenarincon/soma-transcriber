@@ -24,6 +24,10 @@ soma-transcriber/
     transcriber.py
     manifest.py
     writer.py
+    study_pack.py
+    study_prompts.py
+    study_writer.py
+    study_manifest.py
     utils.py
   app/
     streamlit_app.py
@@ -58,6 +62,14 @@ soma-transcriber/
 
 `writer.py`: escritura de transcripciones Markdown con metadata y generación de `output/index.csv`.
 
+`study_pack.py`: CLI V2 para generar Study Packs privados desde transcripciones Markdown. Coordina fases `video-notes`, `module-summaries`, `course-pack` y `all`, soporta `--dry-run`, `--max-videos`, `--force`, `--model` y `--config`.
+
+`study_prompts.py`: prompts y plantillas para transformar transcripciones en notas de estudio, resúmenes de módulo y documentos globales para IA. Sus instrucciones evitan copiar transcripciones completas, priorizan paráfrasis fiel y bloquean conocimiento externo salvo que se configure lo contrario.
+
+`study_writer.py`: lectura de transcripciones Markdown, parseo de metadata YAML, extracción de la sección `## Transcripción literal`, chunking de texto por caracteres y escritura de archivos Markdown del Study Pack.
+
+`study_manifest.py`: manifest privado de V2 en `data/study_manifest.json`. Registra estado por transcripción para evitar regenerar notas y costos duplicados.
+
 `utils.py`: helpers compartidos para fechas, rutas seguras, configuración, conversión de tamaños y mensajes por defecto.
 
 ## Responsabilidad de `app/`
@@ -87,6 +99,32 @@ Las secciones vacías no se incluyen. Esto permite mejorar precisión en nombres
 
 El modelo puede declararse en `transcription.model`; si el usuario pasa `--model`, la CLI tiene prioridad.
 
+La sección opcional `study` configura V2:
+
+- `study.model`
+- `study.output_language`
+- `study.max_chars_per_analysis_chunk`
+- `study.include_short_quotes`
+- `study.quote_max_words`
+- `study.avoid_external_knowledge`
+
+## Study Pack Builder
+
+V2 lee `output/transcripts/{course-name}/...` y genera documentos privados en `output/study/{course-name}/...`.
+
+El flujo interno es:
+
+```text
+transcripciones Markdown
+  -> notas por video en video_notes/
+  -> resúmenes por módulo en module_notes/
+  -> documentos globales del Study Pack
+```
+
+El builder no incluye transcripciones completas dentro del Study Pack. Trabaja con síntesis, principios, frameworks, conceptos, ejemplos y referencias internas al archivo fuente.
+
+`study_pack.py` usa OpenAI API para análisis textual y requiere `OPENAI_API_KEY` solo cuando no se ejecuta con `--dry-run`. No toca audio, FFmpeg ni la CLI de transcripción.
+
 ## Código Fuente
 
 Debe versionarse:
@@ -110,6 +148,8 @@ No deben versionarse:
 - `output/audio/...`
 - `output/chunks/...`
 - `output/transcripts/...`
+- `output/study/...`
+- `data/study_manifest.json`
 
 ## Archivos Privados
 

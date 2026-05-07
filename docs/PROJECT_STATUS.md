@@ -1,8 +1,8 @@
 # Estado del Proyecto
 
-Versión actual: V1.6
+Versión actual: V2.0
 
-Estado: primer curso real completo procesado exitosamente; pipeline V1 validado, Soma Studio Local disponible y próximo hito V2 Study Pack.
+Estado: pipeline V1 validado con un curso completo y Study Pack Builder V2.0 agregado como CLI local inicial.
 
 Soma Transcriber ya tiene una primera base funcional para detectar videos, extraer audio, dividir archivos grandes, transcribir con OpenAI API y escribir resultados organizados. La versión V1.1 agregó controles para reducir riesgo operativo y costos accidentales antes de ejecutar transcripciones reales. En V1.3 se ejecutó el primer test real controlado con 1 video y fue exitoso.
 
@@ -29,6 +29,12 @@ Soma Transcriber ya tiene una primera base funcional para detectar videos, extra
 - Soma Studio permite seleccionar carpeta local de curso/output desde Finder o pegar rutas manualmente.
 - En macOS, el selector de carpetas usa `osascript`/AppleScript con fallback manual.
 - La UI aclara que `max_videos = 0` significa sin límite y recomienda `1` para pruebas.
+- Study Pack Builder V2.0 en `src/study_pack.py`.
+- Generación por fases: `video-notes`, `module-summaries`, `course-pack` y `all`.
+- Manifest V2 privado en `data/study_manifest.json`.
+- Configuración V2 mediante sección `study` en YAML.
+- Chunking de texto por caracteres para analizar transcripciones largas.
+- Salidas privadas en `output/study/{course-name}/`.
 - `.gitignore` configurado para excluir `.env`, `.tmp/`, `data/`, `output/`, `outputs/`, videos, audios y archivos pesados.
 
 ## Validaciones Ejecutadas
@@ -64,6 +70,8 @@ python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-
 ## Todavía No Probado
 
 - No se ha estimado costo real por duración de video.
+- No se ha ejecutado generación real de Study Pack con OpenAI.
+- Falta probar `video-notes` con `--max-videos 2`.
 
 ## Hallazgo V1.3
 
@@ -83,7 +91,7 @@ El módulo 1 real quedó como prueba de producción local: 13/13 videos `complet
 
 ## Próximo Hito Recomendado
 
-V2 Study Pack: convertir las transcripciones completas en conocimiento estudiable por IA.
+Ejecutar un dry-run de V2 y luego una prueba real controlada de `video-notes` con `--max-videos 2`.
 
 ## Riesgos Actuales
 

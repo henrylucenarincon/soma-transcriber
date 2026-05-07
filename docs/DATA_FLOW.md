@@ -42,3 +42,31 @@ data/manifest.json
 ```
 
 Todas estas salidas son privadas y están ignoradas por Git.
+
+## Flujo V2: Study Pack
+
+V2 parte de las transcripciones Markdown ya generadas por V1 y crea documentos de estudio privados para IA. No copia transcripciones completas dentro del Study Pack.
+
+```text
+transcripts Markdown
+  -> lectura de metadata y sección "Transcripción literal"
+  -> chunking de texto si la transcripción es larga
+  -> notas de estudio por video
+  -> resúmenes por módulo
+  -> documentos globales del curso
+  -> AI_STUDY_CONTEXT.md y MASTER_PROMPT_FOR_AI.md
+  -> actualización de data/study_manifest.json
+```
+
+Salidas V2:
+
+```text
+output/study/{course-name}/video_notes/...
+output/study/{course-name}/module_notes/...
+output/study/{course-name}/00_STUDY_PACK_INDEX.md
+output/study/{course-name}/08_AI_STUDY_CONTEXT.md
+output/study/{course-name}/09_MASTER_PROMPT_FOR_AI.md
+data/study_manifest.json
+```
+
+`output/study/` y `data/study_manifest.json` son privados y no deben versionarse.

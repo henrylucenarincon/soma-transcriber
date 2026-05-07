@@ -13,6 +13,7 @@ No debe subirse a GitHub:
 - audios extraídos
 - chunks
 - transcripciones privadas
+- Study Packs privados en `output/study/`
 - `output/`
 - `outputs/`
 - `data/`
@@ -37,6 +38,8 @@ Puede subirse al repositorio:
 API key expuesta: si `.env` se versiona por accidente, la clave debe revocarse y reemplazarse.
 
 Transcripciones privadas versionadas: pueden contener contenido del curso y notas sensibles. No deben entrar al repositorio.
+
+Study Packs privados versionados: aunque son síntesis, pueden revelar estructura, ejemplos y aprendizajes extraídos del curso. Deben quedarse dentro de `output/`.
 
 Videos o audios versionados: son archivos pesados y privados. También pueden violar términos de uso si se comparten.
 

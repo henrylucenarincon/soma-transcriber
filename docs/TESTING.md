@@ -22,6 +22,12 @@ Ver ayuda de CLI:
 python3 src/main.py --help
 ```
 
+Ver ayuda de Study Pack Builder:
+
+```bash
+python3 src/study_pack.py --help
+```
+
 Validar import de helpers de audio:
 
 ```bash
@@ -193,6 +199,36 @@ Resultado esperado:
 ```
 
 Estos archivos son locales/privados. `output/` y `data/` no se suben al repositorio.
+
+## Validación V2 Study Pack
+
+Dry-run sin llamar a OpenAI:
+
+```bash
+python3 src/study_pack.py \
+  --transcripts "./output/transcripts/Victor Heras - Marca Personal 5.0" \
+  --index "./output/index.csv" \
+  --output "./output/study" \
+  --course-name "Victor Heras - Marca Personal 5.0" \
+  --config "configs/local/victor-heras-marca-personal-5.yaml" \
+  --dry-run \
+  --max-videos 2
+```
+
+Prueba real controlada recomendada para V2:
+
+```bash
+python3 src/study_pack.py \
+  --transcripts "./output/transcripts/Victor Heras - Marca Personal 5.0" \
+  --index "./output/index.csv" \
+  --output "./output/study" \
+  --course-name "Victor Heras - Marca Personal 5.0" \
+  --config "configs/local/victor-heras-marca-personal-5.yaml" \
+  --phase video-notes \
+  --max-videos 2
+```
+
+No ejecutar generación real durante tareas de documentación o refactor. `output/study/` y `data/study_manifest.json` son privados y no se suben al repositorio.
 
 ## Criterios de Éxito Iniciales
 

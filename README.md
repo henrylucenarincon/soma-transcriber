@@ -204,6 +204,49 @@ La UI no cambia el flujo de privacidad: `output/`, `data/`, `.env`, `configs/loc
 
 Estado actual del pipeline: el primer curso real fue procesado completo como prueba de pipeline: 90 videos, 90 `completed`, 0 `failed`. El siguiente paso es generar Study Packs a partir de esas transcripciones privadas.
 
+## V2 Study Pack
+
+El Study Pack Builder convierte transcripciones Markdown privadas en documentos de estudio para IA. No incluye transcripciones completas ni largos fragmentos verbatim: trabaja con síntesis, principios, frameworks, conceptos, ejemplos y referencias internas al archivo fuente.
+
+Dry-run sin llamar a OpenAI:
+
+```bash
+python3 src/study_pack.py \
+  --transcripts "./output/transcripts/Victor Heras - Marca Personal 5.0" \
+  --index "./output/index.csv" \
+  --output "./output/study" \
+  --course-name "Victor Heras - Marca Personal 5.0" \
+  --config "configs/local/victor-heras-marca-personal-5.yaml" \
+  --dry-run \
+  --max-videos 2
+```
+
+Generar solo notas por video para una prueba controlada:
+
+```bash
+python3 src/study_pack.py \
+  --transcripts "./output/transcripts/Victor Heras - Marca Personal 5.0" \
+  --index "./output/index.csv" \
+  --output "./output/study" \
+  --course-name "Victor Heras - Marca Personal 5.0" \
+  --config "configs/local/victor-heras-marca-personal-5.yaml" \
+  --phase video-notes \
+  --max-videos 2
+```
+
+Generar el Study Pack completo:
+
+```bash
+python3 src/study_pack.py \
+  --transcripts "./output/transcripts/Victor Heras - Marca Personal 5.0" \
+  --index "./output/index.csv" \
+  --output "./output/study" \
+  --course-name "Victor Heras - Marca Personal 5.0" \
+  --config "configs/local/victor-heras-marca-personal-5.yaml"
+```
+
+`output/study/` es privado y está cubierto por la regla general de `output/`: no se sube a GitHub. El manifest de V2 se guarda en `data/study_manifest.json`, también privado.
+
 ## Estructura esperada del curso
 
 Ejemplo:
@@ -246,6 +289,11 @@ output/
     Mi curso/
       Modulo 01/
         01 - Intro.md
+  study/
+    Mi curso/
+      00_STUDY_PACK_INDEX.md
+      video_notes/
+      module_notes/
   index.csv
 ```
 
@@ -257,6 +305,8 @@ Además se mantiene `data/manifest.json` con el estado de cada archivo:
 - `failed`
 
 Si un video ya está `completed`, se salta automáticamente salvo que uses `--force`. Esto evita costos duplicados.
+
+V2 mantiene además `data/study_manifest.json` para evitar regenerar notas de estudio ya completadas.
 
 ## Documentación del proyecto
 
