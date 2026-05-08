@@ -4,20 +4,157 @@
 // ── State ───────────────────────────────────────────────────────────────────
 let isRunning = false;
 
+// ── Study Pack Progress ───────────────────────────────────────────────────────
+const PHASES = [
+  { key: 'video-notes',      label: 'Video-notes',      signals: ['generando video-notes', 'video-note:'],       start: 2,  end: 40 },
+  { key: 'module-summaries', label: 'Module-summaries',  signals: ['generando module-notes', 'module summary'],   start: 40, end: 62 },
+  { key: 'evidence',         label: 'Evidence',          signals: ['generando evidencia', 'evidence::'],          start: 62, end: 82 },
+  { key: 'course-pack',      label: 'Course-pack',       signals: ['generando course-pack', 'course-pack:'],      start: 82, end: 98 },
+];
+
+let progress = { active: false, phase: -1, pct: 0, total: 0, current: 0 };
+
+function resetProgress(show = false) {
+  progress = { active: show, phase: -1, pct: 0, total: 0, current: 0 };
+  setProgressPct(0);
+  document.getElementById('progressPhase').textContent = 'Iniciando…';
+  document.getElementById('progressPct').textContent = '0%';
+  document.getElementById('progressSection').classList.toggle('hidden', !show);
+  PHASES.forEach(p => {
+    const el = document.getElementById(`step-${p.key}`);
+    if (el) { el.className = 'step'; el.textContent = `○ ${p.label}`; }
+  });
+}
+
+function setProgressPct(pct) {
+  pct = Math.min(100, Math.max(0, Math.round(pct)));
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+}
+
+function parseProgressFromLine(line) {
+  if (!progress.active) return;
+
+  const low = line.toLowerCase();
+
+  // Detect phase transitions
+  PHASES.forEach((phase, i) => {
+    if (phase.signals.some(s => low.includes(s))) {
+      if (progress.phase < i) {
+        // Mark previous phases done
+        for (let j = 0; j < i; j++) {
+          const el = document.getElementById(`step-${PHASES[j].key}`);
+          if (el) { el.className = 'step done'; el.textContent = `✓ ${PHASES[j].label}`; }
+        }
+        // Mark current phase active
+        progress.phase = i;
+        progress.current = 0;
+        const el = document.getElementById(`step-${phase.key}`);
+        if (el) { el.className = 'step active'; el.textContent = `◉ ${phase.label}`; }
+        document.getElementById('progressPhase').textContent = phase.label + '…';
+        setProgressPct(phase.start);
+      }
+    }
+  });
+
+  // Parse tqdm-style N/M count from the line  e.g. "| 1/2 ["
+  const nmMatch = line.match(/\|\s*(\d+)\/(\d+)\s*\[/);
+  if (nmMatch && progress.phase >= 0) {
+    const n = parseInt(nmMatch[1], 10);
+    const m = parseInt(nmMatch[2], 10);
+    if (m > 0) {
+      const phase = PHASES[progress.phase];
+      const within = (n / m) * (phase.end - phase.start);
+      setProgressPct(phase.start + within);
+    }
+  }
+
+  // Completion signals
+  if (low.includes('study pack listo') || low.includes('[ok] proceso completado')) {
+    PHASES.forEach(p => {
+      const el = document.getElementById(`step-${p.key}`);
+      if (el) { el.className = 'step done'; el.textContent = `✓ ${p.label}`; }
+    });
+    setProgressPct(100);
+    document.getElementById('progressPhase').textContent = '¡Completado!';
+    document.getElementById('progressPct').textContent = '100%';
+  }
+}
+
 // ── Init ────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   loadConfigs();
   setupPhaseCards();
   onMaxVideosChange();
   switchTab('transcription');
+  document.getElementById('outputPath').addEventListener('change', () => loadCourses());
+  loadCourses();
+  checkRunningJob(); // reconnect if a job was running before reload
 });
+
+// ── Job reconnection ──────────────────────────────────────────────────────────
+async function checkRunningJob() {
+  try {
+    const res = await fetch('/api/jobs/current');
+    const data = await res.json();
+
+    if (!data.job_id) return; // nothing to reconnect
+
+    const isStudyPack = data.type === 'study-pack';
+    const isRunning   = data.running;
+
+    // Switch to the right tab
+    switchTab(isStudyPack ? 'study-pack' : 'transcription');
+
+    clearLog();
+    resetProgress(isStudyPack);
+    setRunning(isRunning);
+
+    const banner = isRunning
+      ? '⟳ Reconectando al proceso en curso…\n'
+      : '↺ Mostrando output del último proceso:\n';
+    appendLog(banner);
+
+    // Stream or replay the log
+    try {
+      const streamRes = await fetch(`/api/jobs/${data.job_id}/reconnect`);
+      if (!streamRes.ok) { setRunning(false); return; }
+
+      const reader  = streamRes.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        buffer += chunk;
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+        if (isStudyPack) lines.forEach(l => parseProgressFromLine(l));
+        appendLog(chunk);
+      }
+    } catch (_) {}
+
+    setRunning(false);
+  } catch (_) {}
+}
 
 // ── Config helpers ───────────────────────────────────────────────────────────
 function getConfig() {
+  // Course name: prefer hidden input (synced from both select and text modes)
+  const courseNameFromSelect = (() => {
+    const sel = document.getElementById('courseNameSelect');
+    const val = sel?.value;
+    return (val && val !== '__new__') ? val : '';
+  })();
+  const courseNameFromInput = v('courseName');
+  const courseName = courseNameFromInput || courseNameFromSelect;
+
   return {
     coursePath:  v('coursePath'),
     outputPath:  v('outputPath') || './output',
-    courseName:  v('courseName'),
+    courseName,
     configPath:  v('configPath') || null,
     maxVideos:   parseInt(v('maxVideos'), 10) || null,
     force:       document.getElementById('forceCheck').checked,
@@ -27,7 +164,8 @@ function getConfig() {
 function getStudyConfig() {
   const base = getConfig();
   const phase = document.querySelector('input[name="phase"]:checked')?.value || 'all';
-  return { ...base, phase };
+  const module = document.getElementById('moduleFilter')?.value || null;
+  return { ...base, phase, module };
 }
 
 function v(id) {
@@ -58,6 +196,127 @@ function onMaxVideosChange() {
     chip.textContent = `${val} videos`;
     chip.className = 'chip chip-info';
     warn.classList.add('hidden');
+  }
+}
+
+// ── Modules ───────────────────────────────────────────────────────────────────
+async function loadModules(courseName) {
+  const outputPath = v('outputPath') || './output';
+  const select = document.getElementById('moduleFilter');
+  if (!select) return;
+
+  select.innerHTML = '<option value="">Todos los módulos</option>';
+  if (!courseName) return;
+
+  try {
+    const res = await fetch(`/api/modules?output=${encodeURIComponent(outputPath)}&course_name=${encodeURIComponent(courseName)}`);
+    const data = await res.json();
+    (data.modules || []).forEach(mod => {
+      const opt = document.createElement('option');
+      opt.value = mod;
+      opt.textContent = mod;
+      select.appendChild(opt);
+    });
+  } catch (_) {}
+}
+
+function onModuleChange() { /* reactive hook for future use */ }
+
+// ── Existing courses ──────────────────────────────────────────────────────────
+async function loadCourses() {
+  const outputPath = v('outputPath') || './output';
+  try {
+    const res = await fetch(`/api/courses?output=${encodeURIComponent(outputPath)}`);
+    const data = await res.json();
+    const courses = data.courses || [];
+    const selectRow = document.getElementById('courseNameSelectRow');
+    const inputRow  = document.getElementById('courseNameInputRow');
+    const select    = document.getElementById('courseNameSelect');
+    const backBtn   = document.getElementById('backToSelectBtn');
+
+    if (courses.length === 0) {
+      // No existing courses — show plain input
+      selectRow.classList.add('hidden');
+      inputRow.classList.remove('hidden');
+      backBtn.classList.add('hidden');
+      return;
+    }
+
+    // Populate dropdown
+    const currentName = v('courseName');
+    select.innerHTML = '<option value="">Selecciona un curso...</option>';
+    courses.forEach(name => {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      if (name === currentName) opt.selected = true;
+      select.appendChild(opt);
+    });
+
+    // Add "Nuevo curso..." at the end
+    const newOpt = document.createElement('option');
+    newOpt.value = '__new__';
+    newOpt.textContent = '+ Nuevo curso...';
+    select.appendChild(newOpt);
+
+    // Show select, hide text input (unless user was already in new-course mode)
+    const isNewMode = inputRow.classList.contains('new-mode');
+    if (!isNewMode) {
+      selectRow.classList.remove('hidden');
+      inputRow.classList.add('hidden');
+      backBtn.classList.add('hidden');
+      // Auto-select if there's only one course
+      if (courses.length === 1 && !currentName) {
+        select.value = courses[0];
+        document.getElementById('courseName').value = courses[0];
+        loadModules(courses[0]);
+      }
+    }
+  } catch (_) {}
+}
+
+function onCourseSelectChange() {
+  const select = document.getElementById('courseNameSelect');
+  const val = select.value;
+
+  if (val === '__new__') {
+    showNewCourse();
+    return;
+  }
+
+  document.getElementById('courseName').value = val;
+  loadModules(val);
+}
+
+function showNewCourse() {
+  const selectRow = document.getElementById('courseNameSelectRow');
+  const inputRow  = document.getElementById('courseNameInputRow');
+  const backBtn   = document.getElementById('backToSelectBtn');
+  const input     = document.getElementById('courseName');
+
+  selectRow.classList.add('hidden');
+  inputRow.classList.remove('hidden');
+  inputRow.classList.add('new-mode');
+  backBtn.classList.remove('hidden');
+  input.value = '';
+  input.focus();
+}
+
+function showCourseSelect() {
+  const selectRow = document.getElementById('courseNameSelectRow');
+  const inputRow  = document.getElementById('courseNameInputRow');
+  const backBtn   = document.getElementById('backToSelectBtn');
+  const select    = document.getElementById('courseNameSelect');
+
+  selectRow.classList.remove('hidden');
+  inputRow.classList.add('hidden');
+  inputRow.classList.remove('new-mode');
+  backBtn.classList.add('hidden');
+
+  // Sync text input with dropdown value
+  const val = select.value;
+  if (val && val !== '__new__') {
+    document.getElementById('courseName').value = val;
   }
 }
 
@@ -125,9 +384,10 @@ function setupPhaseCards() {
 }
 
 // ── Streaming ──────────────────────────────────────────────────────────────────
-async function streamCommand(endpoint, body) {
+async function streamCommand(endpoint, body, { showProgress = false } = {}) {
   if (isRunning) return;
   clearLog();
+  resetProgress(showProgress);
   setRunning(true);
 
   try {
@@ -144,16 +404,33 @@ async function streamCommand(endpoint, body) {
 
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
+    let buffer = '';
 
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
-      appendLog(decoder.decode(value, { stream: true }));
+      const chunk = decoder.decode(value, { stream: true });
+      buffer += chunk;
+
+      // Process complete lines for progress parsing
+      const lines = buffer.split('\n');
+      buffer = lines.pop(); // keep incomplete last line
+      lines.forEach(line => parseProgressFromLine(line));
+      if (showProgress) parseProgressFromLine(chunk); // also parse raw chunk for tqdm
+
+      appendLog(chunk);
     }
+    // Process any remaining buffer
+    if (buffer) parseProgressFromLine(buffer);
+
   } catch (e) {
     appendLog(`\nError de red: ${e.message}\n`);
   } finally {
     setRunning(false);
+    // If progress was shown and didn't reach 100%, mark as finished
+    if (showProgress && progress.active && progress.pct < 100) {
+      setProgressPct(progress.pct < 10 ? progress.pct : 100);
+    }
   }
 }
 
@@ -267,7 +544,7 @@ async function studyPackDryRun() {
   const c = getStudyConfig();
   await streamCommand('/api/study-pack/dry-run', {
     output_path: c.outputPath, course_name: c.courseName, config_path: c.configPath,
-    max_videos: c.maxVideos, force: c.force, phase: c.phase,
+    max_videos: c.maxVideos, force: c.force, phase: c.phase, module: c.module || null,
   });
 }
 
@@ -275,12 +552,13 @@ async function generateStudyPack() {
   if (!v('courseName')) { alertConfig(); return; }
   const c = getStudyConfig();
 
-  if (!c.maxVideos && !confirm('¿Generar Study Pack completo sin límite? Esto puede generar costos de API de Claude.')) return;
+  const noLimit = !c.maxVideos && !c.module;
+  if (noLimit && !confirm('¿Generar Study Pack completo sin límite de módulo ni videos? Esto puede generar costos significativos de API de Claude.')) return;
 
   await streamCommand('/api/study-pack/generate', {
     output_path: c.outputPath, course_name: c.courseName, config_path: c.configPath,
-    max_videos: c.maxVideos, force: c.force, phase: c.phase,
-  });
+    max_videos: c.maxVideos, force: c.force, phase: c.phase, module: c.module || null,
+  }, { showProgress: true });
 }
 
 // ── Status tab ─────────────────────────────────────────────────────────────────

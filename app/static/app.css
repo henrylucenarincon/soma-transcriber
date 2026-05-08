@@ -541,6 +541,68 @@ tr:hover td { background: var(--surface-2); }
 }
 .phase-desc { font-size: 11px; color: var(--text-subtle); }
 
+/* ── Progress ──────────────────────────────────────────────────────────── */
+.progress-section {
+  padding: 8px 14px 6px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex-shrink: 0;
+}
+.progress-section.hidden { display: none !important; }
+
+.progress-track {
+  height: 3px;
+  background: var(--surface-2);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #a78bfa);
+  border-radius: 99px;
+  width: 0%;
+  transition: width 600ms var(--ease);
+}
+
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progress-phase {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--mono);
+}
+
+.progress-pct {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-steps {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.step {
+  font-size: 10px;
+  color: var(--text-subtle);
+  font-weight: 500;
+  transition: color 300ms;
+}
+.step.active  { color: var(--accent); }
+.step.done    { color: var(--success); }
+.step-sep     { font-size: 10px; color: var(--border); }
+
 /* ── Log Panel ─────────────────────────────────────────────────────────── */
 .log-panel {
   height: var(--log-h);

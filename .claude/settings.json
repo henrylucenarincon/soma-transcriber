@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(lsof -nP -i:8899*)",
+      "Bash(lsof -nP -i:*)",
+      "Bash(kill -9 *)",
+      "Bash(pkill -f *)",
+      "Bash(.venv/bin/python -m compileall*)",
+      "Bash(.venv/bin/pip install*)",
+      "Bash(.venv/bin/pip show*)",
+      "Bash(curl -s http://127.0.0.1:8899*)",
+      "Bash(open http://127.0.0.1:8899*)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push*)",
+      "Bash(.venv/bin/python app/server.py*)",
+      "Bash(.venv/bin/python src/main.py*)",
+      "Bash(.venv/bin/python src/study_pack.py*)"
+    ],
+    "deny": []
+  }
+}

@@ -56,18 +56,22 @@
 - Rediseñar Soma Studio con FastAPI y UI dark theme minimal.
 - Integrar Study Pack en la nueva UI (tab dedicado con selector de fase).
 - Agregar streaming de output en tiempo real en la nueva UI.
-- Agregar progreso estructurado en la nueva UI.
+- Agregar barra de progreso por fases con pasos visuales en tiempo real.
+- Corregir bug de buffering Python con PYTHONUNBUFFERED=1.
+- Dropdown inteligente de cursos detectados desde output/transcripts/.
+- Filtro de módulos en Study Pack (CLI --module + UI selector).
+- Sistema de jobs con reconexión al recargar la página.
+- Configurar permisos en .claude/settings.json para reducir prompts.
+- Validar calidad de notas del módulo 3 con Claude (ViralCopy, Ganchos, Filtro 5-50).
 
 Nota: el perfil local real fue creado en `configs/local/` y no se versiona por privacidad.
 
 ## Pendientes
 
-- Agregar `ANTHROPIC_API_KEY` real en `.env`.
-- Regenerar course-pack completo con V2.3 (Claude) y `--force`.
-- Validar `99_QUALITY_REPORT.md` con la nueva generación.
-- Validar calidad de `08_AI_STUDY_CONTEXT.md` y `09_MASTER_PROMPT_FOR_AI.md`.
-- Probar que una IA externa (ChatGPT, Claude) da guiones específicos del curso desde el Study Pack.
-- Revisar calidad de transcripciones por muestreo.
+- Generar Study Pack completo del curso (90 notas, 11 módulos, course-pack) con Claude.
+- Validar `99_QUALITY_REPORT.md` tras generación completa.
+- Validar `08_AI_STUDY_CONTEXT.md` y `09_MASTER_PROMPT_FOR_AI.md` como onboarding real para IA.
+- Probar con Claude.ai Projects: subir Study Pack y pedir guion viral basado en el curso.
 - Exportar ZIP del Study Pack desde Soma Studio.
 - Vista de revisión por muestreo.
 - Agregar estimación de duración/costo de API.
@@ -75,8 +79,12 @@ Nota: el perfil local real fue creado en `configs/local/` y no se versiona por p
 
 ## Siguiente Acción Recomendada
 
-1. Agregar `ANTHROPIC_API_KEY` real al `.env`.
-2. Abrir Soma Studio: `python app/server.py` → http://127.0.0.1:8899
-3. Seleccionar el curso Victor Heras, perfil `configs/local/victor-heras-marca-personal-5.yaml`, max_videos=2, fase=video-notes.
-4. Ejecutar "Generar Study Pack" para validar la nueva integración con Claude.
-5. Revisar los outputs y validar calidad.
+Generar Study Pack completo desde Soma Studio:
+- Curso: Victor Heras - Marca Personal 5.0
+- Perfil: configs/local/victor-heras-marca-personal-5.yaml
+- Límite: 0 (sin límite)
+- Módulo: Todos
+- Fase: Todas las fases
+- Force: ✓
+
+Tiempo estimado: ~2 horas. Luego validar documentos maestros y probar con Claude.ai.

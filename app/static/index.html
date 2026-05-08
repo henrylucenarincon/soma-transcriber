@@ -45,7 +45,26 @@
 
       <div class="field">
         <label class="field-label">Nombre del curso</label>
-        <input type="text" id="courseName" class="input" placeholder="Nombre del curso" oninput="onConfigChange()">
+        <!-- Shown when existing courses detected -->
+        <div id="courseNameSelectRow" class="hidden">
+          <div class="input-row">
+            <select id="courseNameSelect" class="select" onchange="onCourseSelectChange()">
+              <option value="">Selecciona un curso...</option>
+            </select>
+            <button class="btn-icon" onclick="showNewCourse()" title="Nuevo curso">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
+        <!-- Shown for new course or when no transcripts exist -->
+        <div id="courseNameInputRow">
+          <div class="input-row">
+            <input type="text" id="courseName" class="input" placeholder="Nombre del curso" oninput="onConfigChange()">
+            <button class="btn-icon hidden" id="backToSelectBtn" onclick="showCourseSelect()" title="Volver a cursos existentes">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="field">
@@ -205,6 +224,22 @@
 
       <div class="section">
         <div class="section-header">
+          <span class="section-title">Filtro de módulo</span>
+          <span class="text-subtle" style="font-size:11px;color:var(--text-subtle)">Opcional</span>
+        </div>
+        <div class="section-body">
+          <div class="field">
+            <label class="field-label">Módulo</label>
+            <select id="moduleFilter" class="select" onchange="onModuleChange()">
+              <option value="">Todos los módulos</option>
+            </select>
+            <div class="field-hint">Selecciona un módulo para procesar solo sus lecciones</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
           <span class="section-title">Acciones</span>
         </div>
         <div class="section-body">
@@ -255,6 +290,27 @@
         </span>
         <button class="btn-text" onclick="clearLog()">Limpiar</button>
       </div>
+
+      <!-- Progress bar (visible only during Study Pack generation) -->
+      <div class="progress-section hidden" id="progressSection">
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-meta">
+          <span class="progress-phase" id="progressPhase">Iniciando…</span>
+          <span class="progress-pct" id="progressPct">0%</span>
+        </div>
+        <div class="progress-steps" id="progressSteps">
+          <span class="step" id="step-video-notes">○ Video-notes</span>
+          <span class="step-sep">→</span>
+          <span class="step" id="step-module-summaries">○ Module-summaries</span>
+          <span class="step-sep">→</span>
+          <span class="step" id="step-evidence">○ Evidence</span>
+          <span class="step-sep">→</span>
+          <span class="step" id="step-course-pack">○ Course-pack</span>
+        </div>
+      </div>
+
       <div class="log-content" id="logContent"></div>
     </div>
 

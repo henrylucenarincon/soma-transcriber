@@ -111,7 +111,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         "--model",
         help=f"Modelo de Claude para análisis. Default: {DEFAULT_STUDY_MODEL}",
     )
-    parser.add_argument("--dry-run", action="store_true", help="Listar lo que se haría sin llamar a OpenAI.")
+    parser.add_argument("--dry-run", action="store_true", help="Listar lo que se haría sin llamar a la API de Claude.")
     parser.add_argument("--max-videos", type=positive_int, help="Procesar solo N transcripciones para pruebas.")
     parser.add_argument("--force", action="store_true", help="Regenerar aunque ya exista en el manifest.")
     parser.add_argument(
@@ -119,6 +119,10 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         choices=[PHASE_VIDEO_NOTES, PHASE_MODULE_SUMMARIES, PHASE_COURSE_PACK, PHASE_ALL],
         default=PHASE_ALL,
         help="Fase a ejecutar. Default: all.",
+    )
+    parser.add_argument(
+        "--module",
+        help="Filtrar por nombre de módulo (carpeta). Procesa solo transcripciones de ese módulo.",
     )
     return parser.parse_args(argv)
 
@@ -134,6 +138,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     study_paths = build_study_paths(output_dir, args.course_name)
 
     transcript_paths = discover_transcripts(transcripts_root)
+    if args.module:
+        transcript_paths = filter_by_module(transcript_paths, transcripts_root, args.module)
     selected_paths = limit_items(transcript_paths, args.max_videos)
 
     if args.dry_run:
@@ -662,6 +668,14 @@ def progress(items: Iterable[T], **kwargs: object) -> Iterable[T]:
         return items
 
     return tqdm(items, **kwargs)
+
+
+def filter_by_module(paths: list[Path], transcripts_root: Path, module_name: str) -> list[Path]:
+    needle = module_name.casefold()
+    return [
+        p for p in paths
+        if needle in p.relative_to(transcripts_root).parent.as_posix().casefold()
+    ]
 
 
 def limit_items(items: list[T], max_items: int | None) -> list[T]:

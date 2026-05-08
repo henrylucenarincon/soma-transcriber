@@ -335,6 +335,50 @@ Funcionalidades de la nueva UI:
 - Selector nativo de carpetas macOS con `osascript`.
 - Confirmación antes de procesar sin límite de videos para evitar costos accidentales.
 
+## 2026-05-08: Entrada V1.5.6 — Mejoras de UI y filtros Study Pack
+
+Se agregaron varias mejoras a Soma Studio y al pipeline de Study Pack:
+
+**Dropdown inteligente de cursos:**
+- `GET /api/courses` detecta automáticamente los cursos con transcripciones en `output/transcripts/`.
+- El campo "Nombre del curso" muestra un dropdown con cursos existentes.
+- Botón `+` para entrar a modo "Nuevo curso" cuando no hay transcripciones aún.
+- Al seleccionar un curso existente, se cargan automáticamente sus módulos.
+
+**Filtro de módulos en Study Pack:**
+- `GET /api/modules` lista los módulos de un curso específico.
+- Selector de módulo en el tab Study Pack permite procesar solo un módulo a la vez.
+- `--module` flag agregado a `src/study_pack.py` con función `filter_by_module`.
+- La confirmación antes de lanzar sin límite considera también si hay módulo seleccionado.
+
+**Sistema de jobs con reconexión:**
+- `RunningJob` class en `app/server.py` bufferéa todo el output del subproceso.
+- `GET /api/jobs/current` expone el job activo (tipo, running, has_log).
+- `GET /api/jobs/{job_id}/reconnect` permite reconectarse y reproducir el log acumulado.
+- Al recargar la página, el frontend detecta automáticamente el job activo y reconecta.
+- Transcripción y Study Pack usan el sistema de jobs para reconexión.
+
+**Barra de progreso en tiempo real:**
+- Barra de progreso por fases en el panel de output del Study Pack.
+- 4 pasos visuales: Video-notes → Module-summaries → Evidence → Course-pack.
+- Cada paso cambia de `○` (pendiente) a `◉` (activo) y `✓` (completado).
+- Porcentaje actualizado por fase y por conteo tqdm interno (N/M).
+
+**Fix crítico de buffering:**
+- `PYTHONUNBUFFERED=1` agregado al entorno del subproceso en `_env_with_dotenv()`.
+- Sin este fix, Python bloqueaba el output hasta llenar 8KB de buffer.
+- Consecuencia: tqdm no llegaba al stream en tiempo real y la barra quedaba en 0%.
+- Con el fix, cada línea de tqdm llega inmediatamente al frontend.
+
+**Permisos Claude Code:**
+- `.claude/settings.json` creado con allowlist de comandos frecuentes del proyecto.
+- Reduce prompts de aprobación para git, pip, server, CLI y curl.
+
+**Validación de calidad V2 con Claude:**
+- Módulo 3 completo (15 lecciones) regenerado con Claude Sonnet 4.6.
+- Nota de "Estructura ViralCopy" validada: duraciones exactas, ejemplos verbatim, instrucciones concretas para IA.
+- Calidad confirmada como suficiente para el objetivo del proyecto.
+
 ## Validaciones Ejecutadas
 
 ```bash

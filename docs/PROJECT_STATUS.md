@@ -1,6 +1,6 @@
 # Estado del Proyecto
 
-Versión actual: V2.3 / V1.5.5
+Versión actual: V2.3 / V1.5.6
 
 Estado: pipeline V1 completamente validado. Study Pack Builder V2 migrado de OpenAI a Claude Sonnet 4.6 con prompt caching. Soma Studio rediseñado con FastAPI como interfaz local moderna. Pendiente: regenerar course-pack completo con la nueva configuración y validar calidad de output.
 
@@ -28,8 +28,14 @@ Soma Transcriber ya tiene una primera base funcional para detectar videos, extra
 - Streaming de output en tiempo real desde CLI hacia la UI vía `StreamingResponse`.
 - Tabs: Transcripción (listar, dry-run, transcribir, reintentar), Study Pack (por fase), Estado (manifest, índice).
 - Selector nativo de carpetas macOS con `osascript`.
-- Confirmación antes de procesar sin límite de videos.
+- Confirmación antes de procesar sin límite de videos o módulo.
 - Interfaz Streamlit legacy (`app/streamlit_app.py`) conservada como fallback.
+- Dropdown inteligente de cursos detectados automáticamente desde `output/transcripts/`.
+- Filtro de módulos en tab Study Pack — procesa solo un módulo seleccionado.
+- Sistema de jobs con reconexión: recargar la página reconecta al proceso activo.
+- Barra de progreso por fases con pasos visuales (○ → ◉ → ✓) y porcentaje en tiempo real.
+- Fix de buffering Python con `PYTHONUNBUFFERED=1` para stream en tiempo real.
+- `.claude/settings.json` con allowlist de permisos para reducir prompts de aprobación.
 - Study Pack Builder V2.0 en `src/study_pack.py`.
 - Generación por fases: `video-notes`, `module-summaries`, `course-pack` y `all`.
 - Prompts V2.0.1 para video-notes más profundas, accionables y útiles para IA.
@@ -77,17 +83,23 @@ python3 -c "from app.server import app; print(f'{len(app.routes)} rutas OK')"
 - Compilación y carga de imports de V2.3 (Claude) validada.
 - Servidor FastAPI levantado y respondiendo en `http://127.0.0.1:8899`.
 
+## Probado en V1.5.6
+
+- Módulo 3 completo (15 lecciones) generado con Claude Sonnet 4.6 — ~80s/nota.
+- Calidad validada: nota "Estructura ViralCopy" contiene duraciones exactas, ejemplos verbatim, instrucciones concretas para IA.
+- Barra de progreso funcionando en tiempo real tras fix de buffering.
+- Filtro de módulos validado: proceso solo procesó módulo 3 correctamente.
+- Sistema de reconexión validado: recargar página reconecta al job activo.
+
 ## Todavía No Probado
 
-- Generación real de Study Pack con Claude (requiere `ANTHROPIC_API_KEY` real).
-- Course-pack completo regenerado con V2.3.
-- Estimación de costo real de Claude por ciclo completo.
+- Course-pack completo (90 video-notes + 11 module-notes + evidence + master docs) regenerado con Claude.
+- Estimación de costo real de Claude por ciclo completo del curso.
+- Uso real del Study Pack con Claude.ai Projects para generar guiones.
 
 ## Próximo Hito Recomendado
 
-1. Agregar `ANTHROPIC_API_KEY` real en `.env`.
-2. Regenerar `course-pack` con `--force` desde Soma Studio o CLI.
-3. Validar `99_QUALITY_REPORT.md` y calidad de `08_AI_STUDY_CONTEXT.md` y `09_MASTER_PROMPT_FOR_AI.md`.
+Generar el Study Pack completo del curso (fase all, sin límite, con force) y validar los documentos maestros `08_AI_STUDY_CONTEXT.md` y `09_MASTER_PROMPT_FOR_AI.md`.
 
 ## Riesgos Actuales
 
