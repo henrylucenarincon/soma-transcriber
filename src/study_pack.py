@@ -16,6 +16,7 @@ try:
         build_course_document_prompt,
         build_course_evidence_prompt,
         build_module_summary_prompt,
+        build_system_prompt,
         build_video_note_merge_prompt,
         build_video_note_prompt,
     )
@@ -44,6 +45,7 @@ except ImportError:
         build_course_document_prompt,
         build_course_evidence_prompt,
         build_module_summary_prompt,
+        build_system_prompt,
         build_video_note_merge_prompt,
         build_video_note_prompt,
     )
@@ -68,7 +70,7 @@ except ImportError:
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG_PATH = PROJECT_ROOT / "config.yaml"
 DEFAULT_STUDY_MANIFEST_PATH = PROJECT_ROOT / "data" / "study_manifest.json"
-DEFAULT_STUDY_MODEL = "gpt-4o-mini"
+DEFAULT_STUDY_MODEL = "claude-sonnet-4-6"
 PHASE_VIDEO_NOTES = "video-notes"
 PHASE_MODULE_SUMMARIES = "module-summaries"
 PHASE_COURSE_PACK = "course-pack"
@@ -107,7 +109,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument(
         "--model",
-        help=f"Modelo de análisis de OpenAI. Default configurable: {DEFAULT_STUDY_MODEL}",
+        help=f"Modelo de Claude para análisis. Default: {DEFAULT_STUDY_MODEL}",
     )
     parser.add_argument("--dry-run", action="store_true", help="Listar lo que se haría sin llamar a OpenAI.")
     parser.add_argument("--max-videos", type=positive_int, help="Procesar solo N transcripciones para pruebas.")
@@ -138,8 +140,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         print_dry_run(args, transcripts_root, selected_paths, transcript_paths, study_paths, settings)
         return 0
 
-    validate_openai_api_key()
-    client = build_openai_client()
+    validate_anthropic_api_key()
+    client = build_claude_client()
     manifest = StudyManifest.load(DEFAULT_STUDY_MANIFEST_PATH)
 
     if args.phase in {PHASE_VIDEO_NOTES, PHASE_ALL}:
@@ -278,7 +280,7 @@ def generate_single_video_note(
             chunks_count=chunks_count,
             settings=settings,
         )
-        partial_notes.append(call_openai_text(client, model=settings.model, prompt=prompt))
+        partial_notes.append(call_claude_text(client, model=settings.model, prompt=prompt, settings=settings))
 
     if len(partial_notes) == 1:
         return partial_notes[0]
@@ -291,7 +293,7 @@ def generate_single_video_note(
         partial_notes=partial_notes,
         settings=settings,
     )
-    return call_openai_text(client, model=settings.model, prompt=merge_prompt)
+    return call_claude_text(client, model=settings.model, prompt=merge_prompt, settings=settings)
 
 
 def generate_module_summaries(
@@ -329,7 +331,7 @@ def generate_module_summaries(
             video_notes=video_notes,
             settings=settings,
         )
-        content = call_openai_text(client, model=settings.model, prompt=prompt)
+        content = call_claude_text(client, model=settings.model, prompt=prompt, settings=settings)
         write_markdown(module_note_path, content)
         manifest.set_global_output(f"module::{module_note_name(module_path)}", module_note_path, STATUS_COMPLETED)
         manifest.save()
@@ -381,7 +383,7 @@ def generate_course_pack(
             video_notes_index=video_notes_index,
             settings=settings,
         )
-        content = call_openai_text(client, model=settings.model, prompt=prompt)
+        content = call_claude_text(client, model=settings.model, prompt=prompt, settings=settings)
         write_markdown(output_path, content)
         manifest.set_global_output(filename, output_path, STATUS_COMPLETED)
         manifest.save()
@@ -421,7 +423,7 @@ def generate_course_pack_evidence(
                 module_notes=module_notes,
                 settings=settings,
             )
-            content = call_openai_text(client, model=settings.model, prompt=prompt)
+            content = call_claude_text(client, model=settings.model, prompt=prompt, settings=settings)
             write_markdown(output_path, content)
             manifest.set_global_output(f"evidence::{filename}", output_path, STATUS_COMPLETED)
             manifest.save()
@@ -549,7 +551,7 @@ def print_dry_run(
     study_paths: Any,
     settings: StudySettings,
 ) -> None:
-    print("Dry run Study Pack: no se llamará a OpenAI API y no se escribirán outputs.")
+    print("Dry run Study Pack: no se llamará a la API de Claude y no se escribirán outputs.")
     print(f"Curso: {args.course_name}")
     print(f"Transcripts: {transcripts_root}")
     print(f"Index: {args.index.expanduser().resolve() if args.index else '(no indicado)'}")
@@ -596,38 +598,50 @@ def count_modules_for_paths(transcripts_root: Path, paths: list[Path]) -> int:
     return len(modules)
 
 
-def call_openai_text(client: Any, model: str, prompt: str) -> str:
-    response = client.chat.completions.create(
+def call_claude_text(client: Any, model: str, prompt: str, settings: StudySettings) -> str:
+    system = build_system_prompt(settings)
+    # Separate system from user content — all prompt builders prepend system + "\n\n"
+    separator = system + "\n\n"
+    user_content = prompt[len(separator):] if prompt.startswith(separator) else prompt
+
+    response = client.messages.create(
         model=model,
-        messages=[
+        max_tokens=16000,
+        system=[
             {
-                "role": "user",
-                "content": prompt,
+                "type": "text",
+                "text": system,
+                "cache_control": {"type": "ephemeral"},
             }
         ],
-        temperature=0.2,
+        messages=[{"role": "user", "content": user_content}],
     )
-    content = response.choices[0].message.content
-    if not content:
-        raise RuntimeError("OpenAI devolvió una respuesta vacía para el Study Pack.")
-    return content.strip()
+
+    if not response.content:
+        raise RuntimeError("Claude devolvió una respuesta vacía para el Study Pack.")
+
+    block = response.content[0]
+    if hasattr(block, "text"):
+        return block.text.strip()
+
+    raise RuntimeError(f"Claude devolvió un tipo de contenido inesperado: {type(block)}")
 
 
-def build_openai_client() -> Any:
+def build_claude_client() -> Any:
     try:
-        from openai import OpenAI
+        import anthropic
     except ImportError as exc:
         raise RuntimeError(
-            "openai no está instalado. Ejecuta: pip install -r requirements.txt"
+            "anthropic no está instalado. Ejecuta: pip install -r requirements.txt"
         ) from exc
 
-    return OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    return anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
 
-def validate_openai_api_key() -> None:
-    if not os.getenv("OPENAI_API_KEY"):
+def validate_anthropic_api_key() -> None:
+    if not os.getenv("ANTHROPIC_API_KEY"):
         raise SystemExit(
-            "ERROR: Falta OPENAI_API_KEY. Crea un archivo .env desde .env.example "
+            "ERROR: Falta ANTHROPIC_API_KEY. Créala en .env desde .env.example "
             "o exporta la variable antes de generar Study Pack."
         )
 

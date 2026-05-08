@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soma Studio</title>
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+
+<!-- ── Top Bar ─────────────────────────────────────────────────────────── -->
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-gem">◆</div>
+    Soma Studio
+  </div>
+  <span class="topbar-sep">/</span>
+  <span class="topbar-sub">Transcripción e inteligencia aplicada al estudio</span>
+  <div class="topbar-right">
+    <div class="status-dot" id="serverDot"></div>
+    <span class="topbar-badge">local · v2.2</span>
+  </div>
+</header>
+
+<!-- ── Layout ──────────────────────────────────────────────────────────── -->
+<div class="layout">
+
+  <!-- ── Sidebar ────────────────────────────────────────────────────── -->
+  <aside class="sidebar">
+
+    <div class="sidebar-label">Curso</div>
+
+    <div class="sidebar-section">
+      <div class="field">
+        <label class="field-label">Carpeta del curso</label>
+        <div class="input-row">
+          <input type="text" id="coursePath" class="input" placeholder="/ruta/al/curso" oninput="onConfigChange()">
+          <button class="btn-icon" onclick="pickFolder('course')" title="Seleccionar carpeta">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Nombre del curso</label>
+        <input type="text" id="courseName" class="input" placeholder="Nombre del curso" oninput="onConfigChange()">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Carpeta de output</label>
+        <div class="input-row">
+          <input type="text" id="outputPath" class="input" value="./output" oninput="onConfigChange()">
+          <button class="btn-icon" onclick="pickFolder('output')" title="Seleccionar carpeta">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Perfil de configuración</label>
+        <select id="configPath" class="select" onchange="onConfigChange()">
+          <option value="">Sin perfil</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-label">Opciones</div>
+
+    <div class="sidebar-section">
+      <div class="field">
+        <label class="field-label">Límite de videos</label>
+        <div class="input-row">
+          <input type="number" id="maxVideos" class="input number-input" value="1" min="0" step="1" oninput="onMaxVideosChange()">
+          <span id="maxVideosChip" class="chip chip-success">Prueba</span>
+        </div>
+        <div class="field-hint">0 = sin límite · 1 = prueba controlada</div>
+        <div id="maxVideosWarn" class="confirm-banner hidden" style="margin-top:8px">
+          ⚠ Sin límite: procesará todos los pendientes
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="checkbox-row">
+          <input type="checkbox" id="forceCheck">
+          <span class="checkbox-label">Forzar reproceso</span>
+        </label>
+        <div class="field-hint" style="margin-top:3px;padding-left:22px">Regenera aunque ya esté completado</div>
+      </div>
+    </div>
+
+    <div style="flex:1"></div>
+
+    <div class="sidebar-section" style="padding-bottom:8px">
+      <div class="info-row">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+        Transcripción: OpenAI Whisper
+      </div>
+      <div class="info-row" style="margin-top:4px">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+        Study Pack: Claude Sonnet
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ── Main ───────────────────────────────────────────────────────── -->
+  <main class="main">
+
+    <!-- Tabs -->
+    <div class="tabs-bar">
+      <button class="tab active" data-tab="transcription" onclick="switchTab('transcription')">Transcripción</button>
+      <button class="tab" data-tab="study-pack" onclick="switchTab('study-pack')">Study Pack</button>
+      <button class="tab" data-tab="status" onclick="switchTab('status')">Estado</button>
+    </div>
+
+    <!-- ── Tab: Transcripción ──────────────────────────────────────── -->
+    <div class="tab-content" id="tab-transcription">
+
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">Acciones</span>
+          <span id="transcribeStatus"></span>
+        </div>
+        <div class="section-body">
+          <div class="action-bar">
+            <button class="btn btn-ghost" id="btnList" onclick="listVideos()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              Listar videos
+            </button>
+            <button class="btn btn-ghost" id="btnDryRun" onclick="dryRun()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+              Dry run
+            </button>
+            <button class="btn btn-primary" id="btnTranscribe" onclick="transcribe()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Transcribir
+            </button>
+            <button class="btn btn-ghost" id="btnRetry" onclick="retryFailed()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              Reintentar fallidos
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video list -->
+      <div class="section hidden" id="videoListSection">
+        <div class="section-header">
+          <span class="section-title">Videos detectados</span>
+          <span id="videoListCount" class="chip chip-info"></span>
+        </div>
+        <div class="table-wrap">
+          <table id="videoListTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Estado</th>
+                <th>Ruta</th>
+              </tr>
+            </thead>
+            <tbody id="videoListBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Tab: Study Pack ────────────────────────────────────────── -->
+    <div class="tab-content hidden" id="tab-study-pack">
+
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">Fase de generación</span>
+        </div>
+        <div class="section-body">
+          <div class="phase-grid" id="phaseGrid">
+            <label class="phase-card selected" id="phase-all">
+              <input type="radio" name="phase" value="all" checked>
+              <div class="phase-name">Todas las fases</div>
+              <div class="phase-desc">video-notes → module-summaries → course-pack</div>
+            </label>
+            <label class="phase-card" id="phase-video-notes">
+              <input type="radio" name="phase" value="video-notes">
+              <div class="phase-name">Video-notes</div>
+              <div class="phase-desc">Notas individuales por lección</div>
+            </label>
+            <label class="phase-card" id="phase-module-summaries">
+              <input type="radio" name="phase" value="module-summaries">
+              <div class="phase-name">Module summaries</div>
+              <div class="phase-desc">Sistema operativo por módulo</div>
+            </label>
+            <label class="phase-card" id="phase-course-pack">
+              <input type="radio" name="phase" value="course-pack">
+              <div class="phase-name">Course-pack</div>
+              <div class="phase-desc">Documentos maestros + evidence layer</div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">Acciones</span>
+        </div>
+        <div class="section-body">
+          <div class="action-bar">
+            <button class="btn btn-ghost" id="btnSpDryRun" onclick="studyPackDryRun()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+              Dry run
+            </button>
+            <button class="btn btn-primary" id="btnSpGenerate" onclick="generateStudyPack()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M12 8v8m-4-4h8"/></svg>
+              Generar Study Pack
+            </button>
+          </div>
+          <div class="info-row" style="margin-top:10px">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+            Usa ANTHROPIC_API_KEY desde .env · Modelo: Claude Sonnet 4.6 con prompt caching
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Tab: Estado ────────────────────────────────────────────── -->
+    <div class="tab-content hidden" id="tab-status">
+
+      <div class="action-bar">
+        <button class="btn btn-ghost" onclick="loadStatus()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          Actualizar estado
+        </button>
+      </div>
+
+      <div id="statusContent">
+        <div class="empty-state">
+          <div class="empty-icon">◎</div>
+          <div>Haz clic en "Actualizar estado" para ver el progreso</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Log Panel ───────────────────────────────────────────────── -->
+    <div class="log-panel">
+      <div class="log-header">
+        <span class="log-title">
+          <span class="running-dot hidden" id="runningDot"></span>
+          Output
+        </span>
+        <button class="btn-text" onclick="clearLog()">Limpiar</button>
+      </div>
+      <div class="log-content" id="logContent"></div>
+    </div>
+
+  </main>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,8 +1,8 @@
 # Estado del Proyecto
 
-Versión actual: V2.2.1
+Versión actual: V2.3 / V1.5.5
 
-Estado: pipeline V1 validado con un curso completo y Study Pack Builder V2.2.1 reforzado con Course Pack Evidence Layer, inventarios intermedios, Quality Report y prompts más livianos para documentos maestros.
+Estado: pipeline V1 completamente validado. Study Pack Builder V2 migrado de OpenAI a Claude Sonnet 4.6 con prompt caching. Soma Studio rediseñado con FastAPI como interfaz local moderna. Pendiente: regenerar course-pack completo con la nueva configuración y validar calidad de output.
 
 Soma Transcriber ya tiene una primera base funcional para detectar videos, extraer audio, dividir archivos grandes, transcribir con OpenAI API y escribir resultados organizados. La versión V1.1 agregó controles para reducir riesgo operativo y costos accidentales antes de ejecutar transcripciones reales. En V1.3 se ejecutó el primer test real controlado con 1 video y fue exitoso.
 
@@ -24,11 +24,12 @@ Soma Transcriber ya tiene una primera base funcional para detectar videos, extra
 - Manifest en `data/manifest.json`.
 - Saltar archivos ya `completed` salvo que se use `--force`.
 - Índice CSV en `output/index.csv`.
-- Soma Studio Local con Streamlit como interfaz personal encima de la CLI.
-- Tabs locales para curso, transcripción, estado y Study Pack próximamente.
-- Soma Studio permite seleccionar carpeta local de curso/output desde Finder o pegar rutas manualmente.
-- En macOS, el selector de carpetas usa `osascript`/AppleScript con fallback manual.
-- La UI aclara que `max_videos = 0` significa sin límite y recomienda `1` para pruebas.
+- Soma Studio rediseñado con FastAPI en `app/server.py` — interfaz local moderna con dark theme minimal.
+- Streaming de output en tiempo real desde CLI hacia la UI vía `StreamingResponse`.
+- Tabs: Transcripción (listar, dry-run, transcribir, reintentar), Study Pack (por fase), Estado (manifest, índice).
+- Selector nativo de carpetas macOS con `osascript`.
+- Confirmación antes de procesar sin límite de videos.
+- Interfaz Streamlit legacy (`app/streamlit_app.py`) conservada como fallback.
 - Study Pack Builder V2.0 en `src/study_pack.py`.
 - Generación por fases: `video-notes`, `module-summaries`, `course-pack` y `all`.
 - Prompts V2.0.1 para video-notes más profundas, accionables y útiles para IA.
@@ -44,6 +45,11 @@ Soma Transcriber ya tiene una primera base funcional para detectar videos, extra
 - Inventarios V2.2 de cobertura, principios, frameworks, conceptos, ejemplos, aplicaciones y tareas de IA.
 - Quality Report V2.2 en `99_QUALITY_REPORT.md` con validación simple de cobertura por módulos.
 - V2.2.1 reduce prompts gigantes en la fase `course-pack`: los archivos maestros usan `_course_pack_evidence/` como fuente principal y reciben `module_notes` solo como índice de cobertura.
+- V2.3 migra el Study Pack Builder de OpenAI a Claude Sonnet 4.6 con prompt caching.
+- El prompt caching cachea el system prompt (1996 chars) compartido por todas las llamadas de análisis, reduciendo costos en ciclos de generación masiva.
+- El modelo por defecto del Study Pack cambia a `claude-sonnet-4-6` (configurable con `--model` o `study.model` en YAML).
+- La transcripción de audio (V1) sigue con OpenAI Whisper como única opción para audio.
+- Documentación de handoff en `docs/HANDOFF_FOR_NEXT_AI.md` para continuar el desarrollo con otra IA sin perder contexto.
 - Manifest V2 privado en `data/study_manifest.json`.
 - Configuración V2 mediante sección `study` en YAML.
 - Chunking de texto por caracteres para analizar transcripciones largas.
@@ -53,67 +59,48 @@ Soma Transcriber ya tiene una primera base funcional para detectar videos, extra
 ## Validaciones Ejecutadas
 
 ```bash
-python3 -m compileall src
+python3 -m compileall src app
 python3 src/main.py --help
-```
-
-También se probaron comandos sin API:
-
-```bash
-python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-output --course-name Curso\ Demo --list-videos --max-videos 1
-python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-output --course-name Curso\ Demo --dry-run --max-videos 1
+python3 src/study_pack.py --help
+python3 -c "from app.server import app; print(f'{len(app.routes)} rutas OK')"
 ```
 
 ## Probado
 
 - Primer test real con 1 video usando OpenAI API.
 - Resultado del primer test: procesado 1, fallidos 0.
-- Se generó audio, `output/index.csv` y transcripción Markdown con metadata y `status: completed`.
-- Módulo 1 real procesado completo.
-- Resultado del módulo 1: 13 videos detectados, 13 `completed`, 0 `failed` después del reproceso.
-- El video 12 requirió chunking preventivo y quedó con `chunks_count: 3`.
-- Primer curso completo procesado exitosamente.
-- Curso: Victor Heras - Marca Personal 5.0.
-- Videos detectados: 90.
-- Completed: 90.
-- Failed: 0.
-- Output final: `output/transcripts/Victor Heras - Marca Personal 5.0/`.
-- `output/` y `data/` son privados y no se versionan.
+- Módulo 1 real: 13 `completed`, 0 `failed`.
+- Primer curso completo: Victor Heras - Marca Personal 5.0, 90 `completed`, 0 `failed`.
 - Prueba real controlada de V2 con 2 `video-notes` del módulo 3.
-- Course Pack completo generado técnicamente, pendiente de regenerar con prompts V2.1.
-- Hallazgo V2.0.1: las primeras `video-notes` fueron técnicamente correctas, pero demasiado resumidas y algo genéricas.
 - Prueba real de `module summary` del módulo 3.
-- Hallazgo V2.0.5: el primer `module summary` fue técnicamente correcto, pero demasiado genérico para servir como síntesis operativa.
+- Course Pack completo generado técnicamente con V2.2.1.
+- Compilación y carga de imports de V2.3 (Claude) validada.
+- Servidor FastAPI levantado y respondiendo en `http://127.0.0.1:8899`.
 
 ## Todavía No Probado
 
-- No se ha estimado costo real por duración de video.
-- No se ha regenerado el `course-pack` completo con V2.2.
-
-## Hallazgo V1.3
-
-El primer Markdown real quedó como un bloque único de texto. En V1.3.1 se corrige la presentación para escribir la transcripción literal en párrafos legibles, sin resumir, reescribir ni alterar el orden del contenido.
-
-## Hallazgo V1.3.3
-
-Al procesar el módulo 1 real se detectó un caso `input_too_large` en un video largo que no había superado el límite por MB. Para reducir ese riesgo, Soma ahora divide preventivamente audios que superen `audio.max_chunk_minutes`, por defecto 10 minutos.
-
-## Hallazgo V1.3.4
-
-En Python 3.13, la dependencia de chunking anterior falló por la remoción de `audioop` y ausencia de `pyaudioop`. Soma reemplazó ese flujo por FFmpeg/FFprobe para obtener duración y crear chunks sin depender de esa compatibilidad.
-
-## Resultado V1.3.5
-
-El módulo 1 real quedó como prueba de producción local: 13/13 videos `completed`. El caso `input_too_large` del video 12 se resolvió con FFmpeg/FFprobe, generando 3 chunks y una transcripción organizada en partes.
+- Generación real de Study Pack con Claude (requiere `ANTHROPIC_API_KEY` real).
+- Course-pack completo regenerado con V2.3.
+- Estimación de costo real de Claude por ciclo completo.
 
 ## Próximo Hito Recomendado
 
-Regenerar `course-pack` con `--force` y validar `99_QUALITY_REPORT.md`.
+1. Agregar `ANTHROPIC_API_KEY` real en `.env`.
+2. Regenerar `course-pack` con `--force` desde Soma Studio o CLI.
+3. Validar `99_QUALITY_REPORT.md` y calidad de `08_AI_STUDY_CONTEXT.md` y `09_MASTER_PROMPT_FOR_AI.md`.
 
 ## Riesgos Actuales
 
-- Ejecutar un curso completo por accidente sin `--max-videos`.
-- Usar `--force` sin intención y duplicar costos.
-- Exponer `OPENAI_API_KEY` si se versiona `.env` por error.
+- Ejecutar un curso completo por accidente sin `--max-videos` (la UI pide confirmación pero la CLI no bloquea).
+- Usar `--force` sin intención y duplicar costos de API.
+- Exponer `OPENAI_API_KEY` o `ANTHROPIC_API_KEY` si se versiona `.env` por error.
 - Versionar transcripciones privadas, audios o videos si se cambia `.gitignore`.
-- Encontrar errores no visibles hasta probar con videos reales, especialmente FFmpeg/FFprobe y límites de tamaño o duración.
+
+## Hallazgos Históricos
+
+- V1.3: primer Markdown quedó como bloque único → corregido con párrafos.
+- V1.3.3: `input_too_large` en audio largo → corregido con chunking por duración.
+- V1.3.4: `audioop` removido en Python 3.13 → reemplazado por FFmpeg/FFprobe.
+- V1.3.5: módulo 1 completo 13/13, video 12 con 3 chunks.
+- V2.0.1: primeras `video-notes` demasiado resumidas → prompts reforzados.
+- V2.0.5: primer `module summary` demasiado genérico → Module Operating System.

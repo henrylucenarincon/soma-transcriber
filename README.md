@@ -180,29 +180,34 @@ python src/main.py \
 
 ## Soma Studio Local
 
-Soma Studio Local es una interfaz personal y local construida con Streamlit. No reemplaza la CLI: la usa por debajo para listar videos, hacer dry-run, transcribir y reintentar fallidos.
+Soma Studio Local es una interfaz moderna y local construida con FastAPI. Permite transcribir cursos, generar Study Packs y revisar el estado del pipeline sin usar la CLI directamente.
 
-Abrir la interfaz:
+Iniciar el servidor:
 
 ```bash
-streamlit run app/streamlit_app.py
+.venv/bin/python app/server.py
 ```
 
-Si no activaste el entorno virtual:
+Luego abrir en el navegador: `http://127.0.0.1:8899`
+
+La interfaz incluye:
+
+- Panel de configuración persistente (curso, output, perfil YAML, límite de videos, force).
+- Tab Transcripción: listar videos, dry-run, transcribir, reintentar fallidos.
+- Tab Study Pack: selección de fase, dry-run, generar con Claude.
+- Tab Estado: conteos de manifest, checks de archivos, índice CSV.
+- Panel de output en vivo con streaming en tiempo real.
+- Selector nativo de carpetas macOS con fallback manual.
+
+No es una app pública, no tiene login, no usa base de datos externa y no sube datos a la nube.
+
+En la UI, `max_videos = 0` significa sin límite; usa `1` para pruebas controladas. La interfaz muestra una advertencia y pide confirmación antes de procesar sin límite.
+
+Alternativa legacy: la interfaz Streamlit original sigue disponible:
 
 ```bash
 .venv/bin/streamlit run app/streamlit_app.py
 ```
-
-Soma Studio sirve para preparar cursos como contexto de aprendizaje para IA: primero transcripciones literales, luego documentos de estudio y paquetes de contexto. No es una app pública, no tiene login, no usa base de datos externa y no sube datos a la nube.
-
-Puedes seleccionar la carpeta del curso desde la interfaz o pegar la ruta manualmente. También puedes elegir la carpeta de output desde la UI. En macOS, el selector usa el diálogo nativo mediante `osascript`/AppleScript; si falla, puedes seguir pegando la ruta manualmente.
-
-En Soma Studio, `max_videos = 0` significa sin límite. Para pruebas controladas, usa `max_videos = 1`; usa `0` solo cuando quieras procesar todo lo pendiente y entiendas el costo potencial de API.
-
-La UI no cambia el flujo de privacidad: `output/`, `data/`, `.env`, `configs/local/` y `.tmp/` siguen siendo privados y no deben subirse a GitHub.
-
-Estado actual del pipeline: el primer curso real fue procesado completo como prueba de pipeline: 90 videos, 90 `completed`, 0 `failed`. El siguiente paso es generar Study Packs a partir de esas transcripciones privadas.
 
 ## V2 Study Pack
 

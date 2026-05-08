@@ -55,44 +55,65 @@ Mejorar el sistema según hallazgos reales:
 
 ## V1.5: Soma Studio Local
 
-Crear una interfaz local con Streamlit para controlar el flujo personal encima de la CLI:
+Estado: rediseñado y completado.
 
-- seleccionar curso
-- seleccionar perfil YAML
-- listar videos
-- ejecutar dry-run
-- transcribir con controles de seguridad
-- reintentar fallidos
-- ver rutas de outputs y estado
-- preparar la sección visual de Study Pack
+La interfaz local fue inicialmente construida con Streamlit (V1.5.0) y luego rediseñada completamente con FastAPI + HTML/CSS/JS (V1.5.5).
 
-Estado: implementado como interfaz local inicial. No tiene login, backend propio, base de datos externa ni modo SaaS.
+La nueva UI incluye:
+
+- dark theme minimal (paleta zinc + violet)
+- sidebar de configuración persistente
+- tab Transcripción con streaming en tiempo real
+- tab Study Pack con selector de fase integrado
+- tab Estado con conteos de manifest, checks de archivos e índice CSV
+- selector nativo de carpetas macOS
+- confirmación antes de procesar sin límite de videos
+- output coloreado en vivo
+
+Iniciar: `python app/server.py` → `http://127.0.0.1:8899`
+
+No tiene login, backend externo, base de datos ni modo SaaS.
 
 ## V1.6: Primer Curso Completo Procesado
 
+Estado: completado.
+
 El primer curso real quedó procesado completo: 90 videos detectados, 90 `completed`, 0 `failed`.
 
-V1 queda validado como pipeline completo de transcripción local: detección, orden natural, extracción, chunking, transcripción, Markdown, manifest, index y operación desde CLI/Soma Studio.
-
-Próximo gran bloque: V2 Study Pack.
+V1 queda validado como pipeline completo de transcripción local.
 
 ## V2: Study Pack
 
-Estado: etapa activa.
+Estado: etapa activa — migración a Claude completada, validación de calidad pendiente.
 
-Generar Study Pack y documentos de análisis a partir de transcripciones privadas:
+El Study Pack Builder usa Claude Sonnet 4.6 (con prompt caching) para generar documentos de estudio desde transcripciones privadas.
 
-- mapa del curso
-- resumen por módulo
-- principios centrales
-- frameworks
-- conceptos clave
-- ejemplos del curso
-- guía de aplicación
-- prompt maestro para IA
-- `AI_STUDY_CONTEXT.md`
+La arquitectura es:
 
-V2.0 agrega el builder inicial por CLI. El siguiente paso es validar con dry-run y luego generar `video-notes` de prueba con `--max-videos 2`.
+```
+transcripciones literales
+→ video-notes por lección
+→ module-notes (Module Operating Systems)
+→ _course_pack_evidence/ (inventarios intermedios)
+→ documentos maestros del Study Pack
+→ 99_QUALITY_REPORT.md
+→ contexto listo para IA
+```
+
+Documentos del Study Pack:
+
+- `00_STUDY_PACK_INDEX.md`
+- `01_COURSE_MAP.md`
+- `02_MODULE_SUMMARIES.md`
+- `03_CORE_PRINCIPLES.md`
+- `04_FRAMEWORKS.md`
+- `05_KEY_CONCEPTS.md`
+- `06_EXAMPLES_AND_CASES.md`
+- `07_APPLICATION_GUIDE.md`
+- `08_AI_STUDY_CONTEXT.md`
+- `09_MASTER_PROMPT_FOR_AI.md`
+
+Pendiente: regenerar course-pack completo con V2.3 y validar calidad de `08` y `09` como onboarding real para IA.
 
 ## V3: Base Consultable para IA
 

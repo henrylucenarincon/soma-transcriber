@@ -290,20 +290,79 @@ Se redujo el tamaño de los prompts de documentos maestros.
 - Esto reduce riesgo de prompts gigantes, lentitud, costos altos o errores `input_too_large` en `course-pack`.
 - No se ejecutó generación real durante esta tarea.
 
+## 2026-05-07: Entrada Handoff para próxima IA
+
+Se creó documentación de traspaso completa en `docs/HANDOFF_FOR_NEXT_AI.md`.
+
+- El handoff resume visión, alcance, estructura, estado V1/V1.5/V2, problemas encontrados y próximos pasos.
+- También documenta la decisión de arquitectura: transcripciones → video-notes → module-notes → evidence layer → master course-pack → quality report.
+- La intención es evitar nuevos ciclos de microajustes aislados y orientar a la próxima IA hacia arquitectura, cobertura y calidad final.
+- No se ejecutó transcripción real ni generación real con OpenAI durante esta tarea.
+
+## 2026-05-07: Entrada V2.3 — Migración a Claude
+
+Se migró el Study Pack Builder de OpenAI a Anthropic Claude.
+
+- `src/study_pack.py` reemplaza cliente, funciones y validaciones de OpenAI por equivalentes de Anthropic.
+- Modelo por defecto cambia de `gpt-4o-mini` a `claude-sonnet-4-6`.
+- Se implementó prompt caching: el system prompt (1996 chars, idéntico en cada llamada) se cachea con `cache_control: ephemeral`. Esto reduce costos en ciclos de generación con muchos videos.
+- La separación system/user se hace extrayendo el prefijo del system prompt del string completo antes de enviarlo a la API.
+- La transcripción de audio (V1) sigue usando OpenAI Whisper porque Claude no tiene capacidad de audio.
+- `requirements.txt` agrega `anthropic>=0.40.0`.
+- `.env.example` actualizado con `ANTHROPIC_API_KEY`.
+- `config.example.yaml` actualiza `study.model` a `claude-sonnet-4-6`.
+
+## 2026-05-07: Entrada V1.5.5 — Soma Studio rediseñado con FastAPI
+
+Se reemplazó la interfaz Streamlit por una app local moderna construida con FastAPI y HTML/CSS/JS puro.
+
+- Nuevo archivo: `app/server.py` — backend FastAPI con 12 rutas.
+- Nuevos archivos: `app/static/index.html`, `app/static/app.css`, `app/static/app.js`.
+- La app corre en `http://127.0.0.1:8899` con `python app/server.py`.
+- El streaming de output usa `StreamingResponse` con `asyncio.create_subprocess_exec`.
+- El frontend consume el stream con `fetch()` + `ReadableStream` en tiempo real.
+- La interfaz Streamlit legacy (`app/streamlit_app.py`) se conserva como fallback.
+- `requirements.txt` agrega `fastapi>=0.111.0` y `uvicorn[standard]>=0.30.0`.
+
+Funcionalidades de la nueva UI:
+
+- Dark theme minimal (paleta zinc + violet, similar a Linear/Vercel).
+- Sidebar de configuración persistente: curso, output, nombre, perfil YAML, límite de videos, force.
+- Tab Transcripción: listar videos, dry-run, transcribir, reintentar fallidos. Tabla parseada en tiempo real desde output de CLI.
+- Tab Study Pack: selector de fase (all / video-notes / module-summaries / course-pack), dry-run, generar.
+- Tab Estado: conteos de manifest y study_manifest, checks de archivos, tabla del índice CSV.
+- Panel de output con streaming en vivo, coloreado por tipo de línea (ok/error/warning/accent).
+- Selector nativo de carpetas macOS con `osascript`.
+- Confirmación antes de procesar sin límite de videos para evitar costos accidentales.
+
 ## Validaciones Ejecutadas
 
 ```bash
-python3 -m compileall src
+python3 -m compileall src app
 python3 src/main.py --help
+python3 src/study_pack.py --help
 ```
 
-Comandos probados sin API:
+Validaciones de imports y lógica:
 
 ```bash
-python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-output --course-name Curso\ Demo --list-videos --max-videos 1
-python3 src/main.py --input /private/tmp/soma-course --output /private/tmp/soma-output --course-name Curso\ Demo --dry-run --max-videos 1
+python3 -c "from app.server import app; print(f'{len(app.routes)} rutas OK')"
+python3 -c "from src.study_pack import call_claude_text, build_claude_client; print('OK')"
+python3 -c "
+from src.study_prompts import build_video_note_prompt, build_system_prompt, StudySettings
+from pathlib import Path
+settings = StudySettings(model='claude-sonnet-4-6')
+system = build_system_prompt(settings)
+prompt = build_video_note_prompt(course_name='Test', module_path='M1', video_title='V1',
+    relative_path=Path('M1/V1.md'), transcript_chunk='Test.', chunk_index=1, chunks_count=1, settings=settings)
+separator = system + '\n\n'
+assert prompt.startswith(separator)
+user = prompt[len(separator):]
+assert user.startswith('Tarea:')
+print('Separación system/user: OK')
+"
 ```
 
 ## Nota
 
-Ya se ejecutó un primer test real con 1 video, el módulo 1 completo y el curso completo. Todavía no se ha ejecutado generación real del Study Pack.
+V1 validado: 90/90 videos `completed`. Study Pack V2 migrado a Claude con prompt caching. UI rediseñada con FastAPI. Pendiente: agregar `ANTHROPIC_API_KEY` real en `.env` y regenerar el course-pack completo para validar calidad.
